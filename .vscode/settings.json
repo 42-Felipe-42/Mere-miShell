@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "libft.h": "c",
+        "push_swap.h": "c"
+    }
+    "files.exclude": {
+        "**/*.o": true
+    }
+} 
+
+/* {
+	"files.associations": {
+		"ft_printf.h": "c"
+	}
+}
+ */

@@ -10,9 +10,8 @@ LIBFT_FILE  =   libft.a
 
 LIBFT_LIB   =   $(LIBFT_PATH)/$(LIBFT_FILE)
 
-C_FILE      =  	main.c \
-				srcs/utils_bis.c \
-				srcs/utils.c \
+C_FILE      =  	expander/expander.c \
+				lexer/lexer_utils.c \
 
 OBJS        =   $(C_FILE:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:58:53 by plangloi          #+#    #+#             */
-/*   Updated: 2024/04/04 13:58:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:45:51 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 typedef struct s_list
 {
