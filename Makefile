@@ -1,4 +1,4 @@
-NAME        =   Mere-MiShell
+NAME        =   minishell
 
 CC          =   cc
 

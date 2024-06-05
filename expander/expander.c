@@ -6,11 +6,11 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/04 15:40:16 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/05 15:48:48 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "include/minishell.h"
 
 char	*expand(char *str, int i)
 {

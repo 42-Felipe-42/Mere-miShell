@@ -6,11 +6,11 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/04 15:41:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:48:58 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../include/minishell.h"
 
 int find_tokken(char *input, int i)
 {
@@ -21,16 +21,16 @@ int find_tokken(char *input, int i)
 		if(input[i] =='<')
 		{
 			if (input[i+1] == '<')
-				return (i++, M_LOWER);
+				return (i++, HERE_DOC);
 			else
-				return(LOWER);
+				return(IN_REDIR);
 		}
 		if (input[i] == '>')
 		{
 			if (input[i+1] == '>')
-				return (i++, M_BIGGER);
+				return (i++, APPEND);
 			else
-				return(BIGGER);
+				return(OUT_REDIR);
 		}
 		i++;
 	}
@@ -46,3 +46,4 @@ int quote_de_porc(char input)
 	else 
 		return(0);
 }
+
