@@ -12,6 +12,7 @@ LIBFT_LIB   =   $(LIBFT_PATH)/$(LIBFT_FILE)
 
 C_FILE      =  	expander/expander.c \
 				lexer/lexer_utils.c \
+				lexer/store_token.c \
 
 OBJS        =   $(C_FILE:.c=.o)
 

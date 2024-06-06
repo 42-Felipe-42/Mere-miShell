@@ -6,13 +6,13 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/05 16:48:58 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/06 13:33:17 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int find_tokken(char *input, int i)
+int find_token(char *input, int i)
 {
 	while (input[i])
 	{
@@ -34,7 +34,7 @@ int find_tokken(char *input, int i)
 		}
 		i++;
 	}
-return(false);
+return(FALSE);
 }
 
 int quote_de_porc(char input)
