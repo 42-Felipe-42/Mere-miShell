@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/07 10:36:40 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/07 15:14:32 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,3 +34,4 @@ int		quote_de_porc(char input);
 void	store_token(t_lexer **lex, int token);
 void	store_token_words(char *input, t_lexer **lex, int start, int len);
 void	lex_str(char *input, t_lexer **lex);
+int		is_token(char *input, int *i);
