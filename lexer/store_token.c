@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/06 16:00:04 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:34:06 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	store_token(t_lexer **lex, int token)
 	}
 }
 
-void	store_token_words(char *input, t_lexer **lex, int start,int len)
+void	store_token_words(char *input, t_lexer **lex, int start, int len)
 {
 	t_lexer	*new;
 	t_lexer	*current;
@@ -58,28 +58,58 @@ void	store_token_words(char *input, t_lexer **lex, int start,int len)
 	}
 }
 
-void	is_quoted(char *input,int *i, int *opened)
+void	is_quoted(char *input, int *i, int *opened)
 {
 	*opened = quote_de_porc(input[*i]);
 	(*i)++;
-	while(*opened && input[*i])
-		
-	
+	while (*opened && input[*i])
+	{
+		if (*opened == quote_de_porc(input[*i]))
+			*opened = 0;
+		(*i)++;
+	}
 }
+
+void	is_word(char *input, int *i)
+{
+	int	temp;
+
+	temp = 0;
+	while (input[*i] && input[*i] != ' ' && !find_token(input, *i))
+	{
+		if (quote_de_porc(input[*i]))
+			is_quoted(input, i, &temp);
+		else
+			(*i)++;
+	}
+}
+
 void	lex_str(char *input, t_lexer **lex)
 {
 	int	i;
+	int	start;
+	int	temp;
 
 	i = 0;
+	temp = 0;
+	start = 0;
 	while (input[i])
 	{
+		while ((input[i] && input[i] == ' ') || (input[i] >= 7 && input[i] <= 13))
+			i++;
+		if (input[i] == '\0')
+			break ;
+		start = i;
+		if (quote_de_porc(input[i]))
+			is_quoted(input, &i, &temp);
+		else
+			is_word(input, &i);
+		if (i > start)
+			store_token_words(input, lex, start, i - start);
 		if (find_token(input, i) != FALSE)
-			store_token(lex, find_token(input, i));
-		if (find_token(input, i) == FALSE)
-			store_token_words(input, lex);
+			(store_token(lex, find_token(input, i)), i++);
 		if (find_token(input, i) == HERE_DOC || find_token(input, i) == APPEND)
 			i++;
-		i++;
 	}
 }
 
@@ -97,15 +127,23 @@ void	print_lex_list(t_lexer *lex)
 		current = current->next;
 	}
 }
+int main() {
+    t_lexer *lex = NULL;
+    char input[] = "echo 'hello' > file.txt";
 
-int	main(void)
-{
-	t_lexer *lex = NULL;
-	char input[] = "e > ";
+    lex_str(input, &lex);
 
-	lex_str(input, &lex);
-	print_lex_list(lex);
+    // Afficher les tokens pour vérifier
+    t_lexer *current = lex;
+    while (current) {
+        if (current->word) {
+            printf("Word: %s\n", current->word);
+        } else {
+            printf("Token: %c\n", current->token);
+        }
+        current = current->next;
+    }
 
-	// Libération de la mémoire (à faire)
-	return (0);
+    // Libérer la mémoire (à implémenter)
+    return 0;
 }

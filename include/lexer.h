@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/06 11:27:30 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/07 10:36:40 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ typedef struct s_lexer
 int		find_token(char *input, int i);
 int		quote_de_porc(char input);
 void	store_token(t_lexer **lex, int token);
-void	store_token_words(char *input, t_lexer **lex);
+void	store_token_words(char *input, t_lexer **lex, int start, int len);
 void	lex_str(char *input, t_lexer **lex);
