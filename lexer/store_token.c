@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/07 16:23:58 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/10 16:36:02 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,15 @@ void	lex_str(char *input, t_lexer **lex)
 
 int main(int ac, char **av) {
     t_lexer *lex = NULL;
-	(void)ac;
+	// (void)ac;
     char *input = av[1];
-
+	if (ac < 2)
+			return (0);
     lex_str(input, &lex);
 
     // Afficher les tokens pour vérifier
     t_lexer *current = lex;
+	
     while (current) {
         if (current->word) {
             printf("Word: %s\n", current->word);
