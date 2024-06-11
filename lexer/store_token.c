@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/10 16:36:02 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/11 14:44:09 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,10 @@ void	is_quoted(char *input, int *i, int *opened)
 // parcour input en i tant que diff token
 void	is_word(char *input, int *i)
 {
-	while (input[*i] && input[*i] != ' ' && is_token(input, i) == FALSE)
+	while (input[*i] && input[*i] != ' ' && is_token(input, i) == FALSE && !quote_de_porc(input[*i]))
 	{
-		if (quote_de_porc(input[*i]))
-			is_quoted(input, i, &(int){0});
-		else
+		// if (quote_de_porc(input[*i]))
+		// 	is_quoted(input, i, &(int){0});
 			(*i)++;
 	}
 }
@@ -88,12 +87,13 @@ void	lex_str(char *input, t_lexer **lex)
 {
 	int	i;
 	int	start;
-	
+
 	i = 0;
-	start= 0;
+	start = 0;
 	while (input[i])
 	{
-		while ((input[i] && input[i] == ' ') || (input[i] >= '\a' && input[i] <= '\r'))
+		while ((input[i] && input[i] == ' ') || (input[i] >= '\a'
+				&& input[i] <= '\r'))
 			i++;
 		if (input[i] == '\0')
 			break ;
@@ -107,28 +107,4 @@ void	lex_str(char *input, t_lexer **lex)
 		if (is_token(input, &i))
 			(store_token(lex, is_token(input, &i)), i++);
 	}
-}
-
-int main(int ac, char **av) {
-    t_lexer *lex = NULL;
-	// (void)ac;
-    char *input = av[1];
-	if (ac < 2)
-			return (0);
-    lex_str(input, &lex);
-
-    // Afficher les tokens pour vérifier
-    t_lexer *current = lex;
-	
-    while (current) {
-        if (current->word) {
-            printf("Word: %s\n", current->word);
-        } else {
-            printf("Token: %d\n", current->token);
-        }
-        current = current->next;
-    }
-
-    // Libérer la mémoire (à implémenter)
-    return 0;
 }

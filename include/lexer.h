@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/10 16:24:57 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/11 16:01:50 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,3 +46,6 @@ void	store_token(t_lexer **lex, int token);
 void	store_token_words(char *input, t_lexer **lex, int start, int len);
 int		is_token(char *input, int *i);
 void	add_node(t_env **env, char *value);
+char	*expand_parsing(t_lexer *lex, t_env *envp);
+char *find_env(char *dest, t_env *envp);
+t_env	*store_env(char **env);

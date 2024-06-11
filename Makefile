@@ -13,7 +13,9 @@ LIBFT_LIB   =   $(LIBFT_PATH)/$(LIBFT_FILE)
 C_FILE      =  	expander/expander.c \
 				lexer/lexer_utils.c \
 				lexer/store_token.c \
-
+				prompt/readline.c	\
+				main.c \
+				
 OBJS        =   $(C_FILE:.c=.o)
 
 .c.o:
@@ -27,7 +29,7 @@ $(LIBFT_LIB):
 	
 $(NAME): $(LIBFT_LIB) $(OBJS)
 	@printf "\r\033[K[Mere-MiShell] \033[0;32mLinking...\033[0m"
-	@$(CC) $(OBJS) $(LIBFT_LIB) -o $(NAME) -lm
+	@$(CC) $(OBJS) $(LIBFT_LIB) -o $(NAME) -lm -lreadline
 	@printf "\r\033[K[Mere-MiShell] \033[0;32mDone!\033[0m\n"
 
 clean:
