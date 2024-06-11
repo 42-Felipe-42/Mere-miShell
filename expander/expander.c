@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/11 17:15:11 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/11 17:42:23 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,37 @@ char	*expand(char *input, int i, t_env *envp)
 		env = "", free(dest);
 	return (env);
 }
+int	ft_strictncmp(const char *s1, const char *s2, int n)
+{
+	int	i;
+
+	i = 0;
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (s1[i] != s2[i])
+			return (-1);
+		i++;
+	}
+	if (i < n || s1[i])
+		return (-1);
+	return (0);
+}
 
 char *find_env(char *dest, t_env *envp)
 {
     while (envp)
     {
-        if (!ft_strictcmp(envp->value, dest))
-            return envp->value;
+        if (ft_strcmp(envp->value, dest) == 0)
+        {
+            // Vérifier si la prochaine caractère après dest est '='
+            if (envp->value[ft_strlen(dest)] == '=')
+                return envp->value;
+        }
         envp = envp->next;
     }
     return NULL;
 }
+
 
 t_env	*store_env(char **env)
 {
