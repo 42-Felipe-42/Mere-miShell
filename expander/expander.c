@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/12 11:00:22 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:29:36 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,18 @@ char	*expand_parsing(t_lexer *lex, t_env *envp)
 	{
 		i = 0;
 		flag = FALSE;
-		while (lex->word[i] && !flag)
+		while (lex->word[i] && !flag && which_quote(lex->word[0]) != S_QUOTE)
 		{
-			if (lex->word[i] == '$' && !quote_de_porc((lex->word[i]))) //$HOME
+			if (lex->word[i] == '$' && !which_quote(lex->word[i]))
 				flag = TRUE;
-			else if (quote_de_porc((lex->word[i]) == D_QUOTE)) //"jwfjpewijfp $HOME ewce"
+			else if (which_quote((lex->word[i]) == D_QUOTE))
 			{
 				i = ft_strchr(lex->word, ' ') - (lex->word);
-				if (ft_strchr(&lex->word[i + 1], '$'))
+				if (!i && ft_strchr(&lex->word[i + 1], '$'))
 					flag = TRUE;
 			}
-			else if (lex->word[i+1] == '$' && quote_de_porc((lex->word[i]) == D_QUOTE)) //"$HOME"
+			else if (lex->word[0] == '$'
+				&& which_quote((lex->word[i]) == D_QUOTE))
 				flag = TRUE;
 			if (flag)
 				result = expand(lex->word, i, envp);
