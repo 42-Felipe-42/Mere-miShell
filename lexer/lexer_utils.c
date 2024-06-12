@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/10 16:17:39 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:31:24 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	is_token(char *input, int *i)
 }
 
 // verifie si input[i] est un guillmet
-int	quote_de_porc(char input)
+int	which_quote(char input)
 {
 	if (input == '\'')
 		return (1);

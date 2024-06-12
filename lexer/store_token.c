@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/12 11:23:36 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:31:29 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len)
 // parcour le input du premier au dernier quote identique
 void	is_quoted(char *input, int *i, int *opened)
 {
-	*opened = quote_de_porc(input[*i]);
+	*opened = which_quote(input[*i]);
 	(*i)++;
 	while (*opened && input[*i])
 	{
-		if (*opened == quote_de_porc(input[*i]))
+		if (*opened == which_quote(input[*i]))
 			*opened = 0;
 		(*i)++;
 	}
@@ -75,7 +75,7 @@ void	is_quoted(char *input, int *i, int *opened)
 // parcour input en i tant que diff token
 void	is_word(char *input, int *i)
 {
-	while (input[*i] && input[*i] != ' ' && is_token(input, i) == FALSE && !quote_de_porc(input[*i]))
+	while (input[*i] && input[*i] != ' ' && is_token(input, i) == FALSE && !which_quote(input[*i]))
 	{
 		(*i)++;
 	}
@@ -96,7 +96,7 @@ void	lex_str(char *input, t_lexer **lex)
 		if (input[i] == '\0')
 			break ;
 		start = i;
-		if (quote_de_porc(input[i]))
+		if (which_quote(input[i]))
 			is_quoted(input, &i, &(int){0});
 		else
 			is_word(input, &i);

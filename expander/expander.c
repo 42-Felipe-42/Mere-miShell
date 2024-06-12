@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/12 11:29:36 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:31:02 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,44 +118,3 @@ void	print_list(t_env *env)
 		env = env->next;
 	}
 }
-
-
-// char *expand_parsing(t_lexer *lex, t_env *envp) {
-//     char *result = NULL;
-//     char *expanded_value;
-//     int i;
-
-//     while (lex) {
-//         i = 0;
-//         while (lex->word[i]) {
-//             if (lex->word[i] == '$') {
-//                 expanded_value = expand(lex->word, i, envp);
-//                 if (expanded_value)
-// 				{
-// 					result = ft_strdup(expanded_value);
-//                 }
-//             }
-// 					i++;
-//         }
-//         lex = lex->next;
-//     }
-//     return (result);
-// }
-// cherche dollar dans input a partir de i, et expand $
-
-
-// int	ft_strictncmp(const char *s1, const char *s2, int n)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while ((s1[i] || s2[i]) && i < n)
-// 	{
-// 		if (s1[i] != s2[i])
-// 			return (-1);
-// 		i++;
-// 	}
-// 	if (i < n || s1[i])
-// 		return (-1);
-// 	return (0);
-// }

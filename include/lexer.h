@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/11 16:01:50 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:31:54 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_env
 #define D_QUOTE		2	// """
 
 // int		find_token(char *input, int i);
-int		quote_de_porc(char input);
+int		which_quote(char input);
 void	lex_str(char *input, t_lexer **lex);
 void	store_token(t_lexer **lex, int token);
 void	store_token_words(char *input, t_lexer **lex, int start, int len);

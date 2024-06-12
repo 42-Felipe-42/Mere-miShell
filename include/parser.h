@@ -6,8 +6,10 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/05 14:26:04 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:32:15 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_quote_closed(t_lexer *lex);
