@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/11 14:44:09 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:23:36 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,7 @@ void	is_word(char *input, int *i)
 {
 	while (input[*i] && input[*i] != ' ' && is_token(input, i) == FALSE && !quote_de_porc(input[*i]))
 	{
-		// if (quote_de_porc(input[*i]))
-		// 	is_quoted(input, i, &(int){0});
-			(*i)++;
+		(*i)++;
 	}
 }
 // stockage de input[i] en fonction de sa valeur, token ou word
