@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/12 10:34:29 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:33:20 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ int	main(int ac, char **av, char **envp)
 	{
 		input = ft_readline();
 		lex_str(input, &lex);
+		if (check_quote_closed(lex) == FALSE)
+		{
+			printf("Quote not closed\n");
+			break ;
+		}
 		expand_parsing(lex, env);
 		current = lex;
 		while (current)
