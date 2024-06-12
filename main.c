@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/12 11:33:20 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:58:30 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int ac, char **av, char **envp)
 			printf("Quote not closed\n");
 			break ;
 		}
-		expand_parsing(lex, env);
+		expander(lex, env);
 		current = lex;
 		while (current)
 		{
@@ -44,8 +44,6 @@ int	main(int ac, char **av, char **envp)
 			current = current->next;
 		}
 	}
-	
 	// Libérer la mémoire (à implémenter)
 	return (0);
 }
-
