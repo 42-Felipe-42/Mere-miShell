@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/13 14:14:11 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:24:51 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,19 @@ char	*expand(char *input, int i, t_env *envp)
 
 	dest = (char *)malloc(strlen(input) + 1);
 	env = NULL;
+	if (input[i] == '$' && !ft_isalnum(input[i + 1]) && ft_strlen(input) == 1)
+			return (input);
 	i++;
 	j = 0;
 	while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
 	{
+		if (input[i] == '$' && !ft_isalnum(input[i + 1]))
+			return (input);
 		// printf("%s\n",dest);
 		dest[j++] = input[i++];
 	}
 	dest[j] = '\0';
+	
 	env = find_env(dest, envp);
 	if (!env)
 		env = "", free(dest);
@@ -94,36 +99,43 @@ void	expander(t_lexer *lex, t_env *envp)
 	char 	*post;
 
 	post = NULL;
+	new_word = NULL;
 	while (lex)
 	{
 		i = 0;
-		if (new_word != NULL)
-			free(new_word);
-		new_word = NULL;
-		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE)							//"jbfjwf $HOME efew $SHLVL"
+		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE)
 		{
-			if (ft_strnstr(lex->word + i, " $", ft_strlen(lex->word + i)) != NULL)
+			if 
+				(
+				(ft_strnstr(lex->word + i, " $", ft_strlen(lex->word + i)) != NULL
+				|| ft_strnstr(lex->word + i, "'$", ft_strlen(lex->word + i)) != NULL)
+				
+				|| lex->word[2] == '$'
+				|| lex->word[0] == '$'
+				)
 			{	
-				post = find_post(lex->word, &i);
-				// printf("i = [%d]\n", i);
+				printf("OK\n");
+				
+				if (lex->word[0] == '$')
+				{
+					lex->word = expand(lex->word, i, envp);
+					break;
+				}
+			post = find_post(lex->word, &i);
 				new_word = ft_strndup(lex->word, i + 1);
 			}
 			else
 				break;
-			// printf("new_word: [%s]\n", new_word);
 			i++;
-			// printf("$ = [%c]\n", lex->word[i]);
 			if (lex->word[i] == '$')
 			{				
 				expand_word = ft_strjoin(new_word, expand_parsing(lex->word + i, envp));
-				// printf("expand_word: [%s]\n", expand_word);
-				i += ft_strlen(expand_parsing(lex->word + i, envp));
-				// printf("i = %d\n", i);
+				i = ft_strlen(expand_word);
 				free(new_word);
 				new_word = ft_strjoin(expand_word, post);
 			}
+			free(lex->word);
 			lex->word = new_word;
-			// printf("lex->word: [%s]\n", lex->word);
 			if (post != NULL)
 				free(post);
 			i++;
@@ -143,50 +155,24 @@ char	*find_post(char *word, int *i)
 	post = NULL;
 	// printf("word: [%s]\n", word);
 	tmp = ft_strnstr(word, " $", ft_strlen(word)) - word;				//donne indice du "_$"
-	if (tmp > 0)
-		*i = tmp;
+	if (tmp < 0)
+		tmp = ft_strnstr(word, "'$", ft_strlen(word)) - word;
+	*i = tmp;
+	
 	// printf("tmp = [%d]\n", tmp);
 	delimiter = ft_strchr(word + *i + 1, ' ') - word;					//index of first "" after "_$"
 	// printf("delimiter = %d\n", delimiter);
 	if (delimiter < 0)
-		delimiter = ft_strchr(word + *i + 1, '\"') - word;		
-	// printf("delimiter = %d\n", delimiter);							//index of first '\"' after "_$"
+		delimiter = ft_strchr(word + *i + 1, '\'') - word;	
+	// printf("delimiter = %d\n", delimiter);								//index of first '\"' after "_$"
+	if (delimiter < 0)
+		delimiter = ft_strchr(word + *i + 1, '\"') - word;
+	// printf("delimiter = %d\n", delimiter);								//index of first '\"' after "_$"
 	if (delimiter > 0)
 		post = ft_strdup(word + delimiter);	
 	// printf("post = [%s]\n", post);
 	return(post);
 }
-
-//VERSION FICELLO
-// t_lexer	*expander(t_lexer *lex, t_env *envp)
-// {
-// 	int		i;
-// 	char	*expanded;
-// 	char	*new_word;
-// 	char	*expand_word;
-// 	while (lex)
-// 	{
-// 		i = 0;
-// 		new_word = NULL;
-// 		while (lex->word[i])
-// 		{
-// 			expand_word = ft_strcpy(new_word, &lex->word[i]);
-// 			if (lex->word[i] == '$' && which_quote(lex->word[0]) != S_QUOTE)
-// 			{
-// 				expanded = expand_parsing(lex->word + i, envp);
-// 				if (expanded)
-// 				{
-// 					expand_word = ft_strjoinandfree(expand_word, &lex->word[i]);
-					
-// 				}
-// 			}
-// 			i++;
-// 		}
-// 		lex = lex->next;
-// 	}
-// 	return (lex);
-// }
-
 
 // copier la variable d'env dans un liste chainee
 t_env	*store_env(char **env)

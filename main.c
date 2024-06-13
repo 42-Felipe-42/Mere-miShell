@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/13 00:44:59 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:22:48 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@ int	main(int ac, char **av, char **envp)
 		// 	printf("Quote not closed\n");
 		// 	break ;
 		// }
+		
+
 		expander(lex, env);
 		current = lex;
 		while (current)
 		{
 			if (current->word)
-				printf("Word: %s\n", current->word);
+				printf("Word:[%s]\n", current->word);
 			else
-				printf("Token: %d\n", current->token);
+				printf("Token: [%d]\n", current->token);
 			current = current->next;
 		}
 	}
