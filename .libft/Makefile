@@ -6,7 +6,7 @@
 #    By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 17:37:56 by plangloi          #+#    #+#              #
-#    Updated: 2024/06/11 17:14:50 by lmerveil         ###   ########.fr        #
+#    Updated: 2024/06/13 19:05:44 by lmerveil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ FILES = 	ft_tolower.c \
 		ft_striteri.c \
 		ft_strmapi.c \
 		ft_strjoin.c \
-		ft_strjoinandfree.c \
+		ft_join_free.c \
 		ft_strtrim.c \
 		ft_substr.c \
 		ft_itoa.c \

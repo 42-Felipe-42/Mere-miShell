@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/13 17:24:51 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/13 19:19:57 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 char	*find_env(char *dest, t_env *envp)
 {
 	int	equal_index;
-	
+
 	while (envp)
 	{
 		if (ft_strcmp(envp->value, dest) == 0)
@@ -42,18 +42,17 @@ char	*expand(char *input, int i, t_env *envp)
 	dest = (char *)malloc(strlen(input) + 1);
 	env = NULL;
 	if (input[i] == '$' && !ft_isalnum(input[i + 1]) && ft_strlen(input) == 1)
-			return (input);
+		return (input);
 	i++;
 	j = 0;
 	while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
 	{
 		if (input[i] == '$' && !ft_isalnum(input[i + 1]))
 			return (input);
-		// printf("%s\n",dest);
+		printf("%s\n", dest);
 		dest[j++] = input[i++];
 	}
 	dest[j] = '\0';
-	
 	env = find_env(dest, envp);
 	if (!env)
 		env = "", free(dest);
@@ -61,20 +60,20 @@ char	*expand(char *input, int i, t_env *envp)
 }
 
 // decider si oui ou non on expand une valeur
-char	*expand_parsing(char *word, t_env *envp)
+char	*exp_pars(char *word, t_env *envp)
 {
 	int	i;
 
 	i = 0;
 	while (word[i])
 	{
-		if (word[0] == '$')							// word = $...
+		if (word[0] == '$') // word = $...
 			return (expand(word, i, envp));
 		else if (which_quote(word[i]) == D_QUOTE)
 		{
-			if (word[1] == '$')						// word = "$...."
+			if (word[1] == '$') // word = "$...."
 				return (expand(word, 1, envp));
-			else									// word = "....$..._$..."
+			else // word = "....$..._$..."
 			{
 				if (ft_strnstr(word, " $", ft_strlen(word)) != NULL)
 				{
@@ -90,88 +89,75 @@ char	*expand_parsing(char *word, t_env *envp)
 	return (word);
 }
 
+bool	check_conditions(char *word, int i)
+{
+	return (ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
+		|| ft_strnstr(word + i, "'$", ft_strlen(word + i)) != NULL
+		|| word[2] == '$' || word[0] == '$');
+}
+
 // return lex expanded
 void	expander(t_lexer *lex, t_env *envp)
 {
 	int		i;
-	char	*new_word;
-	char	*expand_word;
-	char 	*post;
+	char	*new_w;
+	char	*exp_w;
+	char	*post;
 
-	post = NULL;
-	new_word = NULL;
 	while (lex)
 	{
 		i = 0;
 		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE)
 		{
-			if 
-				(
-				(ft_strnstr(lex->word + i, " $", ft_strlen(lex->word + i)) != NULL
-				|| ft_strnstr(lex->word + i, "'$", ft_strlen(lex->word + i)) != NULL)
-				
-				|| lex->word[2] == '$'
-				|| lex->word[0] == '$'
-				)
-			{	
-				printf("OK\n");
-				
+			if (check_conditions(lex->word, i))
+			{
 				if (lex->word[0] == '$')
 				{
 					lex->word = expand(lex->word, i, envp);
-					break;
+					break ;
 				}
-			post = find_post(lex->word, &i);
-				new_word = ft_strndup(lex->word, i + 1);
+				post = find_post(lex->word, &i);
+				new_w = ft_strndup(lex->word, i + 1);
 			}
 			else
-				break;
+				break ;
 			i++;
-			if (lex->word[i] == '$')
-			{				
-				expand_word = ft_strjoin(new_word, expand_parsing(lex->word + i, envp));
-				i = ft_strlen(expand_word);
-				free(new_word);
-				new_word = ft_strjoin(expand_word, post);
+			if (lex->word[i] == '$' && ft_isalnum(lex->word[i + 1]))
+			{
+				exp_w = ft_join_free(new_w, exp_pars(lex->word + i, envp));
+				i = ft_strlen(exp_w);
+				new_w = ft_join_free(exp_w, post);
 			}
+			else
+				break ;
 			free(lex->word);
-			lex->word = new_word;
-			if (post != NULL)
-				free(post);
+			lex->word = new_w;
 			i++;
 		}
 		lex = lex->next;
 	}
-	return ;
 }
 
 // return ce quil y a apres la variable env $
 char	*find_post(char *word, int *i)
 {
-	int delimiter;
-	char *post;
-	int tmp;
+	int		delimiter;
+	char	*post;
+	int		tmp;
 
 	post = NULL;
-	// printf("word: [%s]\n", word);
-	tmp = ft_strnstr(word, " $", ft_strlen(word)) - word;				//donne indice du "_$"
+	tmp = ft_strnstr(word, " $", ft_strlen(word)) - word;
 	if (tmp < 0)
 		tmp = ft_strnstr(word, "'$", ft_strlen(word)) - word;
 	*i = tmp;
-	
-	// printf("tmp = [%d]\n", tmp);
-	delimiter = ft_strchr(word + *i + 1, ' ') - word;					//index of first "" after "_$"
-	// printf("delimiter = %d\n", delimiter);
+	delimiter = ft_strchr(word + *i + 1, ' ') - word;
 	if (delimiter < 0)
-		delimiter = ft_strchr(word + *i + 1, '\'') - word;	
-	// printf("delimiter = %d\n", delimiter);								//index of first '\"' after "_$"
+		delimiter = ft_strchr(word + *i + 1, '\'') - word;
 	if (delimiter < 0)
 		delimiter = ft_strchr(word + *i + 1, '\"') - word;
-	// printf("delimiter = %d\n", delimiter);								//index of first '\"' after "_$"
 	if (delimiter > 0)
-		post = ft_strdup(word + delimiter);	
-	// printf("post = [%s]\n", post);
-	return(post);
+		post = ft_strdup(word + delimiter);
+	return (post);
 }
 
 // copier la variable d'env dans un liste chainee

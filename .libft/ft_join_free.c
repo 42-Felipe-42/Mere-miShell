@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoinandfree.c                                :+:      :+:    :+:   */
+/*   ft_join_free.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 10:08:32 by plangloi          #+#    #+#             */
-/*   Updated: 2024/04/15 14:18:08 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/13 19:12:01 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoinandfree(char *s1, char *s2)
+char	*ft_join_free(char *s1, char *s2)
 {
 	char				*s3;
 	unsigned int		i;
