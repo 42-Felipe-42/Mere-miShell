@@ -6,11 +6,15 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/14 18:41:40 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/14 19:17:13 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+//COMMANDES A CORRIGER:
+//"$HOME wedew$SHLVL  sewg $PWD '$HOME'"
+
 
 // chercher dest dans env, si trouve expand, sinon NULL
 char	*find_env(char *dest, t_env *envp)
@@ -88,35 +92,11 @@ char	*exp_pars(char *word, t_env *envp)
 	}
 	return (word);
 }
-// si !alphanum print le $ avec sa valeur,
-	// sauf $? et $0. Si il y a des num derriere skip le $ et le 1er num et ecrire le reste exemple ($1HOLA
-	// -> HOLA)
-
-// void	prout(t_env *env, t_lexer *lex)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (lex)
-// 	{
-// 		i = 0;
-// 		while (lex->word[i])
-// 		{
-// 			if (lex->word[i] == '$' && ft_isdigit(lex->word[i + 1]))
-// 				i + 2;
-// 			else if (lex->word[i] == '$' && !ft_isalnum(lex->word[i + 1]))
-// 			{
-// 				while (lex->word[i] != ' ')
-// 					i++;
-// 			}
-			
-// 		}
-// 	}
-// }
 
 bool	check_conditions(char *word, int i)
 {
-	if (ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
+	if (ft_strnstr(word + i, "$", ft_strlen(word + i)) != NULL
+		|| ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
 		|| ft_strnstr(word + i, "'$", ft_strlen(word + i)) != NULL
 		|| word[2] == '$'
 		|| word[1] == '$'
@@ -153,9 +133,11 @@ void	expander(t_lexer *lex, t_env *envp)
 			}
 			else
 				break ;
-			i++;
+			if (lex->word[i] != '$')
+				i++;
 			if (lex->word[i] == '$' && ft_isalnum(lex->word[i + 1]))
 			{
+				printf("exp_pars: [%s]\n", exp_pars(lex->word + i, envp));
 				exp_w = ft_join_free(new_w, exp_pars(lex->word + i, envp));
 				i = ft_strlen(exp_w);
 				new_w = ft_join_free(exp_w, post);
@@ -178,61 +160,44 @@ char	*find_post(char *word, int *i)
 	int		tmp;
 
 	post = NULL;
-	printf("word: [%s]\n", word);
-	tmp = ft_strnstr(word, "\"$", ft_strlen(word)) - word;
-	printf("i = %d\n", *i);
-	if (tmp < 0)
-	{
-		tmp = ft_strnstr(word, " $", ft_strlen(word)) - word;
-		printf("tmp = %d\n", tmp);
-	}
-	if (tmp < 0)
-	{
-		tmp = ft_strnstr(word, "'$", ft_strlen(word)) - word;
-		printf("tmp = %d\n", tmp);
-	}
-	if (tmp < 0)
+	// printf("word: [%s]\n", word);
+	
+	if (ft_strchr(word, '$')) // GROSS MODIFICATION DE DERNIER MOMENT A SUPPRIMER??
 	{
 		tmp = ft_strnstr(word, "\"$", ft_strlen(word)) - word;
-		printf("tmp = %d\n", tmp);
-	}	
-	*i = tmp;
-	delimiter = ft_strchr(word + *i + 1, ' ') - word;
-	if (delimiter < 0)
-		delimiter = ft_strchr(word + *i + 1, '\'') - word;
-	if (delimiter < 0)
-		delimiter = ft_strchr(word + *i + 1, '\"') - word;
-	post = ft_strdup(word + delimiter);
+		printf("i = %d\n", *i);
+		if (tmp < 0)
+		{
+			tmp = ft_strnstr(word, " $", ft_strlen(word)) - word;
+			printf("tmp = %d\n", tmp);
+		}
+		if (tmp < 0)
+		{
+			tmp = ft_strnstr(word, "'$", ft_strlen(word)) - word;
+			printf("tmp = %d\n", tmp);
+		}
+		if (tmp < 0)
+		{
+			tmp = ft_strnstr(word, "\"$", ft_strlen(word)) - word;
+			printf("tmp = %d\n", tmp);
+		}
+		if (tmp < 0)
+		{
+			tmp = ft_strchr(word, '$') - word;
+			printf("tmp = %d\n", tmp);
+		}
+		// tmp = ft_strnstr(word, "$", ft_strlen(word)) - word;
+		*i = tmp;
+		printf("i = %d\n", *i);
+		delimiter = ft_strchr(word + *i + 1, ' ') - word;
+		if (delimiter < 0)
+			delimiter = ft_strchr(word + *i + 1, '\'') - word;
+		if (delimiter < 0)
+			delimiter = ft_strchr(word + *i + 1, '\"') - word;
+		post = ft_strdup(word + delimiter);
+	}
 	return (post);
 }
-
-// char	*find_post(char *word, int *i)
-// {
-// 	int		delimiter;
-// 	char	*post;
-
-// 	int		tmp;
-// 	post = NULL;
-// 	printf("word: [%s]\n", word);
-	
-// 	tmp = ft_strchr(word, '$') - word;
-// 	printf("i = %d\n", *i);
-// 	if (*i < 0)
-// 		*i = ft_strnstr(word, " $", ft_strlen(word)) - word;
-// 	if (*i < 0)
-// 		*i = ft_strnstr(word, "'$", ft_strlen(word)) - word;
-// 	printf("i = %d\n", *i);
-// 	if (*i < 0)
-// 		*i = ft_strnstr(word, "\"$", ft_strlen(word)) - word;
-// 	printf("i = %d\n", *i);
-// 	delimiter = ft_strchr(word + *i + 1, ' ') - word;
-// 	if (delimiter < 0)
-// 		delimiter = ft_strchr(word + *i + 1, '\'') - word;
-// 	if (delimiter < 0)
-// 		delimiter = ft_strchr(word + *i + 1, '\"') - word;
-// 	post = ft_strdup(word + delimiter);
-// 	return (post);
-// }
 
 // copier la variable d'env dans un liste chainee
 t_env	*store_env(char **env)
@@ -265,3 +230,30 @@ void	print_list(t_env *env)
 		env = env->next;
 	}
 }
+
+
+// si !alphanum print le $ avec sa valeur,
+	// sauf $? et $0. Si il y a des num derriere skip le $ et le 1er num et ecrire le reste exemple ($1HOLA
+	// -> HOLA)
+
+// void	prout(t_env *env, t_lexer *lex)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (lex)
+// 	{
+// 		i = 0;
+// 		while (lex->word[i])
+// 		{
+// 			if (lex->word[i] == '$' && ft_isdigit(lex->word[i + 1]))
+// 				i + 2;
+// 			else if (lex->word[i] == '$' && !ft_isalnum(lex->word[i + 1]))
+// 			{
+// 				while (lex->word[i] != ' ')
+// 					i++;
+// 			}
+			
+// 		}
+// 	}
+// }
