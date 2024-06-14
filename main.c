@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/13 19:19:17 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/14 18:30:27 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int ac, char **av, char **envp)
 		while (current)
 		{
 			if (current->word)
-				printf("Word:[%s]\n", current->word);
+				printf(GREEN"Word:[%s]\n"RESET, current->word);
 			else
 				printf("Token: [%d]\n", current->token);
 			current = current->next;
