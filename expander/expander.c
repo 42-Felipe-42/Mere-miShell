@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/13 19:19:57 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/14 13:05:15 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,40 @@ char	*exp_pars(char *word, t_env *envp)
 	}
 	return (word);
 }
+// si !alphanum print le $ avec sa valeur,
+	// sauf $? et $0. Si il y a des num derriere skip le $ et le 1er num et ecrire le reste exemple ($1HOLA
+	// -> HOLA)
+
+void	prout(t_env *env, t_lexer *lex)
+{
+	int	i;
+
+	i = 0;
+	while (lex)
+	{
+		i = 0;
+		while (lex->word[i])
+		{
+			if (lex->word[i] == '$' && ft_isdigit(lex->word[i + 1]))
+				i + 2;
+			else if (lex->word[i] == '$' && !ft_isalnum(lex->word[i + 1]))
+			{
+				while (lex->word[i] != ' ')
+					i++;
+			}
+			
+		}
+	}
+}
 
 bool	check_conditions(char *word, int i)
 {
-	return (ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
+	if (ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
 		|| ft_strnstr(word + i, "'$", ft_strlen(word + i)) != NULL
-		|| word[2] == '$' || word[0] == '$');
+		|| word[2] == '$' || word[0] == '$')
+		return (TRUE);
+	else
+		return (FALSE);
 }
 
 // return lex expanded
@@ -104,37 +132,32 @@ void	expander(t_lexer *lex, t_env *envp)
 	char	*exp_w;
 	char	*post;
 
-	while (lex)
+	while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE)
 	{
-		i = 0;
-		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE)
+		if (check_conditions(lex->word, i))
 		{
-			if (check_conditions(lex->word, i))
+			if (lex->word[0] == '$')
 			{
-				if (lex->word[0] == '$')
-				{
-					lex->word = expand(lex->word, i, envp);
-					break ;
-				}
-				post = find_post(lex->word, &i);
-				new_w = ft_strndup(lex->word, i + 1);
-			}
-			else
+				lex->word = expand(lex->word, i, envp);
 				break ;
-			i++;
-			if (lex->word[i] == '$' && ft_isalnum(lex->word[i + 1]))
-			{
-				exp_w = ft_join_free(new_w, exp_pars(lex->word + i, envp));
-				i = ft_strlen(exp_w);
-				new_w = ft_join_free(exp_w, post);
 			}
-			else
-				break ;
-			free(lex->word);
-			lex->word = new_w;
-			i++;
+			post = find_post(lex->word, &i);
+			new_w = ft_strndup(lex->word, i + 1);
 		}
-		lex = lex->next;
+		else
+			break ;
+		i++;
+		if (lex->word[i] == '$' && ft_isalnum(lex->word[i + 1]))
+		{
+			exp_w = ft_join_free(new_w, exp_pars(lex->word + i, envp));
+			i = ft_strlen(exp_w);
+			new_w = ft_join_free(exp_w, post);
+		}
+		else
+			break ;
+		free(lex->word);
+		lex->word = new_w;
+		i++;
 	}
 }
 
