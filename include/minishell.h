@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/11 13:48:43 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:25:56 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,14 @@
 # define UNDERLINE "\x1B[4m"
 
 // int g_return_code;
+typedef struct s_shell
+{
+	char			*av;
+	t_lexer	*lex;
+	t_env	*env;
+}			t_shell;
 
-char	*ft_readline(void);
+char		*ft_readline(void);
+void	expander(t_lexer *lex, t_env *envp, t_shell *shell);
 
 #endif

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/17 15:14:43 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:52:07 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//COMMANDES A CORRIGER:
+// COMMANDES A CORRIGER:
 //"$HOME wedew$SHLVL  sewg $PWD '$HOME'"
-
 
 // chercher dest dans env, si trouve expand, sinon NULL
 char	*find_env(char *dest, t_env *envp)
@@ -98,23 +97,44 @@ bool	check_conditions(char *word, int i)
 	if (ft_strnstr(word + i, "$", ft_strlen(word + i)) != NULL
 		|| ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
 		|| ft_strnstr(word + i, "'$", ft_strlen(word + i)) != NULL
-		|| word[2] == '$'
-		|| word[1] == '$'
-		|| word[0] == '$')
+		|| word[2] == '$' || word[1] == '$' || word[0] == '$')
 		return (TRUE);
 	else
 		return (FALSE);
 }
 
+char *find_pwd(char *str, int *i, t_shell *shell)
+{
+	if (ft_strcmp(&str[*i], "$0") && ft_strlen(str) == 2)
+		str = shell->av;
+	return (str);
+}
+	// post = find_post(lex->word, &i);
+				// if (ft_isdigit(lex->word[i + 1]))
+				// {
+					// new_w = ft_strndup(lex->word, i);
+					// printf("first word : [%s]\n", new_w);
+					// if (lex->word[i + 1] == '0')
+						// tmp2 = ft_strjoin(new_w, shell->av);
+					// printf("$0 [%s]\n", tmp2);
+					// i += 2;
+					// post = ft_strdup(lex->word + i);
+					// printf("post = [%s]\n", post);
+					// tmp = ft_join_free(tmp2, post);
+					// printf("tmp = [%s]\n", tmp);
+					// free(post);
+					// new_w = tmp2;
+				// }
+				// else
 // return lex expanded
-void	expander(t_lexer *lex, t_env *envp)
+void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 {
 	int		i;
 	char	*new_w;
 	char	*exp_w;
 	char	*post;
-	char 	*tmp;
-
+	char	*tmp;
+	(void)shell;
 	while (lex)
 	{
 		i = 0;
@@ -131,6 +151,8 @@ void	expander(t_lexer *lex, t_env *envp)
 				if (ft_isdigit(lex->word[i + 1]))
 				{
 					new_w = ft_strndup(lex->word, i);
+					if (lex->word[i +1] == '0')
+						new_w = ft_strjoin(new_w, shell->av);
 					i += 2;
 					post = ft_strdup(lex->word + i);
 					tmp = ft_join_free(new_w, post);
@@ -161,7 +183,6 @@ void	expander(t_lexer *lex, t_env *envp)
 	}
 }
 
-
 // return ce quil y a apres la variable env $
 char	*find_post(char *word, int *i)
 {
@@ -171,10 +192,10 @@ char	*find_post(char *word, int *i)
 
 	post = NULL;
 	printf("pre word: [%s]\n", word);
-	printf(RED"ft_strchr: [%s]\n"RESET, ft_strchr(word, '$'));
+	printf(RED "ft_strchr: [%s]\n" RESET, ft_strchr(word, '$'));
 	if (ft_strchr(word, '$') > 0)
 	{
-		printf(RED"OKOK\n"RESET);
+		printf(RED "OKOK\n" RESET);
 		tmp = ft_strchr(word, '$') - word;
 		printf("tmp = %d\n", tmp);
 		*i = tmp;
@@ -214,19 +235,10 @@ t_env	*store_env(char **env)
 	return (store_value);
 }
 
-void	print_list(t_env *env)
-{
-	while (env)
-	{
-		printf("%s \n", env->value);
-		env = env->next;
-	}
-}
-
 
 // si !alphanum print le $ avec sa valeur,
-	// sauf $? et $0. Si il y a des num derriere skip le $ et le 1er num et ecrire le reste exemple ($1HOLA
-	// -> HOLA)
+// sauf $? et $0. Si il y a des num derriere skip le $ et le 1er num et ecrire le reste exemple ($1HOLA
+// -> HOLA)
 
 // void	prout(t_env *env, t_lexer *lex)
 // {
@@ -245,8 +257,7 @@ void	print_list(t_env *env)
 // 				while (lex->word[i] != ' ')
 // 					i++;
 // 			}
-			
+
 // 		}
 // 	}
 // }
-
