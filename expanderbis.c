@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/17 17:28:14 by plangloi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    expander.bis                                       :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#              #
+#    Updated: 2024/06/17 17:29:48 by plangloi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 #include "../include/minishell.h"
 
@@ -103,31 +103,30 @@ bool	check_conditions(char *word, int i)
 		return (FALSE);
 }
 
-char	*find_pwd(char *str, int *i, t_shell *shell)
+char *find_pwd(char *str, int *i, t_shell *shell)
 {
 	if (ft_strcmp(&str[*i], "$0") && ft_strlen(str) == 2)
 		str = shell->av;
 	return (str);
 }
-// post = find_post(lex->word, &i);
-// if (ft_isdigit(lex->word[i + 1]))
-// {
-// new_w = ft_strndup(lex->word, i);
-// printf("first word : [%s]\n", new_w);
-// if (lex->word[i + 1] == '0')
-// tmp2 = ft_strjoin(new_w, shell->av);
-// printf("$0 [%s]\n", tmp2);
-// i += 2;
-// post = ft_strdup(lex->word + i);
-// printf("post = [%s]\n", post);
-// tmp = ft_join_free(tmp2, post);
-// printf("tmp = [%s]\n", tmp);
-// free(post);
-// new_w = tmp2;
-// }
-// else
+	// post = find_post(lex->word, &i);
+				// if (ft_isdigit(lex->word[i + 1]))
+				// {
+					// new_w = ft_strndup(lex->word, i);
+					// printf("first word : [%s]\n", new_w);
+					// if (lex->word[i + 1] == '0')
+						// tmp2 = ft_strjoin(new_w, shell->av);
+					// printf("$0 [%s]\n", tmp2);
+					// i += 2;
+					// post = ft_strdup(lex->word + i);
+					// printf("post = [%s]\n", post);
+					// tmp = ft_join_free(tmp2, post);
+					// printf("tmp = [%s]\n", tmp);
+					// free(post);
+					// new_w = tmp2;
+				// }
+				// else
 // return lex expanded
-
 void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 {
 	int		i;
@@ -135,7 +134,6 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 	char	*exp_w;
 	char	*post;
 	char	*tmp;
-
 	(void)shell;
 	while (lex)
 	{
@@ -150,31 +148,24 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 					break ;
 				}
 				post = find_post(lex->word, &i);
-				printf("post = [%s]\n", post);
 				if (ft_isdigit(lex->word[i + 1]))
 				{
 					new_w = ft_strndup(lex->word, i);
-					if (lex->word[i + 1] == '0')
+					if (lex->word[i +1] == '0')
 						new_w = ft_strjoin(new_w, shell->av);
 					i += 2;
 					post = ft_strdup(lex->word + i);
 					tmp = ft_join_free(new_w, post);
 					free(post);
 					new_w = tmp;
-					printf("test1\n");
 				}
 				else
-				{
 					new_w = ft_strndup(lex->word, i);
-					printf("new_w = [%s]\n", new_w);
-					printf("test\n");
-				}
 			}
-			else if(ft_strchr(lex->word, '$') == NULL)
+			else
 				break ;
 			if (lex->word[i] != '$')
 				i++;
-			printf("new_w = [%s]\n", new_w);
 			if (lex->word[i] == '$' && ft_isalpha(lex->word[i + 1]))
 			{
 				printf("new_w = [%s]\n", new_w);
@@ -184,8 +175,6 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 				i = ft_strlen(exp_w);
 				new_w = ft_join_free(exp_w, post);
 			}
-			else /* if(ft_strchr(lex->word + i, '$') == NULL) */
-				break ;
 			free(lex->word);
 			lex->word = new_w;
 			i++;
@@ -203,19 +192,11 @@ char	*find_post(char *word, int *i)
 
 	post = NULL;
 	printf("pre word: [%s]\n", word);
-	printf("*i : %d\n", *i);
-	while (word[*i] == '$' && (word[*i + 1] == '$' || word[*i + 1] == ' '))
-	{
-		*i += 2;
-			*i = ft_strchr(word + *i, '$') - word;
-
-		printf(RED"*i : %d\n"RESET, *i);
-	}
-	printf(RED "ft_strchr: [%s]\n" RESET, ft_strchr(word + *i, '$'));
-	if (ft_strchr(word + *i, '$') > 0)
+	printf(RED "ft_strchr: [%s]\n" RESET, ft_strchr(word, '$'));
+	if (ft_strchr(word, '$') > 0)
 	{
 		printf(RED "OKOK\n" RESET);
-		tmp = ft_strchr(word + *i, '$') - word;
+		tmp = ft_strchr(word, '$') - word;
 		printf("tmp = %d\n", tmp);
 		*i = tmp;
 		printf("after incr i = %d\n", *i);
@@ -253,6 +234,7 @@ t_env	*store_env(char **env)
 	}
 	return (store_value);
 }
+
 
 // si !alphanum print le $ avec sa valeur,
 // sauf $? et $0. Si il y a des num derriere skip le $ et le 1er num et ecrire le reste exemple ($1HOLA

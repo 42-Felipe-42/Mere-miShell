@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/17 15:23:48 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/17 16:02:23 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	print_list(t_shell *shell)
 {
 	while (shell->lex)
 	{
-		printf("Word %s\n", shell->lex->word);
+		printf(GREEN"Word : [%s]\n"RESET, shell->lex->word);
 		shell->lex = shell->lex->next;
 	}
 }
