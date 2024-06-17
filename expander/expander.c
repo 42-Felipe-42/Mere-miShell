@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/16 19:13:25 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:14:43 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	expander(t_lexer *lex, t_env *envp)
 	char	*new_w;
 	char	*exp_w;
 	char	*post;
+	char 	*tmp;
 
 	while (lex)
 	{
@@ -121,19 +122,29 @@ void	expander(t_lexer *lex, t_env *envp)
 		{
 			if (check_conditions(lex->word, i))
 			{
-				if (lex->word[0] == '$')
+				if (lex->word[0] == '$' && !ft_isdigit(lex->word[1]))
 				{
 					lex->word = expand(lex->word, i, envp);
 					break ;
 				}
 				post = find_post(lex->word, &i);
-				new_w = ft_strndup(lex->word, i);
+				if (ft_isdigit(lex->word[i + 1]))
+				{
+					new_w = ft_strndup(lex->word, i);
+					i += 2;
+					post = ft_strdup(lex->word + i);
+					tmp = ft_join_free(new_w, post);
+					free(post);
+					new_w = tmp;
+				}
+				else
+					new_w = ft_strndup(lex->word, i);
 			}
 			else
 				break ;
 			if (lex->word[i] != '$')
 				i++;
-			if (lex->word[i] == '$' && ft_isalnum(lex->word[i + 1]))
+			if (lex->word[i] == '$' && ft_isalpha(lex->word[i + 1]))
 			{
 				printf("new_w = [%s]\n", new_w);
 				printf("exp_pars: [%s]\n", exp_pars(lex->word + i, envp));
@@ -141,49 +152,11 @@ void	expander(t_lexer *lex, t_env *envp)
 				exp_w = ft_join_free(new_w, exp_pars(lex->word + i, envp));
 				i = ft_strlen(exp_w);
 				new_w = ft_join_free(exp_w, post);
-				printf("final word = [%s]\n", new_w);
 			}
-			else
-				break ;
 			free(lex->word);
 			lex->word = new_w;
 			i++;
 		}
-		i = 0;
-		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE)
-		{
-			if (check_conditions(lex->word, i))
-			{
-				if (lex->word[0] == '$')
-				{
-					lex->word = expand(lex->word, i, envp);
-					break ;
-				}
-				post = find_post(lex->word, &i);
-				new_w = ft_strndup(lex->word, i);
-			}
-			else
-				break ;
-			if (lex->word[i] != '$')
-				i++;
-			if (lex->word[i] == '$' && ft_isalnum(lex->word[i + 1]))
-			{
-				printf("new_w = [%s]\n", new_w);
-				printf("exp_pars: [%s]\n", exp_pars(lex->word + i, envp));
-				printf("post = [%s]\n", post);
-				exp_w = ft_join_free(new_w, exp_pars(lex->word + i, envp));
-				i = ft_strlen(exp_w);
-				new_w = ft_join_free(exp_w, post);
-				printf("final word = [%s]\n", new_w);
-			}
-			else
-				break ;
-			free(lex->word);
-			lex->word = new_w;
-			i++;
-		}
-
-
 		lex = lex->next;
 	}
 }
@@ -202,28 +175,8 @@ char	*find_post(char *word, int *i)
 	if (ft_strchr(word, '$') > 0)
 	{
 		printf(RED"OKOK\n"RESET);
-		tmp = ft_strnstr(word, "\"$", ft_strlen(word)) - word + 1;
-		printf("before incr i = %d\n", *i);
-		if (tmp < 0)
-		{
-			tmp = ft_strnstr(word, " $", ft_strlen(word)) - word + 1;
-			printf("tmp = %d\n", tmp);
-		}
-		if (tmp < 0)
-		{
-			tmp = ft_strnstr(word, "'$", ft_strlen(word)) - word + 1;
-			printf("tmp = %d\n", tmp);
-		}
-		// if (tmp < 0)
-		// {
-		// 	tmp = ft_strnstr(word, "\"$", ft_strlen(word)) - word + 1;
-		// 	printf("tmp = %d\n", tmp);
-		// }
-		if (tmp < 0)
-		{
-			tmp = ft_strchr(word, '$') - word;
-			printf("tmp = %d\n", tmp);
-		}
+		tmp = ft_strchr(word, '$') - word;
+		printf("tmp = %d\n", tmp);
 		*i = tmp;
 		printf("after incr i = %d\n", *i);
 		delimiter = ft_strchr(word + *i + 1, ' ') - word;
@@ -231,6 +184,8 @@ char	*find_post(char *word, int *i)
 			delimiter = ft_strchr(word + *i + 1, '\'') - word;
 		if (delimiter < 0)
 			delimiter = ft_strchr(word + *i + 1, '\"') - word;
+		if (delimiter < 0)
+			delimiter = ft_strchr(word + *i + 1, '\0') - word;
 		post = ft_strdup(word + delimiter);
 	}
 	return (post);
