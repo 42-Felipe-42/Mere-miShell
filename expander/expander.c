@@ -6,7 +6,7 @@
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/19 13:01:36 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/19 15:56:19 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,16 @@ char	*expand(char *input, int i, t_env *envp)
 	if (input[i] == '$' && input[i + 1] == '\0' /*&& !ft_isalnum(input[i + 1])*/) // "$"
 		return (input);
 	printf("*i : [%d]\n", i);
-	if (input[i] == '$')
-		i += 1;
+	if (input[i] == '$' && input[i + 1] == '$')
+		i +=3;
+	else if (input[i] == '$')
+		i++;
 	j = 0;
 	printf("*i : [%d]\n", i);
 	printf("input[i]: [%c]\n", input[i]);
 	while (input[i] && (ft_isalpha(input[i]) || input[i] == '_')) // $$A
 	{
 		printf(RED"OK\n"RESET);
-		// if (input[i] == '$' && !ft_isalnum(input[i + 1]))
-		// {
-		// 	printf(RED"input: [%s]\n"RESET, input);
-		// 	return (input);
-		// }
 		dest[j++] = input[i];
 		i += 1;
 	}
@@ -161,6 +158,8 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 			{
 				while (lex->word[i] && ft_strchr(lex->word + i, '$'))
 				{
+					if (lex->word[i + 1] == '$')
+						i++;
 					i++;
 					tmp = expand(lex->word, i, envp);
 					i = ft_strchr(lex->word + i, '$') - lex->word;

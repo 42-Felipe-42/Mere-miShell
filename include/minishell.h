@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/17 15:25:56 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:54:22 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_shell
 }			t_shell;
 
 char		*ft_readline(void);
-void	expander(t_lexer *lex, t_env *envp, t_shell *shell);
+void		expander(t_lexer *lex, t_env *envp, t_shell *shell);
+char		*no_quote(char *word, int i, t_env *envp);
 
 #endif
