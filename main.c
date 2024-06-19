@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/17 16:02:23 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:05:23 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 
 void	print_list(t_shell *shell)
 {
+	printf("\n");
 	while (shell->lex)
 	{
-		printf(GREEN"Word : [%s]\n"RESET, shell->lex->word);
+		if (shell->lex->next == NULL)
+			printf(GREEN"Last Node : [%s]\n"RESET, shell->lex->word);
+		else 
+			printf(RED"Past Node : [%s]\n"RESET, shell->lex->word);
 		shell->lex = shell->lex->next;
 	}
 }
@@ -31,6 +35,7 @@ int	main(int ac, char **av, char **envp)
 
 	lex = NULL;
 	(void)ac;
+	(void)current;
 	shell = malloc(sizeof(t_shell));
 	env = NULL;
 	shell->av = ft_strdup(*av);
