@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/19 15:56:19 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:58:11 by aurlic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*exp_pars(char *word, t_env *envp)
 
 bool	check_conditions(char *word, int i)
 {
-	if (word[i] && 
+	if (word[i] &&
 		(ft_strchr(word + i, '$') != NULL
 		|| ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
 		|| ft_strnstr(word + i, "'$", ft_strlen(word + i)) != NULL
@@ -146,7 +146,7 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 	char	*exp_w = NULL;
 	char	*post;
 	char	*tmp;
-	
+
 	(void)shell;
 	(void)tmp;
 	while (lex)
@@ -154,6 +154,10 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 		i = 0;
 		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE && check_conditions(lex->word, i))
 		{
+			// while (lex->word[i] == '$' && lex->word[i + 1] == '$')
+			// 	i += 2;
+			if (lex->word[0] == '$' && lex->word[1] == '\0')
+				break;
 			if (lex->word[0] == '$' && !ft_isdigit(lex->word[1])) 	// $HOME - sans guillmets
 			{
 				while (lex->word[i] && ft_strchr(lex->word + i, '$'))
@@ -233,16 +237,15 @@ char	*find_post(char *word, int *i)
 	post = NULL;
 	printf("pre word: [%s]\n", word);
 	printf("*i : %d\n", *i);
-	
-	// while (word[*i] == '$' && (word[*i + 1] == '$' || word[*i + 1] == ' '))
+
+	// while ((word[*i] == '$' && (word[*i + 1] == '$')))
 	// {
 	// 	*i += 2;
-	// 	*i = ft_strchr(word + *i, '$') - word;
 	// 	printf(RED"*i : %d\n"RESET, *i);
 	// }
 	printf(RED "ft_strchr: [%s]\n" RESET, ft_strchr(word + *i, '$'));
-	
 	*i = ft_strchr(word + *i, '$') - word;
+	printf("*i $$ : %d\n", *i);
 	if (word[*i] == '$' && ft_isdigit(word[*i + 1])) // dolls + num
 	{
 		printf("word[i] : %c\n", word[*i]);

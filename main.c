@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/18 16:05:23 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/21 16:38:15 by aurlic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print_list(t_shell *shell)
 	{
 		if (shell->lex->next == NULL)
 			printf(GREEN"Last Node : [%s]\n"RESET, shell->lex->word);
-		else 
+		else
 			printf(RED"Past Node : [%s]\n"RESET, shell->lex->word);
 		shell->lex = shell->lex->next;
 	}
@@ -47,6 +47,7 @@ int	main(int ac, char **av, char **envp)
 		input = ft_readline();
 		lex_str(input, &lex);
 		expander(lex, env, shell);
+		quote(lex);
 		shell->lex = lex;
 		current = shell->lex;
 		print_list(shell);
