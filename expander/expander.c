@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/21 16:58:11 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/06/24 14:42:50 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,28 +44,22 @@ char	*expand(char *input, int i, t_env *envp)
 	char	*env;
 	int		j;
 
-	printf("*i : [%d]\n", i);
 	dest = (char *)malloc(strlen(input) + 1);
 	env = NULL;
-	if (input[i] == '$' && input[i + 1] == '\0' /*&& !ft_isalnum(input[i + 1])*/) // "$"
+	if (input[i] == '$' && input[i + 1] == '\0') // "$"
 		return (input);
-	printf("*i : [%d]\n", i);
 	if (input[i] == '$' && input[i + 1] == '$')
 		i +=3;
 	else if (input[i] == '$')
 		i++;
 	j = 0;
-	printf("*i : [%d]\n", i);
-	printf("input[i]: [%c]\n", input[i]);
 	while (input[i] && (ft_isalpha(input[i]) || input[i] == '_')) // $$A
 	{
-		printf(RED"OK\n"RESET);
 		dest[j++] = input[i];
 		i += 1;
 	}
 	dest[j] = '\0';
 	printf(RED"dest: [%s]\n"RESET, dest);
-	printf("*i : %d\n", i);
 	env = find_env(dest, envp);
 	if (!env)
 		env = "", free(dest);
@@ -120,72 +114,30 @@ char	*find_pwd(char *str, int *i, t_shell *shell)
 		str = shell->av;
 	return (str);
 }
-// post = find_post(lex->word, &i);
-// if (ft_isdigit(lex->word[i + 1]))
-// {
-// new_w = ft_strndup(lex->word, i);
-// printf("first word : [%s]\n", new_w);
-// if (lex->word[i + 1] == '0')
-// tmp2 = ft_strjoin(new_w, shell->av);
-// printf("$0 [%s]\n", tmp2);
-// i += 2;
-// post = ft_strdup(lex->word + i);
-// printf("post = [%s]\n", post);
-// tmp = ft_join_free(tmp2, post);
-// printf("tmp = [%s]\n", tmp);
-// free(post);
-// new_w = tmp2;
-// }
-// else
-// return lex expanded
 
 void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 {
 	int		i;
 	char	*new_w;
-	char	*exp_w = NULL;
+	char	*exp_w = "";
 	char	*post;
 	char	*tmp;
+	int		j = 0;
 
 	(void)shell;
+	(void)j;
 	(void)tmp;
 	while (lex)
 	{
 		i = 0;
 		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE && check_conditions(lex->word, i))
 		{
-			// while (lex->word[i] == '$' && lex->word[i + 1] == '$')
-			// 	i += 2;
-			if (lex->word[0] == '$' && lex->word[1] == '\0')
+			if (lex->word[0] == '$' && lex->word[1] == '\0') 		// $\0 - dollar seul
 				break;
-			if (lex->word[0] == '$' && !ft_isdigit(lex->word[1])) 	// $HOME - sans guillmets
-			{
-				while (lex->word[i] && ft_strchr(lex->word + i, '$'))
-				{
-					if (lex->word[i + 1] == '$')
-						i++;
-					i++;
-					tmp = expand(lex->word, i, envp);
-					i = ft_strchr(lex->word + i, '$') - lex->word;
-					if (!tmp)
-					{
-						lex->word = exp_w;
-						free(exp_w);
-						break;
-					}
-					else if (!exp_w)
-						new_w = tmp;
-					else
-						new_w = ft_strjoin(exp_w, tmp);
-					exp_w = new_w;
-					if (i < 0)
-						break;
-				}
-				lex->word = exp_w;
-				break ;
-			}
-			post = find_post(lex->word, &i);
-			if (ft_isdigit(lex->word[i + 1])) 						// $1
+			if (lex->word[0] == '$' && !ft_isdigit(lex->word[1])) 	// $$$$abcd$HOME$$SHLVL-sans guillmets
+				return(dol_digi(&lex->word, i, envp));
+			post = find_post(lex->word, &i, &new_w);				// "abcd$1abcd$HOME" - avec guillemets
+			if (ft_isdigit(lex->word[i + 1]))							// -> $123 - skipper premier chiffre apres $
 			{
 				new_w = ft_strndup(lex->word, i);
 				if (lex->word[i + 1] == '0')
@@ -219,8 +171,8 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 				printf(GREEN"lex->word + i : [%s]\n"RESET, lex->word + i);
 				printf("i : %d\n", i);
 			}
-			else if(ft_strchr(lex->word + i, '$') == NULL && i >= 0)
-				break ;
+			// else if(ft_strchr(lex->word + i, '$') == NULL && i >= 0)
+			// 	break ;
 			else
 				i++;
 		}
@@ -228,29 +180,80 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 	}
 }
 
+// fonction pour expand les cas avec dollar et guillemets: $$$abcd$$$$$HOME$SHLVL
+void	dol_digi(char **word, int i, t_env *envp)
+{
+	char	*tmp;
+	char	*exp_w = "";
+		
+	while ((*word)[i])
+	{
+		printf(GREEN"len : [%zu]\n"RESET, ft_strlen(*word));
+		printf(RED"start i : [%d]\n"RESET, i);
+		while ((*word)[i + 1] == '$')
+		{
+			exp_w = ft_strjoin(exp_w, "$");
+			i++;
+		}
+		if ((*word)[i + 1] == '\'')
+		{
+			printf(GREEN"OKOK\n"RESET);
+			i++;
+		}
+		if ((*word)[i] == '$' && ft_isdigit((*word)[i + 1]))
+		{
+			while ((*word)[i] != '$')
+			{
+				exp_w = ft_strjoin(exp_w, (word)[i]);
+				i++;
+			}
+		}
+		i++;
+		printf(RED"i : [%d]\n"RESET, i);
+		printf(RED"lex->word[i]: [%c]\n"RESET, (*word)[i]);
+		tmp = expand(*word, i, envp);
+		printf(RED"tmp: [%s]\n"RESET, tmp);
+		if (!tmp)
+		{
+			*word = exp_w;
+			free(exp_w);
+			break;
+		}
+		else
+			exp_w = ft_strjoin(exp_w, tmp);
+		printf(RED"\n➜ exp_w: [%s]\n\n"RESET, exp_w);
+		sleep(2);
+		if (ft_strchr((*word) + i, '$') - *word < 0)
+		{
+			*word = exp_w;
+			printf(BLUE"[no env breaking ...]\n"RESET);
+			break;
+		}
+		i = ft_strchr((*word) + i, '$') - *word;
+	}
+	*word = exp_w;
+	printf(BLUE"[breaking ...]\n"RESET);
+}
+
 // return ce quil y a apres la variable env $
-char	*find_post(char *word, int *i)
+char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - avec guillemets
 {
 	int		delimiter;
 	char	*post;
+	// int		dols;
 
-	post = NULL;
-	printf("pre word: [%s]\n", word);
-	printf("*i : %d\n", *i);
-
-	// while ((word[*i] == '$' && (word[*i + 1] == '$')))
+	// dols = 0;
+	printf("start *i : [%d], \npre word: [%s]\n", *i, word);
+	// while (!(word[*i] == '$' && ((word[*i + 1] != '$' && dols % 2 != 0) || ft_isdigit(word[*i + 1]))))
 	// {
-	// 	*i += 2;
-	// 	printf(RED"*i : %d\n"RESET, *i);
-	// }
-	printf(RED "ft_strchr: [%s]\n" RESET, ft_strchr(word + *i, '$'));
+	// 	if (word[(*i)++] == '$')
+	// 		dols++;
+	// }	
+	*new_w = ft_strndup(word, *i);
+	printf(GREEN"new_w : [%s]\n ft_strchr: [%s]\n"RESET, *new_w, ft_strchr(word + *i, '$'));
 	*i = ft_strchr(word + *i, '$') - word;
-	printf("*i $$ : %d\n", *i);
-	if (word[*i] == '$' && ft_isdigit(word[*i + 1])) // dolls + num
-	{
-		printf("word[i] : %c\n", word[*i]);
+	if (word[*i] == '$' && ft_isdigit(word[*i + 1]))
 		post = ft_strdup(word + *i + 2);
-	}
 	else
 	{
 		delimiter = ft_strchr(word + *i + 1, ' ') - word;
@@ -264,56 +267,5 @@ char	*find_post(char *word, int *i)
 			delimiter = ft_strchr(word + *i + 1, '\0') - word;
 		post = ft_strdup(word + delimiter);
 	}
-	printf("post *i : [%d]\n", *i);
-	printf("find_post return : [%s]\n\n", post);
 	return (post);
 }
-
-// copier la variable d'env dans un liste chainee
-t_env	*store_env(char **env)
-{
-	t_env	*store_value;
-	char	*str;
-	int		i;
-
-	str = NULL;
-	store_value = NULL;
-	i = 0;
-	if (!env)
-		return (0);
-	while (env[i])
-	{
-		str = ft_strdup(env[i]);
-		if (!str)
-			return (0);
-		add_node(&store_value, str);
-		i++;
-	}
-	return (store_value);
-}
-
-// si !alphanum print le $ avec sa valeur,
-// sauf $? et $0. Si il y a des num derriere skip le $ et le 1er num et ecrire le reste exemple ($1HOLA
-// -> HOLA)
-
-// void	prout(t_env *env, t_lexer *lex)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (lex)
-// 	{
-// 		i = 0;
-// 		while (lex->word[i])
-// 		{
-// 			if (lex->word[i] == '$' && ft_isdigit(lex->word[i + 1]))
-// 				i + 2;
-// 			else if (lex->word[i] == '$' && !ft_isalnum(lex->word[i + 1]))
-// 			{
-// 				while (lex->word[i] != ' ')
-// 					i++;
-// 			}
-
-// 		}
-// 	}
-// }

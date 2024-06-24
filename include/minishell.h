@@ -6,7 +6,7 @@
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/19 14:54:22 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/24 09:46:31 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ typedef struct s_shell
 char		*ft_readline(void);
 void		expander(t_lexer *lex, t_env *envp, t_shell *shell);
 char		*no_quote(char *word, int i, t_env *envp);
-
+void		dol_digi(char **word, int i, t_env *envp);
 #endif

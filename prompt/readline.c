@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 13:33:39 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/12 10:13:16 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/21 22:32:11 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ char *ft_readline()
 {
     char *line;
 
-    line = readline(GREEN"➜ "RESET);
+    line = readline(GREEN"➜ "RESET YELLOW);
+    printf(RESET);
     if (line)
 	{
 		add_history(line);

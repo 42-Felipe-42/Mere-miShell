@@ -1,17 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/24 10:47:51 by louismdv         ###   ########.fr       */
+/*   Created: 2024/06/24 11:04:33 by louismdv          #+#    #+#             */
+/*   Updated: 2024/06/24 11:04:47 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
-int     check_quote_closed(char *word);
-char	*find_post(char *word, int *i, char **new_w);
-void	quote(t_lexer *lex);
+// copier la variable d'env dans un liste chainee
+t_env	*store_env(char **env)
+{
+	t_env	*store_value;
+	char	*str;
+	int		i;
+
+	str = NULL;
+	store_value = NULL;
+	i = 0;
+	if (!env)
+		return (0);
+	while (env[i])
+	{
+		str = ft_strdup(env[i]);
+		if (!str)
+			return (0);
+		add_node(&store_value, str);
+		i++;
+	}
+	return (store_value);
+}
