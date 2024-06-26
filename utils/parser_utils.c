@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/26 13:57:42 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/26 14:03:57 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,47 +109,45 @@ void	quote(t_lexer *lex)
 // {
 // }
 
-void    init_cmds(t_cmds **cmds)
-{
-    cmds = malloc(sizeof(t_cmds));
-    if (!cmds)
-        return ;
-    (*cmds)->tab = NULL;
-    (*cmds)->builtin = 0;
-    (*cmds)->lex_word = NULL;
-    (*cmds)->next = NULL;
-    (*cmds)->prev = NULL;
-}
-int    count_lexem(t_lexer *lex)
-{
-    int    count;
+// void    init_cmds(t_cmds **cmds)
+// {
+//     cmds = malloc(sizeof(t_cmds));
+//     if (!cmds)
+//         return ;
+//     (*cmds)->tab = NULL;
+//     (*cmds)->builtin = 0;
+//     (*cmds)->lex_word = NULL;
+//     (*cmds)->next = NULL;
+//     (*cmds)->prev = NULL;
+// }
+// int    count_lexem(t_lexer *lex)
+// {
+//     int    count;
 
-    count = 0;
-    while (lex)
-    {
-        count++;
-        lex = lex->next;
-    }
-    return (count);
-}
+//     count = 0;
+//     while (lex)
+//     {
+//         count++;
+//         lex = lex->next;
+//     }
+//     return (count);
+// }
 
-t_cmds    *create_cmds(t_lexer *lex, t_cmds **cmds)
-{
-    t_lexer    *tmp;
-    int        count;
-    int        i;
+// t_cmds    *create_cmds(t_lexer *lex, t_cmds **cmds)
+// {
+//     t_lexer    *tmp;
+//     int        count;
+//     int        i;
 
-    i = 0;
-    count = count_lexem(lex);
-    tmp = lex;
-    (*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
-    while (i < count)
-    {
-        (*cmds)->tab = ft_strdup(lex->word);
-        i++;
-        count--;
-    }
-}
-void    find_builtin(char *word, t_lexer *lex)
-{
-}
+//     i = 0;
+//     count = count_lexem(lex);
+//     tmp = lex;
+//     (*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
+//     while (i < count)
+//     {
+//         (*cmds)->tab = ft_strdup(lex->word[i]);
+//         i++;
+//         count--;
+//     }
+// }
+

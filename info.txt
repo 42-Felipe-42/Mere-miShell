@@ -1,7 +1,0 @@
-
-LEXER - Lexical Analizer
--> takes input and splits it into token according to 
-
-stdin = input
-
-divise input en token en fn des espaces et 

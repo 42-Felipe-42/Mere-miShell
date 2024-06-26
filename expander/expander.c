@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/26 13:51:38 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:32:30 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,16 +263,30 @@ char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - ave
 	char	*post;
 	int		dols;
 
+
 	dols = 0;
 	printf("start *i : [%d], \npre word: [%s]\n", *i, word);
-	while (!(word[*i] == '$' && ((word[*i + 1] != '$' && dols % 2 != 0) || ft_isdigit(word[*i + 1]))))
-	{
-		if (word[(*i)++] == '$')
+	
+    while (word[*i])
+    {
+		dols = 0;
+		while (word[*i] && word[*i] != '$')
+			(*i)++;
+		while (word[*i] == '$') 
+		{
 			dols++;
-	}	
-	*new_w = ft_strndup(word, *i);
+			(*i)++;
+		}
+		if (dols % 2 != 0)
+			break;
+	}
+	printf("dols : [%d]\n", dols);
+	printf("i : [%d]\n", *i);
+	
 	printf(GREEN"new_w : [%s]\n ft_strchr: [%s]\n"RESET, *new_w, ft_strchr(word + *i, '$'));
-	*i = ft_strchr(word + *i, '$') - word;
+	*new_w = ft_strndup(word, *i);
+	if (ft_strchr(word + *i, '$') != NULL)
+		*i = ft_strchr(word + *i, '$') - word;
 	if (word[*i] == '$' && ft_isdigit(word[*i + 1]))
 		post = ft_strdup(word + *i + 2);
 	else
@@ -288,6 +302,8 @@ char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - ave
 			delimiter = ft_strchr(word + *i + 1, '\0') - word;
 		post = ft_strdup(word + delimiter);
 	}
+	printf(GREEN"dols : [%d]\n"RESET, dols);
+	printf(GREEN"post : [%s]\n"RESET, post);
 	return (post);
 }
 
