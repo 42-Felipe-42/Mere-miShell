@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/24 18:26:59 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:51:38 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,10 +209,11 @@ void	no_guillemets(char **word, int i, t_env *envp)
 		{
 			dols++;
 			i++;
-			if (i % 2 != 0 && dols != 1)
-				exp_w = ft_strjoin(exp_w, "$");
+			// if (i % 2 == 0)
+			exp_w = ft_strjoin(exp_w, "$");
 			if (ft_isdigit((*word)[i]))
 			{
+				i++;
 				printf(RED"digit $ : lex->word[i]: [%c]\n"RESET, (*word)[i]);
 				while ((*word)[i] && (*word)[i] != '$')
 				{
@@ -251,6 +252,7 @@ void	no_guillemets(char **word, int i, t_env *envp)
 		}
 		i = ft_strchr((*word) + i, '$') - *word;
 	}
+	printf(RED"\n➜ word: [%s]\n\n"RESET, *word);
 	*word = exp_w;
 }
 
