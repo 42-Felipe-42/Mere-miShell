@@ -6,7 +6,7 @@
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/24 14:42:50 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:26:59 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,19 @@
 
 // COMMANDES A CORRIGER:
 //"$HOME wedew$SHLVL  sewg $PWD '$HOME'"
+
+char *ft_strjoin_char(const char *str, char c)
+{
+    size_t len = strlen(str);
+    char *result = (char *)malloc(len + 2); // +1 for the char and +1 for the null terminator
+    if (!result) {
+        return NULL; // Memory allocation failed
+    }
+    ft_strlcpy(result, str, len + 2);
+    result[len] = c;
+    result[len + 1] = '\0';
+    return result;
+}
 
 // chercher dest dans env, si trouve expand, sinon NULL
 char	*find_env(char *dest, t_env *envp)
@@ -134,8 +147,9 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 		{
 			if (lex->word[0] == '$' && lex->word[1] == '\0') 		// $\0 - dollar seul
 				break;
-			if (lex->word[0] == '$' && !ft_isdigit(lex->word[1])) 	// $$$$abcd$HOME$$SHLVL-sans guillmets
-				return(dol_digi(&lex->word, i, envp));
+			else if (lex->word[0] == '$') 								// $$$$abcd$HOME$$SHLVL-sans guillmets
+				return(no_guillemets(&lex->word, i, envp));
+			
 			post = find_post(lex->word, &i, &new_w);				// "abcd$1abcd$HOME" - avec guillemets
 			if (ft_isdigit(lex->word[i + 1]))							// -> $123 - skipper premier chiffre apres $
 			{
@@ -181,38 +195,44 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 }
 
 // fonction pour expand les cas avec dollar et guillemets: $$$abcd$$$$$HOME$SHLVL
-void	dol_digi(char **word, int i, t_env *envp)
+void	no_guillemets(char **word, int i, t_env *envp)
 {
 	char	*tmp;
 	char	*exp_w = "";
-		
+	int		dols;
+
 	while ((*word)[i])
 	{
-		printf(GREEN"len : [%zu]\n"RESET, ft_strlen(*word));
-		printf(RED"start i : [%d]\n"RESET, i);
-		while ((*word)[i + 1] == '$')
+		dols = 0;
+		printf(RED"i : [%d]\n"RESET, i);
+		while ((*word)[i] && (*word)[i] == '$')
 		{
-			exp_w = ft_strjoin(exp_w, "$");
+			dols++;
 			i++;
-		}
-		if ((*word)[i + 1] == '\'')
-		{
-			printf(GREEN"OKOK\n"RESET);
-			i++;
-		}
-		if ((*word)[i] == '$' && ft_isdigit((*word)[i + 1]))
-		{
-			while ((*word)[i] != '$')
+			if (i % 2 != 0 && dols != 1)
+				exp_w = ft_strjoin(exp_w, "$");
+			if (ft_isdigit((*word)[i]))
 			{
-				exp_w = ft_strjoin(exp_w, (word)[i]);
-				i++;
+				printf(RED"digit $ : lex->word[i]: [%c]\n"RESET, (*word)[i]);
+				while ((*word)[i] && (*word)[i] != '$')
+				{
+					exp_w = ft_strjoin_char(exp_w, (*word)[i]);
+					i++;
+				}
+				if ((*word)[i] == '\0')
+					break;
 			}
 		}
-		i++;
+		printf("dols : [%d]\n", dols);
 		printf(RED"i : [%d]\n"RESET, i);
 		printf(RED"lex->word[i]: [%c]\n"RESET, (*word)[i]);
-		tmp = expand(*word, i, envp);
-		printf(RED"tmp: [%s]\n"RESET, tmp);
+		if (dols % 2 != 0)
+		{
+			tmp = expand(*word, i, envp);
+			printf(RED"tmp: [%s]\n"RESET, tmp);
+		}
+		else
+			tmp = ft_strdup(*word + i);
 		if (!tmp)
 		{
 			*word = exp_w;
@@ -232,7 +252,6 @@ void	dol_digi(char **word, int i, t_env *envp)
 		i = ft_strchr((*word) + i, '$') - *word;
 	}
 	*word = exp_w;
-	printf(BLUE"[breaking ...]\n"RESET);
 }
 
 // return ce quil y a apres la variable env $
@@ -240,15 +259,15 @@ char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - ave
 {
 	int		delimiter;
 	char	*post;
-	// int		dols;
+	int		dols;
 
-	// dols = 0;
+	dols = 0;
 	printf("start *i : [%d], \npre word: [%s]\n", *i, word);
-	// while (!(word[*i] == '$' && ((word[*i + 1] != '$' && dols % 2 != 0) || ft_isdigit(word[*i + 1]))))
-	// {
-	// 	if (word[(*i)++] == '$')
-	// 		dols++;
-	// }	
+	while (!(word[*i] == '$' && ((word[*i + 1] != '$' && dols % 2 != 0) || ft_isdigit(word[*i + 1]))))
+	{
+		if (word[(*i)++] == '$')
+			dols++;
+	}	
 	*new_w = ft_strndup(word, *i);
 	printf(GREEN"new_w : [%s]\n ft_strchr: [%s]\n"RESET, *new_w, ft_strchr(word + *i, '$'));
 	*i = ft_strchr(word + *i, '$') - word;
@@ -269,3 +288,5 @@ char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - ave
 	}
 	return (post);
 }
+
+
