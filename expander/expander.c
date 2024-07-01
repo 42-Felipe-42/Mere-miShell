@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 12:09:52 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:26:01 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,7 @@ char	*exp_pars(char *word, t_env *envp)
 
 bool	check_conditions(char *word, int i)
 {
-	if (word[i] &&
-		(ft_strchr(word + i, '$') != NULL
+	if (word && word[i] && (ft_strchr(word + i, '$') != NULL
 		|| ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
 		|| ft_strnstr(word + i, "'$", ft_strlen(word + i)) != NULL
 		|| word[2] == '$' || word[1] == '$' || word[0] == '$'))
@@ -143,7 +142,9 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 	while (lex)
 	{
 		i = 0;
-		while (lex->word[i] && which_quote(lex->word[0]) != S_QUOTE && check_conditions(lex->word, i))
+		// if (lex->token && lex->next != NULL)
+		// 	lex = lex->next;
+		while (/* lex->word != NULL ||  */(check_conditions(lex->word, i) && which_quote(lex->word[0]) != S_QUOTE))
 		{
 			if (lex->word[0] == '$' && lex->word[1] == '\0') 		// $\0 - dollar seul
 				break;
@@ -197,10 +198,9 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 // fonction pour expand les cas avec dollar et guillemets: $$$abcd$$$$$HOME$SHLVL
 void	no_guillemets(char **word, int i, t_env *envp)
 {
-	char	*tmp = "";
+	char	*tmp;
 	char	*exp_w = "";
 	int		dols;
-	int		counter = 0;
 
 	while ((*word)[i])
 	{
@@ -210,41 +210,50 @@ void	no_guillemets(char **word, int i, t_env *envp)
 		{
 			dols++;
 			i++;
+			// if (i % 2 == 0)
 			exp_w = ft_strjoin(exp_w, "$");
-		}
-		if (ft_isdigit((*word)[i]))
-		{
-			i++;
-			while ((*word)[i] && (*word)[i] != '$')
+			if (ft_isdigit((*word)[i]))
 			{
-				exp_w = ft_strjoin_char(exp_w, (*word)[i]);
 				i++;
+				printf(RED"digit $ : lex->word[i]: [%c]\n"RESET, (*word)[i]);
+				while ((*word)[i] && (*word)[i] != '$')
+				{
+					exp_w = ft_strjoin_char(exp_w, (*word)[i]);
+					i++;
+				}
+				if ((*word)[i] == '\0')
+					break;
 			}
 		}
-		else if (dols % 2 != 0)
+		printf("dols : [%d]\n", dols);
+		printf(RED"i : [%d]\n"RESET, i);
+		printf(RED"lex->word[i]: [%c]\n"RESET, (*word)[i]);
+		if (dols % 2 != 0)
+		{
 			tmp = expand(*word, i, envp);
-		// else
-		// 	tmp = ft_strdup(*word + i);
-		printf(RED"tmp: [%s]\n"RESET, tmp);
+			printf(RED"tmp: [%s]\n"RESET, tmp);
+		}
+		else
+			tmp = ft_strdup(*word + i);
 		if (!tmp)
+		{
+			*word = exp_w;
+			free(exp_w);
+			break;
+		}
+		else
 			exp_w = ft_strjoin(exp_w, tmp);
-		// {
-		// 	*word = exp_w;
-		// 	free(exp_w);
-		// 	break;
-		// }
-		printf(RED"\n	➜ exp_w: [%s]\n\n"RESET, exp_w);
+		printf(RED"\n➜ exp_w: [%s]\n\n"RESET, exp_w);
+		sleep(2);
 		if (ft_strchr((*word) + i, '$') - *word < 0)
 		{
 			*word = exp_w;
-			printf(BLUE"[no more $ signs: breaking ...]\n"RESET);
+			printf(BLUE"[no env breaking ...]\n"RESET);
 			break;
 		}
-		printf(RED"step exp_w: [%s]\n", exp_w);
 		i = ft_strchr((*word) + i, '$') - *word;
-		printf(GREEN"counter: %d\n\n"RESET, counter++);
 	}
-	printf(GREEN"\n	➜ word: [%s]\n\n"RESET, *word);
+	printf(RED"\n➜ word: [%s]\n\n"RESET, *word);
 	*word = exp_w;
 }
 
@@ -255,30 +264,16 @@ char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - ave
 	char	*post;
 	int		dols;
 
-
 	dols = 0;
 	printf("start *i : [%d], \npre word: [%s]\n", *i, word);
-	
-    while (word[*i])
-    {
-		dols = 0;
-		while (word[*i] && word[*i] != '$')
-			(*i)++;
-		while (word[*i] == '$') 
-		{
+	while (!(word[*i] == '$' && ((word[*i + 1] != '$' && dols % 2 != 0) || ft_isdigit(word[*i + 1]))))
+	{
+		if (word[(*i)++] == '$')
 			dols++;
-			(*i)++;
-		}
-		if (dols % 2 != 0)
-			break;
-	}
-	printf("dols : [%d]\n", dols);
-	printf("i : [%d]\n", *i);
-	
-	printf(GREEN"new_w : [%s]\n ft_strchr: [%s]\n"RESET, *new_w, ft_strchr(word + *i, '$'));
+	}	
 	*new_w = ft_strndup(word, *i);
-	if (ft_strchr(word + *i, '$') != NULL)
-		*i = ft_strchr(word + *i, '$') - word;
+	printf(GREEN"new_w : [%s]\n ft_strchr: [%s]\n"RESET, *new_w, ft_strchr(word + *i, '$'));
+	*i = ft_strchr(word + *i, '$') - word;
 	if (word[*i] == '$' && ft_isdigit(word[*i + 1]))
 		post = ft_strdup(word + *i + 2);
 	else
@@ -294,8 +289,6 @@ char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - ave
 			delimiter = ft_strchr(word + *i + 1, '\0') - word;
 		post = ft_strdup(word + delimiter);
 	}
-	printf(GREEN"dols : [%d]\n"RESET, dols);
-	printf(GREEN"post : [%s]\n"RESET, post);
 	return (post);
 }
 

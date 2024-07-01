@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 11:50:27 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:29:42 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	store_token(t_lexer **lex, int token)
 		current->next = new;
 		new->next = NULL;
 	}
+	printf(RED "new token lex%d\n" RESET, new->token);
 }
 
 // creation maillon pour stocker donnees d'un WORD
@@ -75,7 +76,8 @@ void	is_quoted(char *input, int *i, int *opened)
 // parcour input en i tant que diff token
 void	is_word(char *input, int *i)
 {
-	while (input[*i] && input[*i] != ' ' && is_token(input, i) == FALSE && !which_quote(input[*i]))
+	while (input[*i] && input[*i] != ' ' && which_redir(input, i) == FALSE
+		&& !which_quote(input[*i]))
 	{
 		(*i)++;
 	}
@@ -87,7 +89,6 @@ void	lex_str(char *input, t_lexer **lex)
 	int	start;
 
 	i = 0;
-	start = 0;
 	while (input[i])
 	{
 		while ((input[i] && input[i] == ' ') || (input[i] >= '\a'
@@ -102,7 +103,10 @@ void	lex_str(char *input, t_lexer **lex)
 			is_word(input, &i);
 		if (i > start)
 			store_token_words(input, lex, start, i - start);
-		if (is_token(input, &i))
-			(store_token(lex, is_token(input, &i)), i++);
+		else
+		{
+			store_token(lex, is_token(input, &i));
+			i++;
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/12 11:31:24 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:51:38 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,17 @@ int	is_token(char *input, int *i)
 	}
 	return (FALSE);
 }
-
+int	which_redir(char *input, int *i)
+{
+	if (input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
+		return (TRUE);
+	return (FALSE);
+}
 // verifie si input[i] est un guillmet
 int	which_quote(char input)
 {
+	if (!input)
+		return (0);
 	if (input == '\'')
 		return (1);
 	else if (input == '\"')

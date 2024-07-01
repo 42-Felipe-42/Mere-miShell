@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/26 14:03:57 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/01 15:44:55 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ void	quote(t_lexer *lex)
 	while (lex)
 	{
 		i = 0;
-		while (lex->word[i])
+		while (lex->word && lex->word[i])
 		{
 			if (which_quote(lex->word[i]))
 			{
-				lex->word = remove_quote( lex->word);
+				lex->word = remove_quote(lex->word);
 				break ;
 			}
 			i++;
@@ -105,49 +105,100 @@ void	quote(t_lexer *lex)
 		lex = lex->next;
 	}
 }
-// void	find_builtin(char *word, t_lexer *lex)
+int	count_lexem(t_lexer *lex)
+{
+	int	count;
+
+	count = 0;
+	while (lex)
+	{
+		count++;
+		lex = lex->next;
+	}
+	return (count);
+}
+
+
+// void	redir_to_cmds(t_lexer *lex, t_cmds **cmds)
 // {
+// 	t_lexer	*tmp;
+// 	t_lexer	*new_node;
+
+// 	new_node = malloc(sizeof(t_lexer));
+// 	if (!new_node)
+// 		return ;
+// 	new_node->token = lex->token;
+// 	// if (new_node->token != 0)
+// 	// 	printf(BLUE "token %d\n" RESET, new_node->token);
+// 	if (lex->word)
+// 		new_node->word = ft_strdup(lex->word);
+// 	new_node->next = NULL;
+// 	if ((*cmds)->lex_redir == NULL)
+// 	{
+// 		(*cmds)->lex_redir = new_node;
+// 		return ;
+// 	}
+// 	tmp = (*cmds)->lex_redir;
+// 	while (tmp->next)
+// 		tmp = tmp->next;
+// 	tmp->next = new_node;
 // }
 
-// void    init_cmds(t_cmds **cmds)
+// void	lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 // {
-//     cmds = malloc(sizeof(t_cmds));
-//     if (!cmds)
-//         return ;
-//     (*cmds)->tab = NULL;
-//     (*cmds)->builtin = 0;
-//     (*cmds)->lex_word = NULL;
-//     (*cmds)->next = NULL;
-//     (*cmds)->prev = NULL;
-// }
-// int    count_lexem(t_lexer *lex)
-// {
-//     int    count;
+// 	t_lexer	*tmp;
+// 	int		count;
+// 	int		i;
 
-//     count = 0;
-//     while (lex)
-//     {
-//         count++;
-//         lex = lex->next;
-//     }
-//     return (count);
-// }
-
-// t_cmds    *create_cmds(t_lexer *lex, t_cmds **cmds)
-// {
-//     t_lexer    *tmp;
-//     int        count;
-//     int        i;
-
-//     i = 0;
-//     count = count_lexem(lex);
-//     tmp = lex;
-//     (*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
-//     while (i < count)
-//     {
-//         (*cmds)->tab = ft_strdup(lex->word[i]);
-//         i++;
-//         count--;
-//     }
+// 	i = 0;
+// 	// *cmds = init_cmds(*cmds);
+// 	count = count_lexem(lex);
+// 	tmp = lex;
+// 	if (cmds == NULL)
+// 		cmds = malloc(sizeof(t_cmds));
+// 	(*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
+// 	while (i < count)
+// 	{
+// 		if (!tmp->word)
+// 			tmp = tmp->next;
+// 		else
+// 		{
+// 			(*cmds)->tab[i] = ft_strdup(tmp->word);
+// 			if (!(*cmds)->tab)
+// 				return ;
+// 			tmp = tmp->next;
+// 		}
+// 		i++;
+// 	}
+// 	(*cmds)->tab[i] = NULL;
 // }
 
+t_cmds	*new_cmds(t_lexer **lex, t_cmds **cmds)
+{
+	// init_cmds(*cmds);
+	(*cmds)->lex_redir = (*lex);
+	if ((*cmds)->lex_redir == NULL)
+		printf("tester 2\n");
+	// redir_to_cmds(lx, cmds);
+	// lex_to_cmds(lex, cmds);
+	return (*cmds);
+}
+
+void	syntaxe(t_lexer *lex)
+{
+	t_lexer	*tmp;
+
+	tmp = lex;
+	while (tmp)
+	{
+		if (tmp->token == PIPE && (!tmp->next || tmp->next->token == PIPE))
+			return (ft_putstr_fd("Pas la bonne syntaxe de pipe",
+					STDOUT_FILENO));
+		if (tmp->token != 0 && (!tmp->next || tmp->token != 0))
+			return (ft_putstr_fd("Pas la bonne syntaxe de redirection",
+					STDOUT_FILENO));
+	}
+}
+// void    find_builtin(char *word, t_lexer *lex)
+// {
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 11:57:42 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:51:12 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void				store_token(t_lexer **lex, int token);
 void				store_token_words(char *input, t_lexer **lex, int start,
 						int len);
 int					is_token(char *input, int *i);
+int					which_redir(char *input, int *i);
 void				add_node(t_env **env, char *value);
 char				*expand_pars(char *word, t_env *envp);
 char				*find_env(char *dest, t_env *envp);

@@ -15,8 +15,8 @@ C_FILE      =  	expander/expander.c \
 				lexer/store_token.c \
 				prompt/readline.c	\
 				main.c \
-				utils/expander_utils.c \
-				utils/parser_utils.c \
+				expander/expander_utils.c \
+				parser/parser_utils.c \
 				
 OBJS        =   $(C_FILE:.c=.o)
 
