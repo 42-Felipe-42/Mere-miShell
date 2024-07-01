@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 15:29:42 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:41:44 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	store_token(t_lexer **lex, int token)
 		current->next = new;
 		new->next = NULL;
 	}
-	printf(RED "new token lex%d\n" RESET, new->token);
 }
 
 // creation maillon pour stocker donnees d'un WORD
@@ -110,3 +109,4 @@ void	lex_str(char *input, t_lexer **lex)
 		}
 	}
 }
+

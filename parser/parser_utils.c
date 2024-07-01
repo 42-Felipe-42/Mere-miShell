@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 15:44:55 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:48:10 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,36 @@ int	count_lexem(t_lexer *lex)
 	return (count);
 }
 
+t_cmds	*new_cmds(t_lexer **lex, t_cmds **cmds)
+{
+	// init_cmds(*cmds);
+	(*cmds)->lex_redir = (*lex);
+	if ((*cmds)->lex_redir == NULL)
+		printf("tester 2\n");
+	// redir_to_cmds(lx, cmds);
+	// lex_to_cmds(lex, cmds);
+	return (*cmds);
+}
 
+void	syntaxe(t_lexer *lex)
+{
+	t_lexer	*tmp;
+
+	tmp = lex;
+	while (tmp)
+	{
+		if (tmp->token == PIPE && (!tmp->next || tmp->next->token == PIPE))
+			return (ft_putstr_fd("Pas la bonne syntaxe de pipe",
+					STDOUT_FILENO));
+		if (tmp->token != 0 && (!tmp->next || tmp->next->token != 0))
+			return (ft_putstr_fd("Pas la bonne syntaxe de redirection",
+					STDOUT_FILENO));
+	}
+}
+
+// void    find_builtin(char *word, t_lexer *lex)
+// {
+// }
 // void	redir_to_cmds(t_lexer *lex, t_cmds **cmds)
 // {
 // 	t_lexer	*tmp;
@@ -171,34 +200,4 @@ int	count_lexem(t_lexer *lex)
 // 		i++;
 // 	}
 // 	(*cmds)->tab[i] = NULL;
-// }
-
-t_cmds	*new_cmds(t_lexer **lex, t_cmds **cmds)
-{
-	// init_cmds(*cmds);
-	(*cmds)->lex_redir = (*lex);
-	if ((*cmds)->lex_redir == NULL)
-		printf("tester 2\n");
-	// redir_to_cmds(lx, cmds);
-	// lex_to_cmds(lex, cmds);
-	return (*cmds);
-}
-
-void	syntaxe(t_lexer *lex)
-{
-	t_lexer	*tmp;
-
-	tmp = lex;
-	while (tmp)
-	{
-		if (tmp->token == PIPE && (!tmp->next || tmp->next->token == PIPE))
-			return (ft_putstr_fd("Pas la bonne syntaxe de pipe",
-					STDOUT_FILENO));
-		if (tmp->token != 0 && (!tmp->next || tmp->token != 0))
-			return (ft_putstr_fd("Pas la bonne syntaxe de redirection",
-					STDOUT_FILENO));
-	}
-}
-// void    find_builtin(char *word, t_lexer *lex)
-// {
 // }

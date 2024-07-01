@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 13:26:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:55:38 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,62 +198,46 @@ void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
 // fonction pour expand les cas avec dollar et guillemets: $$$abcd$$$$$HOME$SHLVL
 void	no_guillemets(char **word, int i, t_env *envp)
 {
-	char	*tmp;
+	char	*tmp = "";
 	char	*exp_w = "";
 	int		dols;
+	int		counter = 0;
 
 	while ((*word)[i])
 	{
 		dols = 0;
 		printf(RED"i : [%d]\n"RESET, i);
-		while ((*word)[i] && (*word)[i] == '$')
+		while ((*word)[i] && (*word)[i] == '$' && (*word)[i + 1] != '$')
 		{
 			dols++;
 			i++;
-			// if (i % 2 == 0)
-			exp_w = ft_strjoin(exp_w, "$");
-			if (ft_isdigit((*word)[i]))
+			if ((*word)[i] != '$')
 			{
-				i++;
-				printf(RED"digit $ : lex->word[i]: [%c]\n"RESET, (*word)[i]);
-				while ((*word)[i] && (*word)[i] != '$')
-				{
-					exp_w = ft_strjoin_char(exp_w, (*word)[i]);
-					i++;
-				}
-				if ((*word)[i] == '\0')
-					break;
+				tmp = expand(*word, i, envp);
+				if (tmp != NULL)
+					exp_w = ft_strjoin(exp_w, tmp);
 			}
+			else
+				tmp = ft_strdup(*word + i);
 		}
-		printf("dols : [%d]\n", dols);
-		printf(RED"i : [%d]\n"RESET, i);
-		printf(RED"lex->word[i]: [%c]\n"RESET, (*word)[i]);
-		if (dols % 2 != 0)
+		if((*word)[i] && (*word)[i] == '$' && (*word)[i + 1] == '$')
 		{
-			tmp = expand(*word, i, envp);
-			printf(RED"tmp: [%s]\n"RESET, tmp);
+			exp_w = ft_strjoin("$",exp_w); 
+			i++;
 		}
-		else
-			tmp = ft_strdup(*word + i);
-		if (!tmp)
-		{
-			*word = exp_w;
-			free(exp_w);
-			break;
-		}
-		else
-			exp_w = ft_strjoin(exp_w, tmp);
-		printf(RED"\n➜ exp_w: [%s]\n\n"RESET, exp_w);
-		sleep(2);
+		printf(RED"tmp: [%s]\n"RESET, tmp);
+		printf(RED"\n	➜ exp_w: [%s]\n\n"RESET, exp_w);
 		if (ft_strchr((*word) + i, '$') - *word < 0)
 		{
 			*word = exp_w;
-			printf(BLUE"[no env breaking ...]\n"RESET);
+			printf(BLUE"[no more $ signs: breaking ...]\n"RESET);
 			break;
 		}
+		printf(RED"step exp_w: [%s]\n"RESET, exp_w);
 		i = ft_strchr((*word) + i, '$') - *word;
+		printf(GREEN"counter: %d\n\n"RESET, counter++);
 	}
-	printf(RED"\n➜ word: [%s]\n\n"RESET, *word);
+	printf(GREEN"\n	➜ word: [%s]\n\n"RESET, *word);
 	*word = exp_w;
 }
 
