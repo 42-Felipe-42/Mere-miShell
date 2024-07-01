@@ -6,7 +6,7 @@
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/23 17:31:08 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/01 11:50:27 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void	lex_str(char *input, t_lexer **lex)
 	start = 0;
 	while (input[i])
 	{
-		printf("lex i: %d\n", i);
 		while ((input[i] && input[i] == ' ') || (input[i] >= '\a'
 				&& input[i] <= '\r'))
 			i++;

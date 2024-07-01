@@ -6,7 +6,7 @@
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/24 15:21:54 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/01 11:56:57 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 typedef struct s_shell
 {
 	char			*av;
+	t_cmds			*cmds;
 	t_lexer	*lex;
 	t_env	*env;
 }			t_shell;
