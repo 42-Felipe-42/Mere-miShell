@@ -17,6 +17,7 @@ C_FILE      =  	expander/expander.c \
 				main.c \
 				expander/expander_utils.c \
 				parser/parser_utils.c \
+				parser/parser.c \
 				
 OBJS        =   $(C_FILE:.c=.o)
 

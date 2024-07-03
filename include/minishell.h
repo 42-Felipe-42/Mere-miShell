@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 17:38:17 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:59:07 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ typedef struct s_shell
 }			t_shell;
 
 char		*ft_readline(void);
-void		expander(t_lexer *lex, t_env *envp, t_shell *shell);
-char		*no_quote(char *word, int i, t_env *envp);
-void		no_guillemets(char **word, int i, t_env *envp);
+void		expander(t_lexer *lex,t_shell *shell);
+char		*no_guillemets(char *word, t_shell *shell);
+char		*ft_strndup_dol(char *s);
+void				parser(t_shell *shell);
+
 #endif

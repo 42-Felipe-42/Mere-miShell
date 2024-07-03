@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 15:33:43 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:07:53 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,15 @@ typedef struct s_cmds
 	struct s_cmds	*prev;
 }					t_cmds;
 
+#define ECHO 6012
+#define CD 602
+#define PWD 603
+#define EXPORT 604
+#define UNSET 605
+#define ENV 606
+#define EXIT 607
+
 int					check_quote_closed(char *word);
-char				*find_post(char *word, int *i, char **new_w);
-void				quote(t_lexer *lex);
-void				lex_to_cmds(t_lexer *lex, t_cmds **cmds);
-t_cmds				*init_cmds(t_cmds *cmds);
 t_cmds				*new_cmds(t_lexer **lex, t_cmds **cmds);
+void				syntaxe(t_lexer *lex);
+void				is_builtin(t_cmds *cmds, t_lexer *lex);

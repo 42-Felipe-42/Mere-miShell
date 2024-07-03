@@ -6,51 +6,36 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 17:55:38 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:36:42 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// COMMANDES A CORRIGER:
-//"$HOME wedew$SHLVL  sewg $PWD '$HOME'"
-
-char *ft_strjoin_char(const char *str, char c)
-{
-    size_t len = strlen(str);
-    char *result = (char *)malloc(len + 2); // +1 for the char and +1 for the null terminator
-    if (!result) {
-        return NULL; // Memory allocation failed
-    }
-    ft_strlcpy(result, str, len + 2);
-    result[len] = c;
-    result[len + 1] = '\0';
-    return result;
-}
-
 // chercher dest dans env, si trouve expand, sinon NULL
 char	*find_env(char *dest, t_env *envp)
 {
-	int	equal_index;
+	int		dest_len;
+	char	*equal_sign;
 
+	dest_len = strlen(dest);
 	while (envp)
 	{
-		if (ft_strcmp(envp->value, dest) == 0)
-		{
-			if (envp->value[ft_strlen(dest)] == '=')
-			{
-				equal_index = ft_strchr(envp->value, '=') - (envp->value) + 1;
-				return (envp->value + equal_index);
-			}
-		}
+		// Find the '=' in the current environment variable string
+		equal_sign = strchr(envp->value, '=');
+		// Check if '=' is found and the part before it matches 'dest'
+		if (equal_sign && (equal_sign - envp->value == dest_len)
+			&& strncmp(envp->value, dest, dest_len) == 0)
+			return (equal_sign + 1); // Return the value part after '='
 		envp = envp->next;
 	}
 	return (NULL);
 }
 
-//obj: parcourir entrée jusqu'à: '_' ou char non alphanum, stocker dans 'dest' et comp avec env
-//entrée: input sur indice $
-//sortie: valeur associée a env
+// obj: parcourir entrée jusqu'à: '_' ou char non alphanum,
+// stocker dans 'dest' et comp avec env
+// entrée: input sur indice $
+// sortie: valeur associée a env
 char	*expand(char *input, int i, t_env *envp)
 {
 	char	*dest;
@@ -59,221 +44,97 @@ char	*expand(char *input, int i, t_env *envp)
 
 	dest = (char *)malloc(strlen(input) + 1);
 	env = NULL;
-	if (input[i] == '$' && input[i + 1] == '\0') // "$"
-		return (input);
-	if (input[i] == '$' && input[i + 1] == '$')
-		i +=3;
-	else if (input[i] == '$')
+	if (input[i] == '$')
 		i++;
 	j = 0;
-	while (input[i] && (ft_isalpha(input[i]) || input[i] == '_')) // $$A
+	while (input[i] && (ft_isalpha(input[i]) || input[i] == '_'))
 	{
 		dest[j++] = input[i];
 		i += 1;
 	}
 	dest[j] = '\0';
-	printf(RED"dest: [%s]\n"RESET, dest);
 	env = find_env(dest, envp);
 	if (!env)
 		env = "", free(dest);
 	return (env);
 }
 
-// decider si oui ou non on expand une valeur
-char	*exp_pars(char *word, t_env *envp)
+char	*find_pwd(char *str, t_shell *shell)
 {
-	int	i;
-
-	i = 0;
-	while (word[i])
+	if (ft_strncmp(str, "$0", 2) == 0 || ft_strncmp(str, "$0$", 3) == 0 )
 	{
-		if (word[0] == '$') // word = $...
-			return (expand(word, i, envp));
-		else if (which_quote(word[i]) == D_QUOTE)
-		{
-			if (word[1] == '$') // word = "$...."
-				return (expand(word, i, envp));
-			else // word = "....$..._$..."
-			{
-				if (ft_strnstr(word, " $", ft_strlen(word)) != NULL)
-				{
-					i = ft_strnstr(word, " $", ft_strlen(word)) - word;
-					return (expand(word, i + 1, envp));
-				}
-				else
-					break ;
-			}
-		}
-		i++;
-	}
-	return (word);
-}
-
-bool	check_conditions(char *word, int i)
-{
-	if (word && word[i] && (ft_strchr(word + i, '$') != NULL
-		|| ft_strnstr(word + i, " $", ft_strlen(word + i)) != NULL
-		|| ft_strnstr(word + i, "'$", ft_strlen(word + i)) != NULL
-		|| word[2] == '$' || word[1] == '$' || word[0] == '$'))
-		return (TRUE);
-	else
-		return (FALSE);
-}
-
-char	*find_pwd(char *str, int *i, t_shell *shell)
-{
-	if (ft_strcmp(&str[*i], "$0") && ft_strlen(str) == 2)
 		str = shell->av;
+	}
+	else
+		return (NULL);
 	return (str);
 }
 
-void	expander(t_lexer *lex, t_env *envp, t_shell *shell)
+void	expander(t_lexer *lex, t_shell *shell)
 {
-	int		i;
-	char	*new_w;
-	char	*exp_w = "";
-	char	*post;
-	char	*tmp;
-	int		j = 0;
+	t_lexer	*tmp;
 
-	(void)shell;
-	(void)j;
-	(void)tmp;
-	while (lex)
+	tmp = lex;
+	while (tmp)
 	{
-		i = 0;
-		// if (lex->token && lex->next != NULL)
-		// 	lex = lex->next;
-		while (/* lex->word != NULL ||  */(check_conditions(lex->word, i) && which_quote(lex->word[0]) != S_QUOTE))
+		if (tmp->word != NULL)
 		{
-			if (lex->word[0] == '$' && lex->word[1] == '\0') 		// $\0 - dollar seul
-				break;
-			else if (lex->word[0] == '$') 								// $$$$abcd$HOME$$SHLVL-sans guillmets
-				return(no_guillemets(&lex->word, i, envp));
-			
-			post = find_post(lex->word, &i, &new_w);				// "abcd$1abcd$HOME" - avec guillemets
-			if (ft_isdigit(lex->word[i + 1]))							// -> $123 - skipper premier chiffre apres $
+			if (tmp->skip == 0 && ft_strchr(tmp->word, '$')
+				&& which_quote(tmp->word[0]) == FALSE)
 			{
-				new_w = ft_strndup(lex->word, i);
-				if (lex->word[i + 1] == '0')
-					new_w = ft_strjoin(new_w, shell->av);
-				i += 2;
-				post = ft_strdup(lex->word + i);
-				new_w = ft_join_free(new_w, post);
-				printf("new_w : [%s]\n", new_w);
-				free(post);
-				i = -1;
+				if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
+				{
+					tmp->word = no_guillemets(tmp->word, shell);
+					tmp->skip = 1;
+				}
 			}
-			else
-				new_w = ft_strndup(lex->word, i);
-			if (ft_strchr(lex->word + i, '$') == NULL)
-			{
-				printf("lex->word[i] : [%c]\n", lex->word[i]);
-				lex->word = new_w;
-				printf("lex->word: [%s]\n", lex->word);
-			}
-			if (lex->word[i] == '$' && ft_isalpha(lex->word[i + 1]) && i >= 0) // expand lex->word[i] et on ajoute entre new_w et post
-			{
-				printf("new_w = [%s]\n", new_w);
-				printf("exp_pars: [%s]\n", exp_pars(lex->word + i, envp));
-				printf("post = [%s]\n", post);
-				exp_w = ft_join_free(new_w, exp_pars(lex->word + i, envp));
-				i = ft_strlen(exp_w);
-				new_w = ft_join_free(exp_w, post);
-				free(lex->word);
-				lex->word = new_w;
-				printf(GREEN"lex->word : [%s]\n"RESET, lex->word);
-				printf(GREEN"lex->word + i : [%s]\n"RESET, lex->word + i);
-				printf("i : %d\n", i);
-			}
-			// else if(ft_strchr(lex->word + i, '$') == NULL && i >= 0)
-			// 	break ;
-			else
+		}
+		tmp = tmp->next;
+	}
+}
+
+char	*no_guillemets(char *word, t_shell *shell)
+{
+	char	*tmp;
+	char	*exp_w;
+	int		dols;
+	int		i;
+
+	tmp = "";
+	exp_w = "";
+	i = 0;
+	while (word[i])
+	{
+		if (i == 0 && ft_isalnum(word[i]))
+		{
+			exp_w = ft_strndup_dol(word);
+			while (word[i] != '$')
 				i++;
 		}
-		lex = lex->next;
-	}
-}
-
-// fonction pour expand les cas avec dollar et guillemets: $$$abcd$$$$$HOME$SHLVL
-void	no_guillemets(char **word, int i, t_env *envp)
-{
-	char	*tmp = "";
-	char	*exp_w = "";
-	int		dols;
-	int		counter = 0;
-
-	while ((*word)[i])
-	{
 		dols = 0;
-		printf(RED"i : [%d]\n"RESET, i);
-		while ((*word)[i] && (*word)[i] == '$' && (*word)[i + 1] != '$')
+		while (word[i] && word[i] == '$')
 		{
 			dols++;
-			i++;
-			if ((*word)[i] != '$')
-			{
-				tmp = expand(*word, i, envp);
-				if (tmp != NULL)
-					exp_w = ft_strjoin(exp_w, tmp);
-			}
+			if (word[i] && word[i] == '$' && word[i + 1] == '$')
+				exp_w = ft_strjoin(exp_w, "$");
 			else
-				tmp = ft_strdup(*word + i);
-		}
-		if((*word)[i] && (*word)[i] == '$' && (*word)[i + 1] == '$')
-		{
-			exp_w = ft_strjoin("$",exp_w); 
+				break ;
 			i++;
 		}
-		printf(RED"tmp: [%s]\n"RESET, tmp);
-		printf(RED"\n	➜ exp_w: [%s]\n\n"RESET, exp_w);
-		if (ft_strchr((*word) + i, '$') - *word < 0)
+		if (find_pwd(word +i, shell))
+			exp_w = ft_strjoin(exp_w, find_pwd(word +i, shell));
+		if (word[i] && word[i] == '$' && word[i + 1] != '$')
 		{
-			*word = exp_w;
-			printf(BLUE"[no more $ signs: breaking ...]\n"RESET);
-			break;
+			if (dols % 2 != 0)
+				tmp = expand(word, i, shell->env);
+			else
+				tmp = ft_strndup_dol(word + i);
+			exp_w = ft_strjoin(exp_w, tmp);
 		}
-		printf(RED"step exp_w: [%s]\n"RESET, exp_w);
-		i = ft_strchr((*word) + i, '$') - *word;
-		printf(GREEN"counter: %d\n\n"RESET, counter++);
+		i = ft_strchr(word + i + 1, '$') - word;
+		if (i < 0)
+			break ;
 	}
-	printf(GREEN"\n	➜ word: [%s]\n\n"RESET, *word);
-	*word = exp_w;
+	word = exp_w;
+	return (word);
 }
-
-// return ce quil y a apres la variable env $
-char	*find_post(char *word, int *i, char **new_w)		 //"abcd$$$$1abcd$HOME" - avec guillemets
-{
-	int		delimiter;
-	char	*post;
-	int		dols;
-
-	dols = 0;
-	printf("start *i : [%d], \npre word: [%s]\n", *i, word);
-	while (!(word[*i] == '$' && ((word[*i + 1] != '$' && dols % 2 != 0) || ft_isdigit(word[*i + 1]))))
-	{
-		if (word[(*i)++] == '$')
-			dols++;
-	}	
-	*new_w = ft_strndup(word, *i);
-	printf(GREEN"new_w : [%s]\n ft_strchr: [%s]\n"RESET, *new_w, ft_strchr(word + *i, '$'));
-	*i = ft_strchr(word + *i, '$') - word;
-	if (word[*i] == '$' && ft_isdigit(word[*i + 1]))
-		post = ft_strdup(word + *i + 2);
-	else
-	{
-		delimiter = ft_strchr(word + *i + 1, ' ') - word;
-		if (delimiter < 0)
-			delimiter = ft_strchr(word + *i + 1, '$') - word;
-		if (delimiter < 0)
-			delimiter = ft_strchr(word + *i + 1, '\'') - word;
-		if (delimiter < 0)
-			delimiter = ft_strchr(word + *i + 1, '\"') - word;
-		if (delimiter < 0)
-			delimiter = ft_strchr(word + *i + 1, '\0') - word;
-		post = ft_strdup(word + delimiter);
-	}
-	return (post);
-}
-
-

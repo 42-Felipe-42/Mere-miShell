@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:04:33 by louismdv          #+#    #+#             */
-/*   Updated: 2024/06/24 11:04:47 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:00:24 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,48 @@ t_env	*store_env(char **env)
 		i++;
 	}
 	return (store_value);
+}
+
+//copier chars entre dollars ex: $$HOME$PWD 
+char	*ft_strndup_dol(char *s)
+{
+	int		i;
+	char	*dst;
+
+	i = 0;
+	if (s[0] == '$')
+		i++;
+	while (s[i] && s[i] != '$')
+		i++;
+	dst = malloc(sizeof(char) * (i + 1));
+	if (!dst)
+		return (NULL);
+	i = 0;
+	if (s[0] == '$')
+	{
+		dst[0] = '$';
+		i++;
+	}
+	while (s[i] && s[i] != '$')
+	{
+		dst[i] = s[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
+char	*ft_strjoin_char(const char *str, char c)
+{
+	size_t	len;
+	char	*result;
+
+	len = strlen(str);
+	result = (char *)malloc(len + 2);
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, str, len + 2);
+	result[len] = c;
+	result[len + 1] = '\0';
+	return (result);
 }
