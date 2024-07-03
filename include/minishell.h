@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/03 15:59:07 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:51:48 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../.libft/libft.h"
 # include "lexer.h"
 # include "parser.h"
+# include "pipex.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -35,15 +36,15 @@
 // int g_return_code;
 typedef struct s_shell
 {
-	char			*av;
+	char	*av;
 	t_cmds	*cmds;
 	t_env	*env;
 }			t_shell;
 
 char		*ft_readline(void);
-void		expander(t_lexer *lex,t_shell *shell);
+void		expander(t_lexer *lex, t_shell *shell);
 char		*no_guillemets(char *word, t_shell *shell);
 char		*ft_strndup_dol(char *s);
-void				parser(t_shell *shell);
+void		parser(t_shell *shell);
 
 #endif

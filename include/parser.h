@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/03 16:07:53 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:45:23 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_cmds
 	struct s_cmds	*prev;
 }					t_cmds;
 
-#define ECHO 6012
+#define ECHO 601
 #define CD 602
 #define PWD 603
 #define EXPORT 604
