@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/03 16:45:23 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/05 16:07:37 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 typedef struct s_cmds
 {
+	char			**tab;
+	char			*path;
 	int				builtin;
 	struct s_lexer	*lex_redir;
 	struct s_cmds	*next;
@@ -27,8 +29,11 @@ typedef struct s_cmds
 #define UNSET 605
 #define ENV 606
 #define EXIT 607
-
 int					check_quote_closed(char *word);
 t_cmds				*new_cmds(t_lexer **lex, t_cmds **cmds);
 void				syntaxe(t_lexer *lex);
 void				is_builtin(t_cmds *cmds, t_lexer *lex);
+t_cmds	*create_cmds(t_lexer *lex);
+void	lex_to_cmds(t_lexer *lex, t_cmds **cmds);
+void	redir_to_cmds(t_lexer *lex, t_cmds **cmds);
+t_cmds	*init_cmds(void);

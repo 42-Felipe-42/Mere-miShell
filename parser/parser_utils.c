@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/03 15:53:57 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/05 17:39:54 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	*remove_quote(char *word, int *i)
 {
 	int		j;
 	char	*dest;
+
 	j = 0;
 	dest = malloc(sizeof(ft_strlen(word)) + 1);
 	if (!dest)
@@ -46,7 +47,7 @@ char	*remove_quote(char *word, int *i)
 	while (word[*i])
 	{
 		if ((which_quote(word[*i]) && *i == 0) || (which_quote(word[*i])
-			&& word[*i + 1] == '\0'))
+				&& word[*i + 1] == '\0'))
 			(*i)++;
 		else
 		{
@@ -61,26 +62,26 @@ char	*remove_quote(char *word, int *i)
 
 void	parser(t_shell *shell)
 {
-	int	i;
-	t_lexer *lex;
-	
-	lex = shell->cmds->lex_redir;
+	int		i;
+	t_lexer	*lexer;
+
+	lexer = shell->lex;
 	i = 0;
-	syntaxe(lex);
-	while (lex)
+	syntaxe(lexer);
+	while (lexer)
 	{
 		i = 0;
-		is_builtin(shell->cmds, lex);
-		while (lex->word && lex->word[i])
+		is_builtin(shell->cmds, lexer);
+		while (lexer->word && lexer->word[i])
 		{
-			if (which_quote(lex->word[i]))
+			if (which_quote(lexer->word[i]))
 			{
-				lex->word = remove_quote(lex->word, &i);
+				lexer->word = remove_quote(lexer->word, &i);
 				break ;
 			}
 			i++;
 		}
-		lex = lex->next;
+		lexer = lexer->next;
 	}
 }
 int	count_lexem(t_lexer *lex)
@@ -91,6 +92,20 @@ int	count_lexem(t_lexer *lex)
 	while (lex)
 	{
 		count++;
+		lex = lex->next;
+	}
+	return (count);
+}
+
+int	count_pipes(t_lexer *lex)
+{
+	int	count;
+
+	count = 0;
+	while (lex)
+	{
+		if (lex->token == PIPE)
+			count++;
 		lex = lex->next;
 	}
 	return (count);
@@ -117,7 +132,106 @@ void	syntaxe(t_lexer *lex)
 		if (tmp->token != 0 && (!tmp->next || tmp->next->token != 0))
 			return (ft_putstr_fd("Pas la bonne syntaxe de redirection\n",
 					STDOUT_FILENO));
-	tmp = tmp->next;
+		tmp = tmp->next;
 	}
 }
 
+t_cmds	*init_cmds(void)
+{
+	t_cmds	*cmds;
+
+	cmds = malloc(sizeof(t_cmds));
+	if (!cmds)
+		return (NULL);
+	ft_bzero(cmds, sizeof(t_cmds));
+	return (cmds);
+}
+
+// copie des donnee de lex vers cmds->lex
+void	redir_to_cmds(t_lexer *lex, t_cmds **cmds)
+{
+	t_lexer	*tmp;
+	t_lexer	*new_node;
+
+	new_node = malloc(sizeof(t_lexer));
+	if (!new_node)
+		return ;
+	new_node->token = lex->token;
+	if (lex->next->word)
+		new_node->word = ft_strdup(lex->next->word);
+	new_node->next = NULL;
+	if ((*cmds)->lex_redir == NULL)
+	{
+		(*cmds)->lex_redir = new_node;
+		return ;
+	}
+	tmp = (*cmds)->lex_redir;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_node;
+}
+// cat > khiy | cmd2 > file2
+
+void	lex_to_cmds(t_lexer *lex, t_cmds **cmds)
+{
+	t_lexer	*tmp;
+	int		count;
+	int		i;
+
+	i = 0;
+	count = count_pipes(lex) + 1;
+	tmp = lex;
+	if (cmds == NULL)
+		cmds = malloc(sizeof(t_cmds));
+	(*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
+	while (tmp->token == 0)
+	{
+		if (!tmp->word)
+			tmp = tmp->next;
+		else
+		{
+			if (tmp->word)
+				(*cmds)->tab[i] = ft_strdup(tmp->word);
+			printf("tab[%d] : %s\n ", i, (*cmds)->tab[i]);
+			if (!(*cmds)->tab)
+				return ;
+			i++;
+			tmp = tmp->next;
+		}
+	}
+	(*cmds)->tab[i] = NULL;
+}
+
+t_cmds	*create_cmds(t_lexer *lex)
+{
+	t_lexer	*tmp;
+	t_cmds	*cmds;
+	t_cmds	*current_cmd;
+
+	cmds = init_cmds();
+	if (!cmds)
+		return (NULL);
+	current_cmd = cmds;
+	tmp = lex;
+	while (tmp)
+	{
+		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR
+			|| tmp->token == APPEND)
+		{
+			redir_to_cmds(tmp, &current_cmd);
+
+		}
+		else if (tmp->token == PIPE)
+		{
+			current_cmd->next = init_cmds();
+			current_cmd->next->prev = current_cmd;
+			current_cmd = current_cmd->next;
+					}
+		else if (tmp->next && tmp->next->token != PIPE)
+		{
+			lex_to_cmds(tmp, &current_cmd);
+		}
+		tmp = tmp->next;
+	}
+	return (cmds);
+}

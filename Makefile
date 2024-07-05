@@ -18,7 +18,6 @@ C_FILE      =  	expander/expander.c \
 				expander/expander_utils.c \
 				parser/parser_utils.c \
 				parser/parser.c \
-				redirection/
 				
 OBJS        =   $(C_FILE:.c=.o)
 

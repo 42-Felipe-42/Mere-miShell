@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/04/22 14:25:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/05 10:49:00 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ int	get_cmds(char **envp, char *av)
 	}
 	return (EXIT_SUCCESS);
 }
-
 void	wait_children(void)
 {
 	while (1)
