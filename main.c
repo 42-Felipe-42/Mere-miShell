@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/05 17:19:20 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:31:15 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	print_list_cmds(t_shell *shell)
 		while (current_cmd->tab && current_cmd->tab[i])
 		{
 			if (current_cmd->next == NULL)
-				ft_putstr_fd(GREEN "Last Node : ", STDOUT_FILENO);
+				ft_putstr_fd(GREEN "Last Node tab : ", STDOUT_FILENO);
 			else
-				ft_putstr_fd(RED "Past Node : ", STDOUT_FILENO);
+				ft_putstr_fd(RED "Past Node tab : ", STDOUT_FILENO);
 			ft_putstr_fd(current_cmd->tab[i], STDOUT_FILENO);
 			printf(RESET "\n");
 			i++;

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/05 16:10:45 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:48:22 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../.libft/libft.h"
 # include "lexer.h"
 # include "parser.h"
+# include "exec.h"
 // # include "pipex.h"
 # include <readline/history.h>
 # include <readline/readline.h>

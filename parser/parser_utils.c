@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/05 17:43:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:29:31 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void	redir_to_cmds(t_lexer *lex, t_cmds **cmds)
 }
 // cat > khiy | cmd2 > file2
 
-void	lex_to_cmds(t_lexer *lex, t_cmds **cmds)
+t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 {
 	t_lexer	*tmp;
 	int		count;
@@ -184,33 +184,29 @@ void	lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 	if (cmds == NULL)
 		cmds = malloc(sizeof(t_cmds));
 	(*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
-	while (tmp->token == 0)
+	while (tmp && tmp->word)
 	{
-		if (!tmp->word)
+		if (tmp->word)
+			(*cmds)->tab[i] = ft_strdup(tmp->word);
+		if (!(*cmds)->tab)
+			return (NULL);
+		i++;
+		if (tmp->next && tmp->next->word)
 			tmp = tmp->next;
 		else
-		{
-			if (tmp->word)
-				(*cmds)->tab[i] = ft_strdup(tmp->word);
-			printf("tab[%d] : %s\n ", i, (*cmds)->tab[i]);
-			if (!(*cmds)->tab)
-				return ;
-			i++;
-			tmp = tmp->next;
-		}
+			break;
 	}
 	(*cmds)->tab[i] = NULL;
+	return (tmp);
 }
 
 t_cmds	*create_cmds(t_lexer *lex)
 {
-	t_lexer	*tmp;
-	t_cmds	*cmds;
-	t_cmds	*current_cmd;
-
+	t_lexer *tmp;
+	t_cmds *cmds;
+	t_cmds *current_cmd;
 	cmds = init_cmds();
-	if (!cmds)
-		return (NULL);
+
 	current_cmd = cmds;
 	tmp = lex;
 	while (tmp)
@@ -219,18 +215,15 @@ t_cmds	*create_cmds(t_lexer *lex)
 			|| tmp->token == APPEND)
 		{
 			redir_to_cmds(tmp, &current_cmd);
-
 		}
 		else if (tmp->token == PIPE)
 		{
 			current_cmd->next = init_cmds();
 			current_cmd->next->prev = current_cmd;
 			current_cmd = current_cmd->next;
-					}
-		else if (tmp->next && tmp->next->token != PIPE)
-		{
-			lex_to_cmds(tmp, &current_cmd);
 		}
+		else if (tmp->next && tmp->next->token != PIPE)
+			tmp = lex_to_cmds(tmp, &current_cmd);
 		tmp = tmp->next;
 	}
 	return (cmds);

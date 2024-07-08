@@ -6,11 +6,11 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/04/19 17:27:38 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:50:19 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../pipex.h"
+#include "../include/minishell.h"
 
 int	child_looping(int fd_tmp, int *fd, char *av, char **envp)
 {
@@ -35,13 +35,13 @@ int	child_looping(int fd_tmp, int *fd, char *av, char **envp)
 	return (0);
 }
 
-int	first_child(char **av, int *fd, char **envp)
+int	first_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 {
 	pid_t	pid;
 	int		infile;
 
 	if (pipe(fd) == -1)
-		return (close(fd[0]), close(fd[1]), exit(EXIT_FAILURE), 1);
+		return (close(fd->[0]), close(fd[1]), exit(EXIT_FAILURE), 1);
 	pid = fork();
 	if (pid == -1)
 		return (close(fd[0]), close(fd[1]), exit(EXIT_FAILURE), 1);
@@ -89,51 +89,51 @@ int	last_child(char **av, int ac, int *fd, char **envp)
 	return (0);
 }
 
-void	loop_here_doc(char **av, int fd)
-{
-	char	*line;
-	char	*limiter;
+// void	loop_here_doc(char **av, int fd)
+// {
+// 	char	*line;
+// 	char	*limiter;
 
-	limiter = ft_strjoin(av[2], "\n");
-	while (1)
-	{
-		ft_putstr_fd("here_doc> ", 2);
-		line = get_next_line(0);
-		if (line == NULL || ft_strncmp(line, limiter, ft_strlen(line)) == 0)
-		{
-			free(line);
-			break ;
-		}
-		ft_putstr_fd(line, fd);
-		free(line);
-	}
-	free(limiter);
-}
+// 	limiter = ft_strjoin(av[2], "\n");
+// 	while (1)
+// 	{
+// 		ft_putstr_fd("here_doc> ", 2);
+// 		line = get_next_line(0);
+// 		if (line == NULL || ft_strncmp(line, limiter, ft_strlen(line)) == 0)
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		ft_putstr_fd(line, fd);
+// 		free(line);
+// 	}
+// 	free(limiter);
+// }
 
-int	here_doc(char **av)
-{
-	char	*file_name;
-	int		infile;
-	int		fd;
+// int	here_doc(char **av)
+// {
+// 	char	*file_name;
+// 	int		infile;
+// 	int		fd;
 
-	file_name = ft_strdup("42");
-	while (access(file_name, F_OK) == 0)
-		file_name = ft_strjoinandfree(file_name, "42");
-	infile = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	if (infile == -1)
-	{
-		perror("infile");
-		exit(EXIT_FAILURE);
-	}
-	fd = open(file_name, O_RDONLY);
-	if (fd == -1)
-	{
-		perror("fd");
-		exit(EXIT_FAILURE);
-	}
-	unlink(file_name);
-	loop_here_doc(av, infile);
-	free(file_name);
-	close(infile);
-	return (fd);
-}
+// 	file_name = ft_strdup("42");
+// 	while (access(file_name, F_OK) == 0)
+// 		file_name = ft_strjoinandfree(file_name, "42");
+// 	infile = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+// 	if (infile == -1)
+// 	{
+// 		perror("infile");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	fd = open(file_name, O_RDONLY);
+// 	if (fd == -1)
+// 	{
+// 		perror("fd");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	unlink(file_name);
+// 	loop_here_doc(av, infile);
+// 	free(file_name);
+// 	close(infile);
+// 	return (fd);
+// }
