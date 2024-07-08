@@ -1,42 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/04/19 16:42:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/08 18:00:11 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../pipex.h"
+#include "../include/minishell.h"
 
-void	usage(void)
+void	exec(t_cmds *cmds, t_env *env, t_shell *shell)
 {
-	ft_printf("Usage : ./pipex_bonus file1 cmd1 cmd2 ... cmdn file2\n");
-	ft_printf("Usage : ./pipex_bonus here_doc LIMITER cmd1 cmd2 file2\n");
-	exit(EXIT_FAILURE);
-}
-
-int	main(int ac, char **av, char **envp)
-{
-	int	fd[2];
-	int	i;
-	int	fd_temp;
+	t_fd	fd;
+	int		i;
+	int		fd_temp;
 
 	i = 3;
 	fd_temp = 0;
-	if (ac < 5 || (ft_strncmp(av[1], "here_doc", 9) == 0 && ac < 6))
-		return (usage(), 1);
-	if (ft_strncmp(av[1], "here_doc", 9) == 0)
-		fd[0] = here_doc(av);
+	if (cmds->lex_redir->token == HERE_DOC)
+		fd.pipes[0] = here_doc(cmds);
 	else
-		first_child(av, fd, envp);
-	while ((i < ac - 2))
-		child_looping(fd_temp, fd, av[i++], envp);
-	last_child(av, ac, fd, envp);
-	close_fd(fd, fd_temp, 0);
+		first_child(cmds, &fd, env);
+	while (cmds)
+	{
+		child_looping(fd_temp, &fd, cmds, env);
+		cmds = cmds->next;
+	}
+	last_child(cmds, &fd, env);
+	close_fd(&fd, fd_temp, 0);
 	wait_children();
 	return (EXIT_SUCCESS);
 }
