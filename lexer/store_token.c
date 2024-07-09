@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/05 16:06:33 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/09 17:24:39 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	lex_str(char *input, t_lexer **lex)
 {
 	int	i;
 	int	start;
-
+	
 	i = 0;
 	while (input[i])
 	{

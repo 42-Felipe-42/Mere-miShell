@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/09 15:33:38 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:00:06 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,21 @@ int	child_looping(int fd_tmp, t_fd *fd, t_cmds *cmds, t_env *envp)
 {
 	fd_tmp = fd->pipes[0];
 	if (pipe(fd->pipes) == -1)
-		return (/* close_fd(fd, fd_tmp, 3), */ exit(EXIT_FAILURE), 1);
+		return (close_fd(fd, fd_tmp, 3), exit(EXIT_FAILURE), 1);
 	cmds->pid = fork();
-	printf("pid child loop %d\n", cmds->pid);
 	if (cmds->pid == -1)
 		return (close_fd(fd, fd_tmp, 3), exit(EXIT_FAILURE), 1);
 	else if (cmds->pid == 0)
 	{
 		if (dup2(fd_tmp, STDIN_FILENO) == -1 || dup2(fd->pipes[1],
 				STDOUT_FILENO) == -1)
-			return (perror("dup2"), /* close_fd(fd->pipes, fd_tmp, 3), */
+			return (perror("dup2"), close_fd(fd, fd_tmp, 3),
 					exit(EXIT_FAILURE),
 					1);
-		// close_fd(fd->pipes, fd_tmp, 3);
+		close_fd(fd, fd_tmp, 3);
 		get_cmds(envp, cmds);
 	}
-	// close_fd(fd->pipes, fd_tmp, 1);
+	close_fd(fd, fd_tmp, 1);
 	return (0);
 }
 
@@ -41,13 +40,9 @@ int	first_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 		return (close(fd->pipes[0]), close(fd->pipes[1]), exit(EXIT_FAILURE),
 			1);
 	cmds->pid = fork();
-	printf("pid child %d\n", cmds->pid);
 	if (cmds->pid == -1)
-		return (close(fd->pipes[0]),
-				/* close(fd->pipes[1]),
-					*/
-				exit(EXIT_FAILURE),
-				1);
+		return (close(fd->pipes[0]), close(fd->pipes[1]), exit(EXIT_FAILURE),
+			1);
 	if (cmds->pid == 0)
 	{
 		fd->input = open(cmds->lex_redir->word, O_RDONLY, 0644);
@@ -70,7 +65,6 @@ int	last_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 
 	cmds->pid = 0;
 	cmds->pid = fork();
-	printf("after pid last child %d\n", cmds->pid);
 	if (cmds->pid == -1)
 		return (ft_putstr_fd("test\n", STDOUT_FILENO), exit(EXIT_FAILURE), 1);
 	if (cmds->pid == 0)

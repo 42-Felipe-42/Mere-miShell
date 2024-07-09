@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/09 15:55:26 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/09 16:01:13 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exec(t_cmds *cmds, t_env *env /* , t_shell *shell */)
 	fd_temp = 0;
 	while (cmds)
 	{
-		if (cmds->lex_redir->token == HERE_DOC)
+		if (cmds->lex_redir->token != 0 && cmds->lex_redir->token == HERE_DOC)
 			fd.pipes[0] = here_doc(cmds);
 		else
 		first_child(cmds, &fd, env);
