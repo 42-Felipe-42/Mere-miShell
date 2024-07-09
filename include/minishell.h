@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/08 14:48:22 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:35:01 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define MINISHELL_H
 
 # include "../.libft/libft.h"
+# include "exec.h"
 # include "lexer.h"
 # include "parser.h"
-# include "exec.h"
 // # include "pipex.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -40,13 +40,24 @@ typedef struct s_shell
 	char	*av;
 	t_cmds	*cmds;
 	t_env	*env;
-	t_lexer *lex;
+	t_lexer	*lex;
 }			t_shell;
 
 char		*ft_readline(void);
 void		expander(t_lexer *lex, t_shell *shell);
 char		*no_guillemets(char *word, t_shell *shell);
 char		*ft_strndup_dol(char *s);
-void		parser(t_shell *shell);
-
+void		parser(t_lexer **lex, t_shell *shell);
+/****************************************************\
+|*************************EXEC***********************|
+\****************************************************/
+int			get_cmds(t_env *env, t_cmds *cmds);
+char		*get_path(t_env *env, t_cmds *cmds);
+int			here_doc(t_cmds *cmds);
+int			first_child(t_cmds *cmds, t_fd *fd, t_env *envp);
+int			last_child(t_cmds *cmds, t_fd *fd, t_env *envp);
+int			child_looping(int fd_tmp, t_fd *fd, t_cmds *cmds, t_env *envp);
+void		close_fd(t_fd *fd, int file, int who);
+void		wait_children(void);
+void		exec(t_cmds *cmds, t_env *env /* , t_shell *shell */);
 #endif

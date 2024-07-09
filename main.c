@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/08 14:31:15 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:06:27 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,19 @@ int	main(int ac, char **av, char **envp)
 		input = ft_readline();
 		lex_str(input, &lex);
 		expander(lex, shell);
+		parser(&lex , shell);
 		cmds = create_cmds(lex);
 		shell->cmds = cmds;
 		shell->lex = lex;
 		current = shell;
-		parser(shell);
+		exec(shell->cmds, env);
 		// print_list(current);
 		// print_list_lex(lex);
-		// free(lex);
 		print_list_cmds(shell);
+		free(shell);
+	
 		
+
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/08 14:29:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/09 14:35:20 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ char	*remove_quote(char *word, int *i)
 	return (dest);
 }
 
-void	parser(t_shell *shell)
+void	parser(t_lexer **lex, t_shell *shell)
 {
 	int		i;
 	t_lexer	*lexer;
 
-	lexer = shell->lex;
+	lexer = *lex;
 	i = 0;
 	syntaxe(lexer);
 	while (lexer)
@@ -194,7 +194,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 		if (tmp->next && tmp->next->word)
 			tmp = tmp->next;
 		else
-			break;
+			break ;
 	}
 	(*cmds)->tab[i] = NULL;
 	return (tmp);
@@ -202,11 +202,11 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 
 t_cmds	*create_cmds(t_lexer *lex)
 {
-	t_lexer *tmp;
-	t_cmds *cmds;
-	t_cmds *current_cmd;
-	cmds = init_cmds();
+	t_lexer	*tmp;
+	t_cmds	*cmds;
+	t_cmds	*current_cmd;
 
+	cmds = init_cmds();
 	current_cmd = cmds;
 	tmp = lex;
 	while (tmp)
