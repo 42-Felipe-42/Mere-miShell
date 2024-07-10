@@ -3,40 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/09 13:17:10 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/10 15:33:03 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+// void	close_fd(t_fd *fd, int file, int who)
+// {
+// 	if (fd)
+// 	{
+// 		if (fd->pipes[0] != -2 && file != -2 && who == 0)
+// 		{
+// 			close(fd->pipes[0]);
+// 			close(file);
+// 		}
+// 		if (fd->pipes[1] != -2 && file != -2 && who == 1)
+// 		{
+// 			close(fd->pipes[1]);
+// 			close(file);
+// 		}
+// 		if (fd->pipes[0] != -2 && fd->pipes[1] != -2 && who == 2)
+// 		{
+// 			close(fd->pipes[0]);
+// 			close(fd->pipes[1]);
+// 		}
+// 	}
+// 	if (fd->pipes[0] != -2 && fd->pipes[1] != -2 && file != -2 && who == 3)
+// 	{
+// 		close(fd->pipes[0]);
+// 		close(fd->pipes[1]);{}
+// 		close(file);
+// 	}
+// }
+
 void	close_fd(t_fd *fd, int file, int who)
 {
 	if (fd)
 	{
-		if (fd->pipes[0] != -1 && file != -1 && who == 0)
+		if (who == 0 || who == 2 || who == 3)
 		{
-			close(fd->pipes[0]);
+			if (fd->pipes[0] != -1)
+			{
+				close(fd->pipes[0]);
+				fd->pipes[0] = -1; // Marquer comme fermé
+			}
+		}
+		if (who == 1 || who == 2 || who == 3)
+		{
+			if (fd->pipes[1] != -1)
+			{
+				close(fd->pipes[1]);
+				fd->pipes[1] = -1; // Marquer comme fermé
+			}
+		}
+		if ((who == 0 || who == 1 || who == 3) && file != -1)
+		{
 			close(file);
+			file = -1; // Marquer comme fermé
 		}
-		if (fd->pipes[1] != -1 && file != -1 && who == 1)
-		{
-			close(fd->pipes[1]);
-			close(file);
-		}
-		if (fd->pipes[0] != -1 && fd->pipes[1] != -1 && who == 2)
-		{
-			close(fd->pipes[0]);
-			close(fd->pipes[1]);
-		}
-	}
-	if (fd->pipes[0] != -1 && fd->pipes[1] != -1 && file != -1 && who == 3)
-	{
-		close(fd->pipes[0]);
-		close(fd->pipes[1]);
-		close(file);
 	}
 }
 
@@ -75,11 +103,12 @@ void	ft_cmd_no_found(char *str)
 	ft_putstr_fd("\n", 2);
 }
 
-int	get_cmds(t_env	*env, t_cmds *cmds)
+int	get_cmds(t_env *env, t_cmds *cmds)
 {
 	// if (!cmds->tab[0])
 	// 	return (ft_cmd_no_found(&cmds->tab[0]), exit(EXIT_FAILURE), 1);
-	if (ft_strchr(cmds->tab[0], '/') != NULL && access(cmds->tab[0], F_OK | X_OK) == 0)
+	if (ft_strchr(cmds->tab[0], '/') != NULL && access(cmds->tab[0],
+			F_OK | X_OK) == 0)
 		cmds->path = ft_strdup(cmds->tab[0]);
 	else
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bis.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/09 16:00:06 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/10 15:35:24 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,8 @@ int	child_looping(int fd_tmp, t_fd *fd, t_cmds *cmds, t_env *envp)
 	{
 		if (dup2(fd_tmp, STDIN_FILENO) == -1 || dup2(fd->pipes[1],
 				STDOUT_FILENO) == -1)
-			return (perror("dup2"), close_fd(fd, fd_tmp, 3),
-					exit(EXIT_FAILURE),
-					1);
+			return (perror("dup2"), close_fd(fd, fd_tmp, 3), exit(EXIT_FAILURE),
+				1);
 		close_fd(fd, fd_tmp, 3);
 		get_cmds(envp, cmds);
 	}
@@ -45,13 +44,14 @@ int	first_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 			1);
 	if (cmds->pid == 0)
 	{
+		// printf(GREEN "lex word first child %s\n" RESET, cmds->lex_redir->word);
 		fd->input = open(cmds->lex_redir->word, O_RDONLY, 0644);
 		if (fd->input == -1)
 			return (perror(cmds->lex_redir->word), close_fd(fd, fd->input, 2),
 				exit(EXIT_FAILURE), 1);
 		if (dup2(fd->input, STDIN_FILENO) == -1 || dup2(fd->pipes[1],
 				STDOUT_FILENO) == -1)
-			return (perror("dup2"), close_fd(fd, fd->input, 3),
+			return (perror("dup2 first"), close_fd(fd, fd->input, 3),
 				exit(EXIT_FAILURE), 1);
 		close_fd(fd, fd->input, 3);
 		get_cmds(envp, cmds);
@@ -61,34 +61,27 @@ int	first_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 
 int	last_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 {
-	t_cmds	*tmp;
-
-	cmds->pid = 0;
 	cmds->pid = fork();
 	if (cmds->pid == -1)
-		return (ft_putstr_fd("test\n", STDOUT_FILENO), exit(EXIT_FAILURE), 1);
+		return (exit(EXIT_FAILURE), 1);
 	if (cmds->pid == 0)
 	{
-		tmp = cmds;
-		while (tmp)
-			tmp = tmp->next;
-		if (tmp->lex_redir->token == HERE_DOC)
-			fd->output = open(tmp->lex_redir->word,
+		// printf(GREEN "lex word last child %s\n" RESET, cmds->lex_redir->word);
+		if (cmds->lex_redir->token == HERE_DOC)
+			fd->output = open(cmds->lex_redir->word,
 					O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (tmp->lex_redir->token == OUT_REDIR)
-			fd->output = open(tmp->lex_redir->word,
+		else if (cmds->lex_redir->token == OUT_REDIR)
+			fd->output = open(cmds->lex_redir->word,
 					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd->output == -1)
 		{
-			return (perror(tmp->lex_redir->word), close_fd(fd, fd->output, 2),
+			return (perror(cmds->lex_redir->word), close_fd(fd, fd->output, 2),
 				exit(EXIT_FAILURE), 1);
 		}
 		if (dup2(fd->output, STDOUT_FILENO) == -1 || dup2(fd->pipes[0],
 				STDIN_FILENO) == -1)
-			first_child(cmds, fd, envp);
-		return (perror("dup2"), exit(EXIT_FAILURE), 1);
+			return (perror("dup2 last"), exit(EXIT_FAILURE), 1);
 		close_fd(fd, fd->output, 3);
-		cmds = cmds->prev;
 		get_cmds(envp, cmds);
 	}
 	return (0);

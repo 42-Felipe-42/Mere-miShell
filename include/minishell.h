@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/09 14:35:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/10 14:37:21 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,5 @@ int			last_child(t_cmds *cmds, t_fd *fd, t_env *envp);
 int			child_looping(int fd_tmp, t_fd *fd, t_cmds *cmds, t_env *envp);
 void		close_fd(t_fd *fd, int file, int who);
 void		wait_children(void);
-void		exec(t_cmds *cmds, t_env *env /* , t_shell *shell */);
+void		exec(t_cmds **cmds, t_env *env /* , t_shell *shell */);
 #endif
