@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/10 15:35:24 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/10 16:24:30 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ int	last_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 	if (cmds->pid == 0)
 	{
 		// printf(GREEN "lex word last child %s\n" RESET, cmds->lex_redir->word);
-		if (cmds->lex_redir->token == HERE_DOC)
+		if (cmds->lex_redir->token == APPEND)
 			fd->output = open(cmds->lex_redir->word,
 					O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (cmds->lex_redir->token == OUT_REDIR)
+		else
 			fd->output = open(cmds->lex_redir->word,
 					O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd->output == -1)
