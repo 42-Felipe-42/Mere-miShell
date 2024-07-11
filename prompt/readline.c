@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 13:33:39 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/06/21 22:32:11 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:45:50 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,5 @@ char *ft_readline()
 		return (line);
     }
 	free(line);
-    return 0;
+    return NULL;
 }

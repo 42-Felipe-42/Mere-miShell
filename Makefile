@@ -10,11 +10,11 @@ LIBFT_FILE  =   libft.a
 
 LIBFT_LIB   =   $(LIBFT_PATH)/$(LIBFT_FILE)
 
-C_FILE      =  	expander/expander.c \
-				lexer/lexer_utils.c \
+C_FILE      =  	lexer/lexer_utils.c \
 				lexer/store_token.c \
 				prompt/readline.c	\
 				main.c \
+				expander/expander.c \
 				expander/expander_utils.c \
 				parser/parser_utils.c \
 				parser/parser.c \
@@ -22,7 +22,7 @@ C_FILE      =  	expander/expander.c \
 				exec/redir.c \
 				exec/utils_bis.c \
 				exec/utils_exec.c \
-				
+
 OBJS        =   $(C_FILE:.c=.o)
 
 .c.o:

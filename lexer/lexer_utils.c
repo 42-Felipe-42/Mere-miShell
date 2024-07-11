@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/01 14:51:38 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:54:27 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ int	is_token(char *input, int *i)
 		if (input[*i + 1] == '<')
 			return ((*i)++, HERE_DOC);
 		else
-			return (IN_REDIR);
+			return (OUT_REDIR);
 	}
 	if (input[*i] == '>')
 	{
 		if (input[*i + 1] == '>')
 			return ((*i)++, APPEND);
 		else
-			return (OUT_REDIR);
+			return (IN_REDIR);
 	}
 	return (FALSE);
 }

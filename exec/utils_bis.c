@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bis.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/10 16:24:30 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/11 15:12:04 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ int	first_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 	if (cmds->pid == 0)
 	{
 		// printf(GREEN "lex word first child %s\n" RESET, cmds->lex_redir->word);
-		fd->input = open(cmds->lex_redir->word, O_RDONLY, 0644);
+		fd->input = open(cmds->lex_redir->next->word, O_RDONLY, 0644);
+		printf("input 1st child %d\n", fd->input);
+		printf("pipe[1] 1stchild %d\n\n", fd->pipes[1]);
+		printf("pipe[0] last child %d\n\n", fd->pipes[0]);
 		if (fd->input == -1)
 			return (perror(cmds->lex_redir->word), close_fd(fd, fd->input, 2),
 				exit(EXIT_FAILURE), 1);
@@ -78,6 +81,9 @@ int	last_child(t_cmds *cmds, t_fd *fd, t_env *envp)
 			return (perror(cmds->lex_redir->word), close_fd(fd, fd->output, 2),
 				exit(EXIT_FAILURE), 1);
 		}
+		printf("input lat child %d\n", fd->input);
+		printf("pipe[1] last child %d\n\n", fd->pipes[1]);
+		printf("pipe[0] last child %d\n\n", fd->pipes[0]);
 		if (dup2(fd->output, STDOUT_FILENO) == -1 || dup2(fd->pipes[0],
 				STDIN_FILENO) == -1)
 			return (perror("dup2 last"), exit(EXIT_FAILURE), 1);

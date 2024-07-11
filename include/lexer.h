@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/03 11:00:32 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/11 14:57:27 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ typedef struct s_env
 	struct s_env	*prev;
 }					t_env;
 
-#define OUT_REDIR 500 // >
-#define APPEND 501 // >>
-#define IN_REDIR 502 // <
-#define HERE_DOC 503 // <<
+#define IN_REDIR 500 // <
+#define HERE_DOC 501 // <<
+#define APPEND 502 // >>
+#define OUT_REDIR 503 // >
 #define PIPE 504 // |
 
 #define S_QUOTE 1 // ''

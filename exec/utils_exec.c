@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/10 15:33:03 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/11 10:57:15 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,24 +46,24 @@ void	close_fd(t_fd *fd, int file, int who)
 	{
 		if (who == 0 || who == 2 || who == 3)
 		{
-			if (fd->pipes[0] != -1)
+			if (fd->pipes[0] != -2)
 			{
 				close(fd->pipes[0]);
-				fd->pipes[0] = -1; // Marquer comme fermé
+				fd->pipes[0] = -2; // Marquer comme fermé
 			}
 		}
 		if (who == 1 || who == 2 || who == 3)
 		{
-			if (fd->pipes[1] != -1)
+			if (fd->pipes[1] != -2)
 			{
 				close(fd->pipes[1]);
-				fd->pipes[1] = -1; // Marquer comme fermé
+				fd->pipes[1] = -2; // Marquer comme fermé
 			}
 		}
 		if ((who == 0 || who == 1 || who == 3) && file != -1)
 		{
 			close(file);
-			file = -1; // Marquer comme fermé
+			file = -2; // Marquer comme fermé
 		}
 	}
 }
