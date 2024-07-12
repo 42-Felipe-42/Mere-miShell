@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/10 14:37:21 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/12 15:24:08 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,43 @@
 typedef struct s_shell
 {
 	char	*av;
+	int		exit_code;
 	t_cmds	*cmds;
 	t_env	*env;
 	t_lexer	*lex;
+
 }			t_shell;
 
+/*-----------ENV----------*/
+void		store_env(t_shell *shell, char **envp);
+void		set_env_key_value(t_shell *shell, t_env *new, char **envp, int i);
+void	maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
+				int index);
+void		get_env(t_shell *shell, char **envp);
 char		*ft_readline(void);
 void		expander(t_lexer *lex, t_shell *shell);
 char		*no_guillemets(char *word, t_shell *shell);
 char		*ft_strndup_dol(char *s);
-void		parser(t_lexer **lex, t_shell *shell);
+char	*find_env(char *dest, t_env *envp);
+
 /****************************************************\
 |*************************EXEC***********************|
 \****************************************************/
 int			get_cmds(t_env *env, t_cmds *cmds);
 char		*get_path(t_env *env, t_cmds *cmds);
 int			here_doc(t_cmds *cmds);
-int			first_child(t_cmds *cmds, t_fd *fd, t_env *envp);
-int			last_child(t_cmds *cmds, t_fd *fd, t_env *envp);
-int			child_looping(int fd_tmp, t_fd *fd, t_cmds *cmds, t_env *envp);
-void		close_fd(t_fd *fd, int file, int who);
-void		wait_children(void);
-void		exec(t_cmds **cmds, t_env *env /* , t_shell *shell */);
+void		close_all_fds(t_fd *fds);
+void		close_fds_parent(t_fd *fds);
+void		ft_wait_child(t_shell *shell);
+void		ft_exec(t_shell *shell, t_cmds *cmd, t_fd *fd);
+void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds, t_env *env);
+void		execute_child( t_cmds *cmds, t_fd *fds, t_env *env);
+void		init_fd(t_fd *fd);
+void		set_intput(t_cmds *cmds, t_fd *fd);
+void		set_output(t_cmds *cmds, t_fd *fd);
+void		set_redir(t_cmds *cmds, t_fd *fd);
+void		set_fds(t_fd *fd);
+void		run_exec(t_shell *shell);
+void	child_builtin(t_shell *shell, t_cmds *cmd, t_fd *fd);
+
 #endif

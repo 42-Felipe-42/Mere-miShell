@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/09 14:35:20 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:59:23 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,17 @@ char	*remove_quote(char *word, int *i)
 	return (dest);
 }
 
-void	parser(t_lexer **lex, t_shell *shell)
+void	parser(t_lexer *lex)
 {
 	int		i;
 	t_lexer	*lexer;
 
-	lexer = *lex;
+	lexer  = lex;
 	i = 0;
 	syntaxe(lexer);
 	while (lexer)
 	{
 		i = 0;
-		is_builtin(shell->cmds, lexer);
 		while (lexer->word && lexer->word[i])
 		{
 			if (which_quote(lexer->word[i]))
@@ -84,19 +83,6 @@ void	parser(t_lexer **lex, t_shell *shell)
 		lexer = lexer->next;
 	}
 }
-int	count_lexem(t_lexer *lex)
-{
-	int	count;
-
-	count = 0;
-	while (lex)
-	{
-		count++;
-		lex = lex->next;
-	}
-	return (count);
-}
-
 int	count_pipes(t_lexer *lex)
 {
 	int	count;
@@ -109,14 +95,6 @@ int	count_pipes(t_lexer *lex)
 		lex = lex->next;
 	}
 	return (count);
-}
-
-t_cmds	*new_cmds(t_lexer **lex, t_cmds **cmds)
-{
-	(*cmds)->lex_redir = (*lex);
-	if ((*cmds)->lex_redir == NULL)
-		return (NULL);
-	return (*cmds);
 }
 
 void	syntaxe(t_lexer *lex)
@@ -170,7 +148,6 @@ void	redir_to_cmds(t_lexer *lex, t_cmds **cmds)
 		tmp = tmp->next;
 	tmp->next = new_node;
 }
-// cat > khiy | cmd2 > file2
 
 t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 {

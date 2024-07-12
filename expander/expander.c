@@ -3,34 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/03 15:36:42 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:38:59 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 // chercher dest dans env, si trouve expand, sinon NULL
-char	*find_env(char *dest, t_env *envp)
-{
-	int		dest_len;
-	char	*equal_sign;
-
-	dest_len = strlen(dest);
-	while (envp)
-	{
-		// Find the '=' in the current environment variable string
-		equal_sign = strchr(envp->value, '=');
-		// Check if '=' is found and the part before it matches 'dest'
-		if (equal_sign && (equal_sign - envp->value == dest_len)
-			&& strncmp(envp->value, dest, dest_len) == 0)
-			return (equal_sign + 1); // Return the value part after '='
-		envp = envp->next;
-	}
-	return (NULL);
-}
 
 // obj: parcourir entrée jusqu'à: '_' ou char non alphanum,
 // stocker dans 'dest' et comp avec env
@@ -56,12 +38,12 @@ char	*expand(char *input, int i, t_env *envp)
 	env = find_env(dest, envp);
 	if (!env)
 		env = "", free(dest);
-	return (env);
+	return (free(dest), env);
 }
 
 char	*find_pwd(char *str, t_shell *shell)
 {
-	if (ft_strncmp(str, "$0", 2) == 0 || ft_strncmp(str, "$0$", 3) == 0 )
+	if (ft_strncmp(str, "$0", 2) == 0 || ft_strncmp(str, "$0$", 3) == 0)
 	{
 		str = shell->av;
 	}
@@ -121,8 +103,8 @@ char	*no_guillemets(char *word, t_shell *shell)
 				break ;
 			i++;
 		}
-		if (find_pwd(word +i, shell))
-			exp_w = ft_strjoin(exp_w, find_pwd(word +i, shell));
+		if (find_pwd(word + i, shell))
+			exp_w = ft_strjoin(exp_w, find_pwd(word + i, shell));
 		if (word[i] && word[i] == '$' && word[i + 1] != '$')
 		{
 			if (dols % 2 != 0)

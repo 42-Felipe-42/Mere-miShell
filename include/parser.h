@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/08 15:09:19 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/12 15:24:15 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ typedef struct s_cmds
 int					check_quote_closed(char *word);
 t_cmds				*new_cmds(t_lexer **lex, t_cmds **cmds);
 void				syntaxe(t_lexer *lex);
-void				is_builtin(t_cmds *cmds, t_lexer *lex);
+void				is_builtin(t_cmds *cmds);
 t_cmds				*create_cmds(t_lexer *lex);
 t_lexer				*lex_to_cmds(t_lexer *lex, t_cmds **cmds);
 void				redir_to_cmds(t_lexer *lex, t_cmds **cmds);
 t_cmds				*init_cmds(void);
+void				parser(t_lexer *lex);

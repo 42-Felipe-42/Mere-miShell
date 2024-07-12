@@ -3,70 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/11 10:57:15 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:32:19 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// void	close_fd(t_fd *fd, int file, int who)
-// {
-// 	if (fd)
-// 	{
-// 		if (fd->pipes[0] != -2 && file != -2 && who == 0)
-// 		{
-// 			close(fd->pipes[0]);
-// 			close(file);
-// 		}
-// 		if (fd->pipes[1] != -2 && file != -2 && who == 1)
-// 		{
-// 			close(fd->pipes[1]);
-// 			close(file);
-// 		}
-// 		if (fd->pipes[0] != -2 && fd->pipes[1] != -2 && who == 2)
-// 		{
-// 			close(fd->pipes[0]);
-// 			close(fd->pipes[1]);
-// 		}
-// 	}
-// 	if (fd->pipes[0] != -2 && fd->pipes[1] != -2 && file != -2 && who == 3)
-// 	{
-// 		close(fd->pipes[0]);
-// 		close(fd->pipes[1]);{}
-// 		close(file);
-// 	}
-// }
-
-void	close_fd(t_fd *fd, int file, int who)
-{
-	if (fd)
-	{
-		if (who == 0 || who == 2 || who == 3)
-		{
-			if (fd->pipes[0] != -2)
-			{
-				close(fd->pipes[0]);
-				fd->pipes[0] = -2; // Marquer comme fermé
-			}
-		}
-		if (who == 1 || who == 2 || who == 3)
-		{
-			if (fd->pipes[1] != -2)
-			{
-				close(fd->pipes[1]);
-				fd->pipes[1] = -2; // Marquer comme fermé
-			}
-		}
-		if ((who == 0 || who == 1 || who == 3) && file != -1)
-		{
-			close(file);
-			file = -2; // Marquer comme fermé
-		}
-	}
-}
 
 char	*get_path(t_env *env, t_cmds *cmds)
 {
@@ -75,11 +19,11 @@ char	*get_path(t_env *env, t_cmds *cmds)
 	char	*path;
 	char	**path_env;
 
-	while (env && ft_strnstr(env->value, "PATH=", 5) == 0)
+	while (env && ft_strnstr(env->key, "PATH", 5) == 0)
 		env = env->next;
 	if (!env)
 		return (NULL);
-	path_env = ft_split(env->value + 5, ':');
+	path_env = ft_split(env->value, ':');
 	i = -1;
 	while (path_env[++i])
 	{
@@ -119,7 +63,7 @@ int	get_cmds(t_env *env, t_cmds *cmds)
 			return (exit(EXIT_FAILURE), 1);
 		}
 	}
-	if (execve(cmds->path, cmds->tab, &env->value) == -1)
+	if (execve(cmds->path, cmds->tab, NULL) == -1)
 	{
 		ft_cmd_no_found(cmds->tab[0]);
 		return (free(cmds->path), exit(EXIT_FAILURE), 1);
@@ -127,11 +71,41 @@ int	get_cmds(t_env *env, t_cmds *cmds)
 	return (EXIT_SUCCESS);
 }
 
-void	wait_children(void)
+void	ft_wait_child(t_shell *shell)
 {
-	while (1)
+	int		status;
+	t_cmds	*cmd;
+
+	status = -1;
+	cmd = shell->cmds;
+	while (cmd)
 	{
-		if (waitpid(-1, NULL, 0) == -1)
-			break ;
+		if (cmd->pid != -2 && cmd->pid != -1)
+		{
+			waitpid(cmd->pid, &status, 0);
+			if (WIFEXITED(status))
+				shell->exit_code = WEXITSTATUS(status);
+			if (errno == EACCES)
+				shell->exit_code = 126;
+			if (cmd->pid == -1)
+				shell->exit_code = 127;
+		}
+		cmd = cmd->next;
 	}
+}
+
+void	close_all_fds(t_fd *fds)
+{
+	if (!(fds->pipes[0] == -2) && fds->pipes[0] >= 0)
+		close(fds->pipes[1]);
+	if (!(fds->pipes[1] == -2) && fds->pipes[1] >= 0)
+		close(fds->pipes[1]);
+	if (!(fds->redir[0] == -2) && fds->redir[0] >= 0)
+		close(fds->redir[0]);
+	if (!(fds->redir[1] == -2) && fds->redir[1] >= 0)
+		close(fds->redir[1]);
+	if (!(fds->output == -2) && fds->output >= 0)
+		close(fds->output);
+	if (!(fds->input == -2) && fds->input >= 0)
+		close(fds->input);
 }

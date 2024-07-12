@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/11 14:57:27 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/12 13:51:29 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ typedef struct s_lexer
 typedef struct s_env
 {
 	char			*value;
+	char			*key;
+	int				index;
 	struct s_env	*next;
 	struct s_env	*prev;
 }					t_env;
@@ -49,6 +51,4 @@ void				store_token_words(char *input, t_lexer **lex, int start,
 int					is_token(char *input, int *i);
 int					which_redir(char *input, int *i);
 void				add_node(t_env **env, char *value);
-char				*expand_pars(char *word, t_env *envp);
-char				*find_env(char *dest, t_env *envp);
-t_env				*store_env(char **env);
+

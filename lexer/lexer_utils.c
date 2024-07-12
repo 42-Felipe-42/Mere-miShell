@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/11 14:54:27 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:22:31 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// // si token trouve dans input, return sa valeur associee, sinon return false
-// int find_token(char *input, int i)
-// {
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '|')
-// 			return (PIPE);
-// 		if(input[i] =='<')
-// 		{
-// 			if (input[i+1] == '<')
-// 				return (i++, HERE_DOC);
-// 			else
-// 				return(IN_REDIR);
-// 		}
-// 		if (input[i] == '>')
-// 		{
-// 			if (input[i+1] == '>')
-// 				return (i++, APPEND);
-// 			else
-// 				return(OUT_REDIR);
-// 		}
-// 		i++;
-// 	}
-// return(FALSE);
-// }
 
 // si token trouve dans input[i], return sa valeur associee, sinon return false
 int	is_token(char *input, int *i)
@@ -48,17 +22,18 @@ int	is_token(char *input, int *i)
 		if (input[*i + 1] == '<')
 			return ((*i)++, HERE_DOC);
 		else
-			return (OUT_REDIR);
+			return (IN_REDIR);
 	}
 	if (input[*i] == '>')
 	{
 		if (input[*i + 1] == '>')
 			return ((*i)++, APPEND);
 		else
-			return (IN_REDIR);
+			return (OUT_REDIR);
 	}
 	return (FALSE);
 }
+
 int	which_redir(char *input, int *i)
 {
 	if (input[*i] == '|' || input[*i] == '<' || input[*i] == '>')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:58:53 by plangloi          #+#    #+#             */
-/*   Updated: 2024/06/13 19:05:31 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/12 13:57:43 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ char				**ft_split(char const *s, char c);
 void				free_split(char **split);
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
+char				*ft_strncpy_and_free(char *dest, char *src, unsigned int n);
+char				*ft_strncpy(char *dest, char *src, unsigned int n);
 size_t				ft_strlcat(char *dest, const char *src, size_t size);
 t_list				*ft_lstnew(void *content);
 t_list				*ft_lstlast(t_list *lst);

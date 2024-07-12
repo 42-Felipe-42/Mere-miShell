@@ -3,51 +3,132 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/11 14:14:27 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/12 19:06:07 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-
-void	exec(t_cmds **cmds, t_env *env /* , t_shell *shell */)
+void	execute_child(t_cmds *cmds, t_fd *fds, t_env *env)
 {
-	t_fd	fd;
-	int		fd_temp;
-	t_cmds	*head;
-	t_cmds	**curr;
-
-	head = *cmds;
-	curr = cmds;
-	fd_temp = 0;
-	while ((*curr))
+	if (fds->pipes[0] != -2)
+		close(fds->pipes[0]); // Ferme le descripteur d'entrée du pipe
+	if (fds->input != -2)
 	{
-		init_fd(&fd);
-		if ((*curr)->lex_redir->token != 0
-			&& (*curr)->lex_redir->token == HERE_DOC)
-			fd.redir[0] = here_doc((*curr));
-		else
+		if (dup2(fds->input, STDIN_FILENO) == -1)
 		{
-			first_child(head, &fd, env);
-			(*curr) = (*curr)->next;
+			perror("dup2 child input");
+			close_all_fds(fds);
+			// exit(1);
 		}
-		printf("pipes[1] %d\n", fd.pipes[1]);
-		printf("pipes[0] %d\n\n", fd.pipes[0]);
-		while (*curr && (*curr)->next && (*curr)->next->next)
-		{
-			child_looping(fd_temp, &fd, (*curr), env);
-			*curr = (*curr)->next;
-		}
-		if (*curr && (*curr)->next == NULL)
-			last_child((*curr), &fd, env);
-		// close_fd(&fd, fd_temp, 0);
-		if (*curr && (*curr)->next != NULL)
-			*curr = (*curr)->next;
+		close(fds->input); // Ferme le descripteur d'entrée
 	}
-	wait_children();
-	// return ;
+	if (fds->output != -2)
+	{
+		if (dup2(fds->output, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 child output");
+			close_all_fds(fds);
+			// exit(1);
+		}
+		close(fds->output); // Ferme le descripteur de sortie
+	}
+	close_all_fds(fds); // Ferme tous les descripteurs restants
+	get_cmds(env, cmds);
 }
-// ls -l > test | cat < test1
+// void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds, t_env *env)
+// {
+// 	cmds->pid = fork();
+// 	if (cmds->pid == -1)
+// 	{
+// 		perror("fork");
+// 		close_all_fds(fds);
+// 		exit(1); // Échec du fork
+// 	}
+// 	if (cmds->pid == 0)
+// 	{ // Processus enfant
+// 		if (cmds->builtin)
+// 		{
+// 			run_builtins(shell, cmds, fds, 1); // Exécute la commande interne
+// 			close_all_fds(fds);
+// 			exit(0); // Termine le processus enfant après l'exécution du builtin
+// 		}
+// 		else
+// 			execute_child(shell, cmds, fds, env);
+// Exécute une commande externe
+// 	}
+// 	close_parent(fds);
+// 	// Ferme les descripteurs inutiles dans le processus parent
+// 	fds->input = fds->pipes[0]; // Met à jour le descripteur d'entrée du pipe
+// }
+void	ft_exec(t_shell *shell, t_cmds *cmd, t_fd *fd)
+{
+	// if (cmd->builtin == EXIT)
+	// 	ft_exit(shell, cmd, fd);
+	// else if (cmd->builtin == CD)
+	// 	ft_cd(shell, cmd);
+	// else if (cmd->builtin == EXPORT)
+	// 	ft_export(shell, cmd);
+	// else if (cmd->builtin == UNSET)
+	// 	ft_unset(shell, cmd);
+	{
+		cmd->pid = fork();
+		// if (cmd->pid == -1)
+		// 	exitmsg(shell, "fork");
+		if (cmd->pid == 0)
+		{
+			if (cmd->builtin != 0)
+				child_builtin(shell, cmd, fd);
+			else
+				execute_child(cmd, fd, shell->env);
+		}
+		close_fds_parent(fd);
+		fd->redir[0] = fd->pipes[0];
+	}
+}
+
+void	close_fds_parent(t_fd *fds)
+{
+	if (fds->input != -2 && fds->input >= 0)
+		close(fds->input);
+	if (fds->output != -2 && fds->output >= 0)
+		close(fds->output);
+}
+void	run_exec(t_shell *shell)
+{
+	t_cmds	*tmp_cmd;
+	t_fd	fds;
+
+	fds.input = -2;
+	tmp_cmd = shell->cmds;
+	while (tmp_cmd)
+	{
+		init_fd(&fds);
+		if (tmp_cmd->next)
+			if (pipe(fds.pipes) == -1)
+				exit(1);
+		// exitmsg(shell, "pipe");
+		set_redir(tmp_cmd, &fds);
+		// if (shell->excode == 130)
+		// 	break ;
+		printf(RED "fd redir[0] %d \n", fds.redir[0]);
+		printf("fd redir[1] %d\n", fds.redir[1]);
+		printf("fd input %d \n", fds.input);
+		printf("fd output %d\n" RESET, fds.output);
+		set_fds(&fds);
+		printf("--------AFTER------\n");
+		printf(GREEN "fd redir[0] %d \n", fds.redir[0]);
+		printf("fd redir[1] %d\n", fds.redir[1]);
+		printf("fd input %d \n", fds.input);
+		printf("fd output %d\n" RESET, fds.output);
+		if (tmp_cmd->tab &&tmp_cmd->tab[0])
+			ft_exec(shell, tmp_cmd, &fds);
+		if (!tmp_cmd->next)
+			close_fds_parent(&fds);
+		tmp_cmd = tmp_cmd->next;
+	}
+	(ft_wait_child(shell), close_all_fds(&fds));
+}

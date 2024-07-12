@@ -20,8 +20,10 @@ C_FILE      =  	lexer/lexer_utils.c \
 				parser/parser.c \
 				exec/exec.c \
 				exec/redir.c \
-				exec/utils_bis.c \
+				exec/here_doc.c \
 				exec/utils_exec.c \
+				exec/builtins.c \
+				env/get_env.c \
 
 OBJS        =   $(C_FILE:.c=.o)
 

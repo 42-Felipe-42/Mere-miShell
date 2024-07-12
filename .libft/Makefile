@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+         #
+#    By: felipe <felipe@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/08 17:37:56 by plangloi          #+#    #+#              #
-#    Updated: 2024/06/13 19:05:44 by lmerveil         ###   ########.fr        #
+#    Updated: 2024/07/12 13:58:01 by felipe           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ FILES = 	ft_tolower.c \
 		ft_strchr.c \
 		ft_strlcat.c \
 		ft_strlcpy.c \
+		ft_strncpy.c \
 		ft_strlen.c \
 		ft_strncmp.c \
 		ft_strcmp.c \
