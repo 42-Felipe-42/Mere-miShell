@@ -6,11 +6,31 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 19:22:31 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/12 23:56:14 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	which_redir(char *input, int *i)
+{
+	if (input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
+		return (TRUE);
+	return (FALSE);
+}
+
+// verifie si input[i] est un guillmet
+int	which_quote(char input)
+{
+	if (!input)
+		return (0);
+	if (input == '\'')
+		return (1);
+	else if (input == '\"')
+		return (2);
+	else
+		return (0);
+}
 
 // si token trouve dans input[i], return sa valeur associee, sinon return false
 int	is_token(char *input, int *i)
@@ -32,25 +52,6 @@ int	is_token(char *input, int *i)
 			return (OUT_REDIR);
 	}
 	return (FALSE);
-}
-
-int	which_redir(char *input, int *i)
-{
-	if (input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
-		return (TRUE);
-	return (FALSE);
-}
-// verifie si input[i] est un guillmet
-int	which_quote(char input)
-{
-	if (!input)
-		return (0);
-	if (input == '\'')
-		return (1);
-	else if (input == '\"')
-		return (2);
-	else
-		return (0);
 }
 
 void	add_node(t_env **env, char *value)

@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/12 19:25:36 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/13 01:07:57 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	print_list_cmds(t_shell *shell)
 int	main(int ac, char **av, char **envp)
 {
 	t_lexer	*lex;
-	char	*input;
 	t_shell	*shell;
 	t_cmds	*cmds;
 
@@ -55,14 +54,12 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	shell = malloc(sizeof(t_shell));
 	shell->av = ft_strdup(*av);
-	input = av[1];
 	get_env(shell, envp);
 	cmds = malloc(sizeof(t_cmds));
 	while (1)
 	{
 		cmds->builtin = 0;
-		input = ft_readline();
-		lex_str(input, &lex);
+		lexer(&lex, av);
 		expander(lex, shell);
 		parser(lex);
 		cmds = create_cmds(lex);
@@ -70,9 +67,9 @@ int	main(int ac, char **av, char **envp)
 		shell->lex = lex;
 		run_exec(shell);
 		print_list_cmds(shell);
-		free(shell);
-		free(cmds);
-		free_split(cmds->tab);
+		// free(shell);
+		// free(cmds);
+		
 	}
 	return (0);
 }

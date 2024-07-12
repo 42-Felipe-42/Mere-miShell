@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 13:51:29 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/13 00:43:56 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ typedef struct s_env
 #define OUT_REDIR 503 // >
 #define PIPE 504 // |
 
-#define S_QUOTE 1 // ''
-#define D_QUOTE 2 // """
+#define S_QUOTE 1 // '
+#define D_QUOTE 2 // "
 
 // int		find_token(char *input, int i);
 int					which_quote(char input);
@@ -51,4 +51,6 @@ void				store_token_words(char *input, t_lexer **lex, int start,
 int					is_token(char *input, int *i);
 int					which_redir(char *input, int *i);
 void				add_node(t_env **env, char *value);
-
+void				lexer(t_lexer **lex, char **av);
+char				*remove_quote(char *word, int *i);
+int					count_pipes(t_lexer *lex);

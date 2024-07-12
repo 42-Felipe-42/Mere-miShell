@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/11 10:45:44 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/13 00:30:40 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	lex_str(char *input, t_lexer **lex)
 {
 	int	i;
 	int	start;
-	
+
 	i = 0;
 	while (input[i])
 	{
@@ -110,4 +110,13 @@ void	lex_str(char *input, t_lexer **lex)
 			i++;
 		}
 	}
+}
+
+void	lexer(t_lexer **lex, char **av)
+{
+	char	*input;
+
+	input = av[1];
+	input = ft_readline();
+	lex_str(input, lex);
 }
