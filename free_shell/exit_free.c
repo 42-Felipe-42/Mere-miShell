@@ -1,21 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/04 14:44:15 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/15 14:10:40 by plangloi         ###   ########.fr       */
+/*   Created: 2024/07/15 13:53:16 by plangloi          #+#    #+#             */
+/*   Updated: 2024/07/15 14:00:58 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
-typedef struct s_fd
-{
-	int	pipes[2];
-	int	redir[2];
-	int	input;
-	int	output;
-}		t_fd;

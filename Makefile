@@ -24,7 +24,9 @@ C_FILE      =  	lexer/lexer_utils.c \
 				exec/utils_exec.c \
 				exec/builtins.c \
 				env/get_env.c \
-
+				free_shell/exit_free.c \
+				free_shell/free.c \
+				
 OBJS        =   $(C_FILE:.c=.o)
 
 .c.o:

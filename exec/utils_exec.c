@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 18:32:19 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/15 16:40:42 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,26 +71,39 @@ int	get_cmds(t_env *env, t_cmds *cmds)
 	return (EXIT_SUCCESS);
 }
 
-void	ft_wait_child(t_shell *shell)
+static void	child_wtermsig(int sig)
 {
-	int		status;
-	t_cmds	*cmd;
-
-	status = -1;
-	cmd = shell->cmds;
-	while (cmd)
+	int g_return ;
+	if (sig == 2)
 	{
-		if (cmd->pid != -2 && cmd->pid != -1)
+		write(1, "\n", 1);
+		g_return = 130;
+	}
+	if (sig == 3)
+	{
+		write(1, "Quit: 3\n", 8);
+		g_return = 131;
+	}
+}
+
+void	wait_child(t_shell *shell)
+{
+	int		stat;
+	t_cmds	*snake;
+
+	int g_return ;
+	snake = shell->cmds;
+	while (snake)
+	{
+		if (snake->pid != -2 && snake->pid != -1)
 		{
-			waitpid(cmd->pid, &status, 0);
-			if (WIFEXITED(status))
-				shell->exit_code = WEXITSTATUS(status);
-			if (errno == EACCES)
-				shell->exit_code = 126;
-			if (cmd->pid == -1)
-				shell->exit_code = 127;
+			waitpid(snake->pid, &stat, 0);
+			if (WIFSIGNALED(stat))
+				child_wtermsig(WTERMSIG(stat));
+			else if (WIFEXITED(stat))
+				g_return = WEXITSTATUS(stat);
 		}
-		cmd = cmd->next;
+		snake = snake->next;
 	}
 }
 

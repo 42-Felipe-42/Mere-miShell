@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 13:58:53 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 13:57:43 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/15 15:52:18 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include "ft_printf/ft_printf.h"
+# include "getnextline/get_next_line.h"
 
 typedef struct s_list
 {

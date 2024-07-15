@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 15:24:08 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/15 16:40:05 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "exec.h"
 # include "lexer.h"
 # include "parser.h"
-// # include "pipex.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 
@@ -34,6 +33,8 @@
 # define BOLD "\x1B[1m"
 # define UNDERLINE "\x1B[4m"
 
+// extern int g_return ;
+
 // int g_return_code;
 typedef struct s_shell
 {
@@ -45,21 +46,20 @@ typedef struct s_shell
 
 }			t_shell;
 
-/*-----------ENV----------*/
+/*--------------------ENV--------------------*/
 void		store_env(t_shell *shell, char **envp);
 void		set_env_key_value(t_shell *shell, t_env *new, char **envp, int i);
-void	maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
+void		maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
 				int index);
 void		get_env(t_shell *shell, char **envp);
 char		*ft_readline(void);
 void		expander(t_lexer *lex, t_shell *shell);
 char		*no_guillemets(char *word, t_shell *shell);
 char		*ft_strndup_dol(char *s);
-char	*find_env(char *dest, t_env *envp);
+char		*find_env(char *dest, t_env *envp);
 
-/****************************************************\
-|*************************EXEC***********************|
-\****************************************************/
+/*--------------------EXEC--------------------*/
+
 int			get_cmds(t_env *env, t_cmds *cmds);
 char		*get_path(t_env *env, t_cmds *cmds);
 int			here_doc(t_cmds *cmds);
@@ -68,13 +68,20 @@ void		close_fds_parent(t_fd *fds);
 void		ft_wait_child(t_shell *shell);
 void		ft_exec(t_shell *shell, t_cmds *cmd, t_fd *fd);
 void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds, t_env *env);
-void		execute_child( t_cmds *cmds, t_fd *fds, t_env *env);
+void		execute_child(t_cmds *cmds, t_fd *fds, t_env *env);
 void		init_fd(t_fd *fd);
 void		set_intput(t_cmds *cmds, t_fd *fd);
 void		set_output(t_cmds *cmds, t_fd *fd);
 void		set_redir(t_cmds *cmds, t_fd *fd);
 void		set_fds(t_fd *fd);
 void		run_exec(t_shell *shell);
-void	child_builtin(t_shell *shell, t_cmds *cmd, t_fd *fd);
+void		child_builtin(t_shell *shell, t_cmds *cmd, t_fd *fd);
+void	wait_child(t_shell *shell);
+
+/*--------------------FREE--------------------*/
+void		free_lexer(t_lexer **lex);
+void		free_cmds(t_cmds **cmds);
+void		free_env(t_env **env);
+void		free_shell(t_shell *shell);
 
 #endif
