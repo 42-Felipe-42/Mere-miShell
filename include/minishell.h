@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/15 16:40:05 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:29:03 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,22 @@ void		close_all_fds(t_fd *fds);
 void		close_fds_parent(t_fd *fds);
 void		ft_wait_child(t_shell *shell);
 void		ft_exec(t_shell *shell, t_cmds *cmd, t_fd *fd);
-void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds, t_env *env);
-void		execute_child(t_cmds *cmds, t_fd *fds, t_env *env);
+void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds);
+void		execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		init_fd(t_fd *fd);
-void		set_intput(t_cmds *cmds, t_fd *fd);
-void		set_output(t_cmds *cmds, t_fd *fd);
-void		set_redir(t_cmds *cmds, t_fd *fd);
+int			handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd);
+int			handle_output_redir(t_lexer *redirs, int fd);
+void		process_redirections(t_cmds *cmds, int *fd_in, int *fd_out);
 void		set_fds(t_fd *fd);
 void		run_exec(t_shell *shell);
 void		child_builtin(t_shell *shell, t_cmds *cmd, t_fd *fd);
-void	wait_child(t_shell *shell);
+void		wait_child(t_shell *shell);
 
 /*--------------------FREE--------------------*/
 void		free_lexer(t_lexer **lex);
 void		free_cmds(t_cmds **cmds);
 void		free_env(t_env **env);
 void		free_shell(t_shell *shell);
+void free_before_loop(t_cmds **cmds, t_lexer **lex);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/12 14:28:31 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/16 11:11:10 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 void	is_builtin(t_cmds *cmds)
 {
-	if (cmds && cmds->tab != NULL)
+	if (cmds && cmds->tab[0] != NULL)
 	{
 		if (ft_strncmp(cmds->tab[0], "echo", 4) == 0 && ft_strlen(cmds->tab[0]) == 4)
 			cmds->builtin = ECHO;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/13 00:43:56 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:35:14 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_lexer
 	int				token;
 	char			*word;
 	struct s_lexer	*next;
+	struct s_lexer	*prev;
 	int				skip;
 }					t_lexer;
 

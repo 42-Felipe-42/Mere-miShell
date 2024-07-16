@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/13 00:43:33 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/16 18:15:57 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 		if (!(*cmds)->tab)
 			return (NULL);
 		i++;
-		if (tmp->next && tmp->next->word)
+		if (tmp->next)
 			tmp = tmp->next;
 		else
 			break ;
@@ -69,16 +69,20 @@ t_cmds	*create_cmds(t_lexer *lex)
 	t_lexer	*tmp;
 	t_cmds	*cmds;
 	t_cmds	*current_cmd;
+	int		skip_redir;
 
 	cmds = init_cmds();
 	current_cmd = cmds;
 	tmp = lex;
+	skip_redir = 0;
 	while (tmp)
 	{
 		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR
 			|| tmp->token == APPEND)
 		{
+			skip_redir = 0;
 			redir_to_cmds(tmp, &current_cmd);
+			skip_redir = 1;
 		}
 		else if (tmp->token == PIPE)
 		{

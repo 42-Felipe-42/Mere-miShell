@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 19:26:50 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/16 16:21:54 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,62 +21,67 @@ void	init_fd(t_fd *fd)
 	fd->output = -2;
 }
 
-void	set_intput(t_cmds *cmds, t_fd *fd)
+int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd)
 {
-	if (fd->redir[0] != -2 && fd->redir[0] != -1)
-		close(fd->redir[0]);
-	if (cmds->lex_redir->token == IN_REDIR)
+	if (fd != -1)
+		close(fd);
+	if (redirs->token == IN_REDIR)
 	{
-		fd->redir[0] = open(cmds->lex_redir->word, O_RDONLY, 0644);
-		if (fd->redir[0] == -1)
-			perror(cmds->lex_redir->word), close_all_fds(fd);
-	}
-	else if (cmds->lex_redir->token == HERE_DOC)
-	{
-		fd->redir[0] = here_doc(cmds);
-	}
-}
-
-void	set_output(t_cmds *cmds, t_fd *fd)
-{
-	if (fd->redir[1] != -2)
-		close(fd->redir[1]);
-	if (cmds->lex_redir->token == APPEND)
-	{
-		fd->redir[1] = open(cmds->lex_redir->word,
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd->redir[1] == -1)
-			perror(cmds->lex_redir->word), close_all_fds(fd);
-	}
-	else if (cmds->lex_redir->token == OUT_REDIR)
-	{
-		fd->redir[1] = open(cmds->lex_redir->word, O_WRONLY | O_CREAT | O_TRUNC,
-				0644);
-		printf("fd redir[1] set %d\n", fd->redir[1]);
-		if (fd->redir[1] == -1)
-			perror(cmds->lex_redir->word), close_all_fds(fd);
-	}
-}
-
-void	set_redir(t_cmds *cmds, t_fd *fd)
-{
-	t_cmds	*curr;
-
-	curr = cmds;
-	while (curr)
-	{
-		is_builtin(cmds);
-		if (cmds->lex_redir && cmds->lex_redir->token != 0)
+		fd = open(redirs->word, O_RDONLY);
+		if (fd == -1)
 		{
-			if (cmds->lex_redir->token == IN_REDIR
-				|| cmds->lex_redir->token == HERE_DOC)
-				set_intput(cmds, fd);
-			else if (cmds->lex_redir->token == OUT_REDIR
-				|| cmds->lex_redir->token == APPEND)
-				set_output(cmds, fd);
-			printf("fd redir[1] set %d\n", fd->redir[1]);
+			perror(redirs->word);
 		}
-		curr = curr->next;
+	}
+	else if (redirs->token == HERE_DOC)
+	{
+		fd = here_doc(cmd);
+		// Assurez-vous que here_doc() gère les erreurs
+	}
+	return (fd);
+}
+
+int	handle_output_redir(t_lexer *redirs, int fd)
+{
+	if (fd != -1)
+		close(fd);
+	if (redirs->token == OUT_REDIR)
+	{
+		fd = open(redirs->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd == -1)
+		{
+			perror(redirs->word);
+		}
+	}
+	else if (redirs->token == APPEND)
+	{
+		fd = open(redirs->word, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd == -1)
+		{
+			perror(redirs->word);
+		}
+	}
+	return (fd);
+}
+
+void	process_redirections(t_cmds *cmds, int *fd_in, int *fd_out)
+{
+	t_lexer	*redirs;
+
+	redirs = cmds->lex_redir;
+	while (redirs)
+	{
+		if (redirs->token == IN_REDIR || redirs->token == HERE_DOC)
+		{
+			*fd_in = handle_input_redir(redirs, cmds, *fd_in);
+		}
+		else if (redirs->token == OUT_REDIR || redirs->token == APPEND)
+		{
+			*fd_out = handle_output_redir(redirs, *fd_out);
+		}
+		if ((*fd_in == -1) || (*fd_out == -1))
+			break ;
+		redirs = redirs->next;
 	}
 }
 

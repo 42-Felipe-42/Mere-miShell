@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/13 00:30:40 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/16 17:06:00 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	is_word(char *input, int *i)
 		(*i)++;
 	}
 }
+
 // stockage de input[i] en fonction de sa valeur, token ou word
 void	lex_str(char *input, t_lexer **lex)
 {
