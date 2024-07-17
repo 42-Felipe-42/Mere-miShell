@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/13 01:07:31 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/17 16:18:23 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,52 +74,6 @@ void	expander(t_lexer *lex, t_shell *shell)
 		tmp = tmp->next;
 	}
 }
-
-// char	*no_guillemets(char *word, t_shell *shell)
-// {
-// 	char	*tmp;
-// 	char	*exp_w;
-// 	int		dols;
-// 	int		i;
-
-// 	tmp = "";
-// 	exp_w = "";
-// 	i = 0;
-// 	while (word[i])
-// 	{
-// 		if (i == 0 && ft_isalnum(word[i]))
-// 		{
-// 			exp_w = ft_strndup_dol(word);
-// 			while (word[i] != '$')
-// 				i++;
-// 		}
-// 		dols = 0;
-// 		while (word[i] && word[i] == '$')
-// 		{
-// 			dols++;
-// 			if (word[i] && word[i] == '$' && word[i + 1] == '$')
-// 				exp_w = ft_strjoin(exp_w, "$");
-// 			else
-// 				break ;
-// 			i++;
-// 		}
-// 		if (find_pwd(word + i, shell))
-// 			exp_w = ft_strjoin(exp_w, find_pwd(word + i, shell));
-// 		if (word[i] && word[i] == '$' && word[i + 1] != '$')
-// 		{
-// 			if (dols % 2 != 0)
-// 				tmp = expand(word, i, shell->env);
-// 			else
-// 				tmp = ft_strndup_dol(word + i);
-// 			exp_w = ft_strjoin(exp_w, tmp);
-// 		}
-// 		i = ft_strchr(word + i + 1, '$') - word;
-// 		if (i < 0)
-// 			break ;
-// 	}
-// 	word = exp_w;
-// 	return (word);
-// }
 
 char	*initialize_expansion(char *word, int *i)
 {

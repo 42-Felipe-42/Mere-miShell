@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/16 17:06:00 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 18:02:28 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len)
 {
 	t_lexer	*new;
 	t_lexer	*current;
-
+	
 	new = ft_calloc(1, sizeof(t_lexer));
 	new->word = ft_strndup(input + start, len);
 	new->token = 0;

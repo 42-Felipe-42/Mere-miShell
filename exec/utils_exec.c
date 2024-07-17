@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/16 15:34:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:23:05 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,6 @@ char **env_array = convert_env_to_array(env);	// if (!cmds->tab[0])
 			return (exit(EXIT_FAILURE), 1);
 		}
 	}
-	// printf("cmds->tab %s\n", cmds->tab[0]);
-	
 	if (execve(cmds->path, cmds->tab, env_array) == -1)
 	{
 		ft_cmd_no_found(cmds->tab[0]);

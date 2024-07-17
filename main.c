@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/16 17:12:16 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 18:03:28 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,22 +54,21 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	shell = malloc(sizeof(t_shell));
 	shell->av = ft_strdup(*av);
+	shell->env = NULL;
 	get_env(shell, envp);
 	cmds = malloc(sizeof(t_cmds));
 	while (1)
 	{
 		lexer(&lex, av);
-		expander(lex, shell);
-		parser(lex);
+		parser(lex, shell);
 		cmds = create_cmds(lex);
 		shell->cmds = cmds;
 		shell->lex = lex;
-		
-		
-		run_exec(shell);
 		// print_list_cmds(shell);
+		run_exec(shell);
 		// free(shell);
-	free_before_loop(&cmds, &lex);
+		
+		// free_before_loop(&cmds);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/16 18:15:57 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 18:04:53 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 		if (!(*cmds)->tab)
 			return (NULL);
 		i++;
-		if (tmp->next)
+		if (tmp->next && tmp->next->word)
 			tmp = tmp->next;
 		else
 			break ;
 	}
+	printf("i = %d\n", i);
 	(*cmds)->tab[i] = NULL;
 	return (tmp);
 }
@@ -80,8 +81,9 @@ t_cmds	*create_cmds(t_lexer *lex)
 		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR
 			|| tmp->token == APPEND)
 		{
-			skip_redir = 0;
 			redir_to_cmds(tmp, &current_cmd);
+			printf("yes\n");
+			tmp = tmp->next;
 			skip_redir = 1;
 		}
 		else if (tmp->token == PIPE)
@@ -90,14 +92,19 @@ t_cmds	*create_cmds(t_lexer *lex)
 			current_cmd->next->prev = current_cmd;
 			current_cmd = current_cmd->next;
 		}
-		else if (tmp->next && tmp->next->token != PIPE)
+		else if ((tmp->next && tmp->next->token != PIPE) || (!tmp->next
+				&& skip_redir == 0))
+		{
+			printf("no\n");
 			tmp = lex_to_cmds(tmp, &current_cmd);
+		}
 		tmp = tmp->next;
 	}
+	// free_lexer(&lex);
 	return (cmds);
 }
 
-void	parser(t_lexer *lex)
+void	parser(t_lexer *lex, t_shell *shell)
 {
 	int		i;
 	t_lexer	*lexer;
@@ -105,6 +112,7 @@ void	parser(t_lexer *lex)
 	lexer = lex;
 	i = 0;
 	syntaxe(lexer);
+	expander(lex, shell);
 	while (lexer)
 	{
 		i = 0;

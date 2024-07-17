@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/16 15:29:03 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:16:00 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ void		free_lexer(t_lexer **lex);
 void		free_cmds(t_cmds **cmds);
 void		free_env(t_env **env);
 void		free_shell(t_shell *shell);
-void free_before_loop(t_cmds **cmds, t_lexer **lex);
+void free_before_loop(t_cmds **cmds);
+
+
+void	parser(t_lexer *lex, t_shell *shell);
 
 #endif

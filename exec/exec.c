@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/16 18:06:41 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:55:57 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		// 	(close_all_fds(fds), exit(1));
 		// }
 		// else
-		if (fds->redir[0] == -1 || fds->redir[1] == -1)
-			exit(1);
 		execute_child(shell, cmds, fds);
 	}
 	close_fds_parent(fds);
@@ -75,7 +73,15 @@ void	run_exec(t_shell *shell)
 		// if (tmp_cmd->builtin && !tmp_cmd->next && !tmp_cmd->prev)
 		// 	run_builtins(shell, tmp_cmd, &fds, 0);
 		// if (tmp_cmd->tab[0])
-		execute_cmd(shell, tmp_cmd, &fds);
+		// printf("fds.redir[0] %d\n",fds.redir[0]);
+		// printf("fds.redir[1] %d\n",fds.redir[1]);
+		// printf("fds.pipe[0] %d\n",fds.pipes[0]);
+		// printf("fds.pipe[1] %d\n",fds.pipes[1]);
+		// printf("fds.input %d\n",fds.input);
+		// printf("fds.output %d\n",fds.output);
+		// printf("tmp_cmd->tab[0] %s\n", tmp_cmd->tab[0]);
+		if (tmp_cmd->tab && tmp_cmd->tab[0])
+			execute_cmd(shell, tmp_cmd, &fds);
 		if (!tmp_cmd->next)
 			close_fds_parent(&fds);
 		if (tmp_cmd->next)

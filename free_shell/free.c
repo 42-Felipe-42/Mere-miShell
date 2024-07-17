@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/15 15:58:30 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:36:58 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,12 @@ void	free_cmds(t_cmds **cmds)
 		if (tmp->tab)
 		{
 			while (tmp->tab[i])
-				free(tmp->tab[i++]);
+			{
+				if (tmp->tab[i]) {
+					printf("%s\n", tmp->tab[i]);
+					free(tmp->tab[i]);}
+				i++;
+			}
 			free(tmp->tab);
 		}
 		if (tmp->path)

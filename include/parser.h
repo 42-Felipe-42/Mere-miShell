@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 15:24:15 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/17 16:15:58 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,3 @@ t_cmds				*create_cmds(t_lexer *lex);
 t_lexer				*lex_to_cmds(t_lexer *lex, t_cmds **cmds);
 void				redir_to_cmds(t_lexer *lex, t_cmds **cmds);
 t_cmds				*init_cmds(void);
-void				parser(t_lexer *lex);

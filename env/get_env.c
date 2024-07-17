@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/15 15:47:24 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:58:54 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,16 @@ void	set_env_key_value(t_shell *shell, t_env *new, char **envp, int i)
 void	maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
 		int index)
 {
-	t_env	*current;
+	t_env	*current = NULL;
 
 	current = shell->env;
 	new_env_node->index = index;
 	set_env_key_value(shell, new_env_node, envp, index);
 	new_env_node->next = NULL;
 	new_env_node->prev = NULL;
-	if (!current)
+	if (!current) {
 		shell->env = new_env_node;
+	}
 	else
 	{
 		while (current->next)
@@ -74,11 +75,10 @@ void	get_env(t_shell *shell, char **envp)
 	while (envp[index])
 	{
 		new_env_node = malloc(sizeof(t_env));
-		// if (!new_env_node)
-		// {
-		// 	exit_shell(shell,
-		// 		"Failed to allocate memory for new environment node", 1);
-		// }
+		if (!new_env_node)
+		{
+			exit(1);
+		}
 		maj_env_node(shell, new_env_node, envp, index);
 		index++;
 	}
@@ -92,13 +92,9 @@ char	*find_env(char *key, t_env *envp)
 	len = ft_strlen(key);
 	while (tmp_envp)
 	{
-		// Compare the key with the current environment key
 		if (ft_strncmp(key, tmp_envp->key, len) == 0
 			&& tmp_envp->key[len] == '\0')
-
-			return (ft_printf("Current env key: %s, value: %s\n", tmp_envp->key,
-					tmp_envp->value), tmp_envp->value);
-
+			return (tmp_envp->value);
 		tmp_envp = tmp_envp->next;
 	}
 	return (NULL);
