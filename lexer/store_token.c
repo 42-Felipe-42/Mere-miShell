@@ -6,19 +6,21 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/17 18:02:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:48:50 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 // creation maillon pour stocker donnees d'un TOKEN
-void	store_token(t_lexer **lex, int token)
+void	store_token(t_lexer **lex, int token, t_shell *shell)
 {
 	t_lexer	*new;
 	t_lexer	*current;
 
 	new = ft_calloc(1, sizeof(t_lexer));
+	if (!new)
+		exit_and_free(shell, "Malloc error lexer", 1);
 	new->word = NULL;
 	new->token = token;
 	new->skip = 0;
@@ -38,12 +40,15 @@ void	store_token(t_lexer **lex, int token)
 }
 
 // creation maillon pour stocker donnees d'un WORD
-void	store_token_words(char *input, t_lexer **lex, int start, int len)
+void	store_token_words(char *input, t_lexer **lex, int start, int len,
+		t_shell *shell)
 {
 	t_lexer	*new;
 	t_lexer	*current;
-	
-	new = ft_calloc(1, sizeof(t_lexer));
+
+	new = malloc(sizeof(t_lexer));
+	if (!new)
+		exit_and_free(shell, "Malloc error lexer", 1);
 	new->word = ft_strndup(input + start, len);
 	new->token = 0;
 	new->skip = 0;
@@ -85,7 +90,7 @@ void	is_word(char *input, int *i)
 }
 
 // stockage de input[i] en fonction de sa valeur, token ou word
-void	lex_str(char *input, t_lexer **lex)
+void	lex_str(char *input, t_lexer **lex, t_shell *shell)
 {
 	int	i;
 	int	start;
@@ -104,20 +109,20 @@ void	lex_str(char *input, t_lexer **lex)
 		else
 			is_word(input, &i);
 		if (i > start)
-			store_token_words(input, lex, start, i - start);
+			store_token_words(input, lex, start, i - start, shell);
 		else
 		{
-			store_token(lex, is_token(input, &i));
+			store_token(lex, is_token(input, &i), shell);
 			i++;
 		}
 	}
 }
 
-void	lexer(t_lexer **lex, char **av)
+void	lexer(t_lexer **lex, char **av, t_shell *shell)
 {
 	char	*input;
 
 	input = av[1];
 	input = ft_readline();
-	lex_str(input, lex);
+	lex_str(input, lex, shell);
 }

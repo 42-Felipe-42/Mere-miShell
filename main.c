@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/17 18:03:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:50:22 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,16 @@ int	main(int ac, char **av, char **envp)
 	cmds = malloc(sizeof(t_cmds));
 	while (1)
 	{
-		lexer(&lex, av);
+		lexer(&lex, av, shell);
 		parser(lex, shell);
-		cmds = create_cmds(lex);
+		cmds = create_cmds(lex, shell);
 		shell->cmds = cmds;
 		shell->lex = lex;
 		// print_list_cmds(shell);
 		run_exec(shell);
 		// free(shell);
 		
-		// free_before_loop(&cmds);
+		free_before_loop(&cmds);
 	}
 	return (0);
 }

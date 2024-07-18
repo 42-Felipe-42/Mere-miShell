@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/16 16:35:14 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 13:58:54 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,7 @@ typedef struct s_env
 #define S_QUOTE 1 // '
 #define D_QUOTE 2 // "
 
-// int		find_token(char *input, int i);
 int					which_quote(char input);
-void				lex_str(char *input, t_lexer **lex);
-void				store_token(t_lexer **lex, int token);
-void				store_token_words(char *input, t_lexer **lex, int start,
-						int len);
 int					is_token(char *input, int *i);
 int					which_redir(char *input, int *i);
-void				add_node(t_env **env, char *value);
-void				lexer(t_lexer **lex, char **av);
-char				*remove_quote(char *word, int *i);
 int					count_pipes(t_lexer *lex);

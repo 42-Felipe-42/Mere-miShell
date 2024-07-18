@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bis.c                                        :+:      :+:    :+:   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 13:42:58 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/18 13:53:57 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	loop_here_doc(t_cmds *cmds, int fd)
 	free(limiter);
 }
 
-int	here_doc(t_cmds *cmds)
+int	here_doc(t_cmds *cmds, t_shell *shell)
 {
 	char	*file_name;
 	t_fd	fd;
@@ -43,16 +43,10 @@ int	here_doc(t_cmds *cmds)
 		file_name = ft_join_free(file_name, "42");
 	tmp = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (tmp == -1)
-	{
-		perror("infile");
-		exit(EXIT_FAILURE);
-	}
+		exit_and_free(shell, "Fail to open file", 1);
 	fd.input = open(file_name, O_RDONLY);
 	if (fd.input == -1)
-	{
-		perror("fd");
-		exit(EXIT_FAILURE);
-	}
+		exit_and_free(shell, "Fail to open file", 1);
 	unlink(file_name);
 	loop_here_doc(cmds, tmp);
 	free(file_name);

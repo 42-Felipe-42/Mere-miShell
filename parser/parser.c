@@ -6,21 +6,21 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/17 18:04:53 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:00:33 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 // copie des donnee de lex vers cmds->lex
-void	redir_to_cmds(t_lexer *lex, t_cmds **cmds)
+void	redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 {
 	t_lexer	*tmp;
 	t_lexer	*new_node;
 
 	new_node = malloc(sizeof(t_lexer));
 	if (!new_node)
-		return ;
+		exit_and_free(shell, "Error malloc redir", 1);
 	new_node->token = lex->token;
 	if (lex->next->word)
 		new_node->word = ft_strdup(lex->next->word);
@@ -36,7 +36,7 @@ void	redir_to_cmds(t_lexer *lex, t_cmds **cmds)
 	tmp->next = new_node;
 }
 
-t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
+t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 {
 	t_lexer	*tmp;
 	int		count;
@@ -48,6 +48,8 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 	if (cmds == NULL)
 		cmds = malloc(sizeof(t_cmds));
 	(*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
+	if (!cmds || !(*cmds)->tab)
+		exit_and_free(shell, "Error malloc redir", 1);
 	while (tmp && tmp->word)
 	{
 		if (tmp->word)
@@ -60,19 +62,17 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds)
 		else
 			break ;
 	}
-	printf("i = %d\n", i);
-	(*cmds)->tab[i] = NULL;
-	return (tmp);
+	return ((*cmds)->tab[i] = NULL, tmp);
 }
 
-t_cmds	*create_cmds(t_lexer *lex)
+t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 {
 	t_lexer	*tmp;
 	t_cmds	*cmds;
 	t_cmds	*current_cmd;
 	int		skip_redir;
 
-	cmds = init_cmds();
+	cmds = init_cmds(shell);
 	current_cmd = cmds;
 	tmp = lex;
 	skip_redir = 0;
@@ -81,14 +81,14 @@ t_cmds	*create_cmds(t_lexer *lex)
 		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR
 			|| tmp->token == APPEND)
 		{
-			redir_to_cmds(tmp, &current_cmd);
+			redir_to_cmds(tmp, &current_cmd, shell);
 			printf("yes\n");
 			tmp = tmp->next;
 			skip_redir = 1;
 		}
 		else if (tmp->token == PIPE)
 		{
-			current_cmd->next = init_cmds();
+			current_cmd->next = init_cmds(shell);
 			current_cmd->next->prev = current_cmd;
 			current_cmd = current_cmd->next;
 		}
@@ -96,11 +96,11 @@ t_cmds	*create_cmds(t_lexer *lex)
 				&& skip_redir == 0))
 		{
 			printf("no\n");
-			tmp = lex_to_cmds(tmp, &current_cmd);
+			tmp = lex_to_cmds(tmp, &current_cmd, shell);
 		}
 		tmp = tmp->next;
 	}
-	// free_lexer(&lex);
+	free_lexer(&lex);
 	return (cmds);
 }
 
@@ -111,21 +111,18 @@ void	parser(t_lexer *lex, t_shell *shell)
 
 	lexer = lex;
 	i = 0;
-	syntaxe(lexer);
-	expander(lex, shell);
+	syntaxe(lexer, shell);
+	expander(lexer, shell);
 	while (lexer)
 	{
 		i = 0;
 		while (lexer->word && lexer->word[i])
 		{
-			if (check_quote_closed(lex->word) == FALSE)
-			{
-				printf("test\n");
-				exit(1);
-			}
+			if (check_quote_closed(lexer->word) == FALSE)
+				exit_and_free(shell, "Quote not closed", 1);
 			if (which_quote(lexer->word[i]))
 			{
-				lexer->word = remove_quote(lexer->word, &i);
+				lexer->word = remove_quote(lexer->word, &i, shell);
 				break ;
 			}
 			i++;

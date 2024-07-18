@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/17 15:23:05 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 13:52:28 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,81 +47,96 @@ void	ft_cmd_no_found(char *str)
 	ft_putstr_fd("\n", 2);
 }
 
-int count_env_vars(t_env *env)
+int	count_env_vars(t_env *env)
 {
-    int count = 0;
-    t_env *tmp = env;
+	int		count;
+	t_env	*tmp;
 
-    while (tmp)
-    {
-        count++;
-        tmp = tmp->next;
-    }
-
-    return count;
+	count = 0;
+	tmp = env;
+	while (tmp)
+	{
+		count++;
+		tmp = tmp->next;
+	}
+	return (count);
 }
 
-char **allocate_env_array(int count)
+char	**allocate_env_array(int count)
 {
-    char **env_array = malloc((count + 1) * sizeof(char *));
-    if (!env_array)
-        return NULL;
-    return env_array;
+	char	**env_array;
+
+	env_array = malloc((count + 1) * sizeof(char *));
+	if (!env_array)
+		return (NULL);
+	return (env_array);
 }
 
-char *create_env_entry(char *key, char *value)
+char	*create_env_entry(char *key, char *value, t_shell *shell)
 {
-    size_t len = strlen(key) + strlen(value) + 2; // Pour '=' et '\0'
-    char *entry = malloc(len);
-    if (entry)
-        snprintf(entry, len, "%s=%s", key, value);
-    return entry;
+	char	*entry;
+	char	*tmp;
+
+	tmp = ft_strjoin(key, "=");
+	if (!tmp)
+		exit_and_free(shell, "Error malloc env", 1);
+	entry = ft_strjoin(tmp, value);
+	free(tmp);
+	if (!entry)
+		exit_and_free(shell, "Error malloc env", 1);
+	return (entry);
 }
 
-int fill_env_array(t_env *env, char **env_array)
+int	fill_env_array(t_env *env, char **env_array, t_shell *shell)
 {
-    t_env *tmp = env;
-    int i = 0;
+	t_env	*tmp;
+	int		i;
+	int		j;
 
-    while (tmp)
-    {
-        env_array[i] = create_env_entry(tmp->key, tmp->value);
-        if (!env_array[i])
-        {
-            for (int j = 0; j < i; j++)
-                free(env_array[j]);
-            return -1;
-        }
-        tmp = tmp->next;
-        i++;
-    }
-    env_array[i] = NULL; // Le dernier élément doit être NULL
-
-    return 0;
+	tmp = env;
+	i = 0;
+	while (tmp)
+	{
+		j = 0;
+		env_array[i] = create_env_entry(tmp->key, tmp->value, shell);
+		if (!env_array[i])
+		{
+			while (j < i)
+			{
+				free(env_array[j]);
+				j++;
+			}
+			return (-1);
+		}
+		tmp = tmp->next;
+		i++;
+	}
+	env_array[i] = NULL;
+	return (0);
 }
 
-char **convert_env_to_array(t_env *env)
+char	**convert_env_to_array(t_env *env, t_shell *shell)
 {
-    int count = count_env_vars(env);
-    char **env_array = allocate_env_array(count);
+	int		count;
+	char	**env_array;
 
-    if (!env_array)
-        return NULL;
-
-    if (fill_env_array(env, env_array) == -1)
-    {
-        free(env_array);
-        return NULL;
-    }
-
-    return env_array;
+	count = count_env_vars(env);
+	env_array = allocate_env_array(count);
+	if (!env_array)
+		return (NULL);
+	if (fill_env_array(env, env_array, shell) == -1)
+	{
+		free(env_array);
+		exit_and_free(shell, "Error convert env", 1);
+	}
+	return (env_array);
 }
 
-
-int	get_cmds(t_env *env, t_cmds *cmds)
+int	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 {
-char **env_array = convert_env_to_array(env);	// if (!cmds->tab[0])
-	// 	return (ft_cmd_no_found(&cmds->tab[0]), exit(EXIT_FAILURE), 1);
+	char	**env_array;
+
+	env_array = convert_env_to_array(env, shell);
 	if (ft_strchr(cmds->tab[0], '/') != NULL && access(cmds->tab[0],
 			F_OK | X_OK) == 0)
 		cmds->path = ft_strdup(cmds->tab[0]);
@@ -148,12 +163,12 @@ static void	child_wtermsig(int sig)
 	if (sig == 2)
 	{
 		write(1, "\n", 1);
-		g_return = 130;
+		g_return= 130 ;
 	}
 	if (sig == 3)
 	{
 		write(1, "Quit: 3\n", 8);
-		g_return = 131;
+		g_return= 131;
 	}
 }
 
@@ -172,7 +187,7 @@ void	wait_child(t_shell *shell)
 			if (WIFSIGNALED(stat))
 				child_wtermsig(WTERMSIG(stat));
 			else if (WIFEXITED(stat))
-				g_return = WEXITSTATUS(stat);
+				g_return= WEXITSTATUS(stat);
 		}
 		snake = snake->next;
 	}

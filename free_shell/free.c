@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/17 17:36:58 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 11:09:11 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ void	free_shell(t_shell *shell)
 	if (shell)
 	{
 		if (shell->cmds)
-			free_cmds(&(shell->cmds));
+			free_cmds(&shell->cmds);
 		if (shell->env)
-			free_env(&(shell->env));
+			free_env(&shell->env);
 		if (shell->lex)
-			free_lexer(&(shell->lex));
+			free_lexer(&shell->lex);
 		if (shell->av)
 			free(shell->av);
 		free(shell);

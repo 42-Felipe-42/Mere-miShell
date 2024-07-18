@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/12 23:56:14 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/18 11:19:40 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ int	is_token(char *input, int *i)
 	return (FALSE);
 }
 
-void	add_node(t_env **env, char *value)
+void	add_node(t_env **env, char *value, t_shell *shell)
 {
 	t_env	*newnode;
 	t_env	*last;
 
 	newnode = malloc(sizeof(t_env));
 	if (!newnode)
-		return ;
+		exit_and_free(shell, "Malloc error lexer", 1);
 	newnode->value = value;
 	newnode->prev = NULL;
 	newnode->next = NULL;

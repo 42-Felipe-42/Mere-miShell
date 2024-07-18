@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/17 15:48:57 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:55:41 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_fd(t_fd *fd)
 	fd->output = -2;
 }
 
-int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd)
+int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd, t_shell *shell)
 {
 	if (fd != -1)
 		close(fd);
@@ -35,7 +35,7 @@ int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd)
 	}
 	else if (redirs->token == HERE_DOC)
 	{
-		fd = here_doc(cmd);
+		fd = here_doc(cmd, shell);
 		// Assurez-vous que here_doc() gère les erreurs
 	}
 	return (fd);
@@ -64,7 +64,7 @@ int	handle_output_redir(t_lexer *redirs, int fd)
 	return (fd);
 }
 
-void	process_redirections(t_cmds *cmds, int *fd_in, int *fd_out)
+void	process_redirections(t_cmds *cmds, int *fd_in, int *fd_out, t_shell *shell)
 {
 	t_lexer	*redirs;
 
@@ -73,7 +73,7 @@ void	process_redirections(t_cmds *cmds, int *fd_in, int *fd_out)
 	{
 		if (redirs->token == IN_REDIR || redirs->token == HERE_DOC)
 		{
-			*fd_in = handle_input_redir(redirs, cmds, *fd_in);
+			*fd_in = handle_input_redir(redirs, cmds, *fd_in, shell);
 		}
 		else if (redirs->token == OUT_REDIR || redirs->token == APPEND)
 		{

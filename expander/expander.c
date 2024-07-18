@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/17 16:18:23 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 11:25:23 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@
 // stocker dans 'dest' et comp avec env
 // entrée: input sur indice $
 // sortie: valeur associée a env
-char	*expand(char *input, int i, t_env *envp)
+char	*expand(char *input, int i, t_env *envp, t_shell *shell)
 {
 	char	*dest;
 	char	*env;
 	int		j;
 
 	dest = (char *)malloc(strlen(input) + 1);
+	if (!dest)
+		exit_and_free(shell, "Malloc error expander", 1);
 	env = NULL;
 	if (input[i] == '$')
 		i++;
@@ -109,7 +111,7 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 	if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
 	{
 		if (dols % 2 != 0)
-			tmp = expand(word, *i, shell->env);
+			tmp = expand(word, *i, shell->env, shell);
 		else
 			tmp = ft_strndup_dol(word + *i);
 		exp_w = ft_strjoin(exp_w, tmp);

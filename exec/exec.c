@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/17 16:55:57 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:57:53 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		close(fds->pipes[0]);
 	if (fds->input != -2)
 		if (dup2(fds->input, STDIN_FILENO) == -1)
-			(close_all_fds(fds), exit(1));
+			(close_all_fds(fds), exit_and_free(shell, "dup2", 1));
 	if (fds->output != -2)
 		if (dup2(fds->output, STDOUT_FILENO) == -1)
-			(close_all_fds(fds), exit(1));
+			(close_all_fds(fds), exit_and_free(shell, "dup2", 1));
 	close_all_fds(fds);
-	get_cmds(shell->env, cmds);
+	get_cmds(shell->env, cmds, shell);
 }
 
 void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
@@ -66,9 +66,8 @@ void	run_exec(t_shell *shell)
 		/* set_last_cmd(shell, tmp_cmd), */ init_fd(&fds);
 		if (tmp_cmd->next)
 			if (pipe(fds.pipes) == -1)
-				exit(1);
-		// exit_shell(shell, "pipe_creation", 1);
-		process_redirections(tmp_cmd, &fds.redir[0], &fds.redir[1]);
+				exit_and_free(shell, "pipe", 1);
+		process_redirections(tmp_cmd, &fds.redir[0], &fds.redir[1], shell);
 		set_fds(&fds);
 		// if (tmp_cmd->builtin && !tmp_cmd->next && !tmp_cmd->prev)
 		// 	run_builtins(shell, tmp_cmd, &fds, 0);

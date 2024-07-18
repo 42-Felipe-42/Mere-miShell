@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/17 16:15:58 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:00:59 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,4 @@ typedef struct s_cmds
 #define EXIT 607
 
 int					check_quote_closed(char *word);
-t_cmds				*new_cmds(t_lexer **lex, t_cmds **cmds);
-void				syntaxe(t_lexer *lex);
 void				is_builtin(t_cmds *cmds);
-t_cmds				*create_cmds(t_lexer *lex);
-t_lexer				*lex_to_cmds(t_lexer *lex, t_cmds **cmds);
-void				redir_to_cmds(t_lexer *lex, t_cmds **cmds);
-t_cmds				*init_cmds(void);

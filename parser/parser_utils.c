@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/13 00:52:24 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/18 11:31:13 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_cmds	*init_cmds(void)
+t_cmds	*init_cmds(t_shell *shell)
 {
 	t_cmds	*cmds;
 
 	cmds = malloc(sizeof(t_cmds));
 	if (!cmds)
-		return (NULL);
+		exit_and_free(shell, "Malloc error cmds", 1);
 	ft_bzero(cmds, sizeof(t_cmds));
 	return (cmds);
 }
@@ -59,7 +59,7 @@ int	count_pipes(t_lexer *lex)
 	return (count);
 }
 
-void	syntaxe(t_lexer *lex)
+void	syntaxe(t_lexer *lex, t_shell *shell)
 {
 	t_lexer	*tmp;
 
@@ -67,16 +67,14 @@ void	syntaxe(t_lexer *lex)
 	while (tmp)
 	{
 		if (tmp->token == PIPE && (!tmp->next || tmp->next->token == PIPE))
-			return (ft_putstr_fd("Pas la bonne syntaxe de pipe\n",
-					STDOUT_FILENO));
+			exit_and_free(shell, "syntax error near unexpected token", 1);
 		if (tmp->token != 0 && (!tmp->next || tmp->next->token != 0))
-			return (ft_putstr_fd("Pas la bonne syntaxe de redirection\n",
-					STDOUT_FILENO));
+			exit_and_free(shell, "syntax error near unexpected token", 1);
 		tmp = tmp->next;
 	}
 }
 
-char	*remove_quote(char *word, int *i)
+char	*remove_quote(char *word, int *i, t_shell *shell)
 {
 	int j;
 	char *dest;
@@ -84,7 +82,7 @@ char	*remove_quote(char *word, int *i)
 	j = 0;
 	dest = malloc(sizeof(ft_strlen(word)) + 1);
 	if (!dest)
-		return (NULL);
+		exit_and_free(shell, "s", 1);
 	while (word[*i])
 	{
 		if ((which_quote(word[*i]) && *i == 0) || (which_quote(word[*i])
