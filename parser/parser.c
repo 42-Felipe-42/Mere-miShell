@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/18 14:00:33 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:10:28 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	i = 0;
 	count = count_pipes(lex) + 1;
 	tmp = lex;
-	if (cmds == NULL)
-		cmds = malloc(sizeof(t_cmds));
+	// if (cmds == NULL)
+	// 	cmds = malloc(sizeof(t_cmds));
 	(*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
-	if (!cmds || !(*cmds)->tab)
+	if (!*cmds || !(*cmds)->tab)
 		exit_and_free(shell, "Error malloc redir", 1);
 	while (tmp && tmp->word)
 	{
@@ -79,10 +79,9 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 	while (tmp)
 	{
 		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR
-			|| tmp->token == APPEND)
+			|| tmp->token == APPEND || tmp->token == HERE_DOC)
 		{
 			redir_to_cmds(tmp, &current_cmd, shell);
-			printf("yes\n");
 			tmp = tmp->next;
 			skip_redir = 1;
 		}
@@ -94,10 +93,7 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 		}
 		else if ((tmp->next && tmp->next->token != PIPE) || (!tmp->next
 				&& skip_redir == 0))
-		{
-			printf("no\n");
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
-		}
 		tmp = tmp->next;
 	}
 	free_lexer(&lex);

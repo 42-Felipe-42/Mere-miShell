@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/18 13:52:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:06:23 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ int	count_env_vars(t_env *env)
 	return (count);
 }
 
-char	**allocate_env_array(int count)
+char	**allocate_env_array(t_shell *shell, int count)
 {
 	char	**env_array;
 
 	env_array = malloc((count + 1) * sizeof(char *));
 	if (!env_array)
-		return (NULL);
+		exit_and_free(shell, "Error malloc env", 1);
 	return (env_array);
 }
 
@@ -121,7 +121,7 @@ char	**convert_env_to_array(t_env *env, t_shell *shell)
 	char	**env_array;
 
 	count = count_env_vars(env);
-	env_array = allocate_env_array(count);
+	env_array = allocate_env_array(shell, count);
 	if (!env_array)
 		return (NULL);
 	if (fill_env_array(env, env_array, shell) == -1)
@@ -132,7 +132,7 @@ char	**convert_env_to_array(t_env *env, t_shell *shell)
 	return (env_array);
 }
 
-int	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
+void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 {
 	char	**env_array;
 
@@ -146,15 +146,16 @@ int	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 		if (!cmds->path)
 		{
 			ft_cmd_no_found(cmds->tab[0]);
-			return (exit(EXIT_FAILURE), 1);
+			free_split(env_array);
+			exit_and_free(shell, "Command not found", 1);
 		}
 	}
 	if (execve(cmds->path, cmds->tab, env_array) == -1)
 	{
 		ft_cmd_no_found(cmds->tab[0]);
-		return (free(cmds->path), exit(EXIT_FAILURE), 1);
+		free_split(env_array);
+		exit_and_free(shell, "Command not found", 1);
 	}
-	return (EXIT_SUCCESS);
 }
 
 static void	child_wtermsig(int sig)
@@ -163,12 +164,12 @@ static void	child_wtermsig(int sig)
 	if (sig == 2)
 	{
 		write(1, "\n", 1);
-		g_return= 130 ;
+		g_return = 130;
 	}
 	if (sig == 3)
 	{
 		write(1, "Quit: 3\n", 8);
-		g_return= 131;
+		g_return = 131;
 	}
 }
 
@@ -187,7 +188,7 @@ void	wait_child(t_shell *shell)
 			if (WIFSIGNALED(stat))
 				child_wtermsig(WTERMSIG(stat));
 			else if (WIFEXITED(stat))
-				g_return= WEXITSTATUS(stat);
+				g_return = WEXITSTATUS(stat);
 		}
 		snake = snake->next;
 	}

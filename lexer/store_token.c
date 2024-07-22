@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/18 14:48:50 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 10:16:04 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,5 +124,7 @@ void	lexer(t_lexer **lex, char **av, t_shell *shell)
 
 	input = av[1];
 	input = ft_readline();
+	if (input == NULL)
+		exit_and_free(shell, "Exit", 1);
 	lex_str(input, lex, shell);
 }

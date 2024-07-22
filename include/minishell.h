@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/18 14:57:35 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 10:58:12 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void		store_token_words(char *input, t_lexer **lex, int start, int len,
 void		add_node(t_env **env, char *value, t_shell *shell);
 void		lexer(t_lexer **lex, char **av, t_shell *shell);
 char		*remove_quote(char *word, int *i, t_shell *shell);
-t_cmds		*new_cmds(t_lexer **lex, t_cmds **cmds, t_shell *shell);
 t_cmds		*create_cmds(t_lexer *lex, t_shell *shell);
 t_lexer		*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell);
 
@@ -64,7 +63,6 @@ t_cmds		*init_cmds(t_shell *shell);
 void		syntaxe(t_lexer *lex, t_shell *shell);
 
 /*--------------------ENV--------------------*/
-void		store_env(t_shell *shell, char **envp);
 void		set_env_key_value(t_shell *shell, t_env *new, char **envp, int i);
 void		maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
 				int index);
@@ -74,16 +72,15 @@ void		expander(t_lexer *lex, t_shell *shell);
 char		*no_guillemets(char *word, t_shell *shell);
 char		*ft_strndup_dol(char *s);
 char		*find_env(char *dest, t_env *envp);
+char	**allocate_env_array(t_shell *shell, int count);
 
 /*--------------------EXEC--------------------*/
 
-int			get_cmds(t_env *env, t_cmds *cmds, t_shell *shell);
+void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell);
 char		*get_path(t_env *env, t_cmds *cmds);
 int			here_doc(t_cmds *cmds, t_shell *shell);
 void		close_all_fds(t_fd *fds);
 void		close_fds_parent(t_fd *fds);
-void		ft_wait_child(t_shell *shell);
-void		ft_exec(t_shell *shell, t_cmds *cmd, t_fd *fd);
 void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		init_fd(t_fd *fd);
