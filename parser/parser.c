@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/22 16:15:21 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:01:34 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,17 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	i = 0;
 	count = count_pipes(lex) + 1;
 	tmp = lex;
-	// if (cmds == NULL)
-	// 	cmds = malloc(sizeof(t_cmds));
 	(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
 	if (!(*cmds)->tab)
 		exit_and_free(shell, "Error malloc redir", 1);
-	while (tmp && tmp->word)
+	while (tmp)
 	{
 		if (tmp->word)
 		{
 			(*cmds)->tab[i] = ft_strdup(tmp->word);
 			if (!(*cmds)->tab)
 				exit_and_free(shell, "Error malloc redir", 1);
-			// printf("tab[%d] %s\n", i, (*cmds)->tab[i]);
+			printf("tab[%d] %s\n", i, (*cmds)->tab[i]);
 			i++;
 		}
 		if (tmp->next && tmp->next->word)
@@ -66,6 +64,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 			break ;
 	}
 	(*cmds)->tab[i] = NULL;
+	printf("tab[%d] %s\n", i, (*cmds)->tab[i]);
 	return (tmp);
 }
 
