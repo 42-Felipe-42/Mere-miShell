@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:57:00 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:39:47 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,16 +135,9 @@ char	**convert_env_to_array(t_env *env, t_shell *shell)
 void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 {
 	char	**env_array;
-	int i;
+
 	if (!cmds || !cmds->tab || !cmds->tab[0])
-	{
 		exit_and_free(shell, "Invalid command structure", 1);
-	}
-	for (i = 0; cmds->tab[i] != NULL; i++)
-	{
-		printf("cmds->tab[%d] = %s\n", i, cmds->tab[i]);
-	}
-	printf("cmds->tab[%d] = %p (should be NULL)\n", i, (void *)cmds->tab[i]);
 	env_array = convert_env_to_array(env, shell);
 	if (!env_array)
 	{
@@ -164,11 +157,6 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 		ft_cmd_no_found(cmds->tab[0]);
 		free_split(env_array);
 		exit_and_free(shell, "Command not found", 127);
-	}
-	printf("Executing: %s\n", cmds->path);
-	for (i = 0; cmds->tab[i] != NULL; i++)
-	{
-		printf("arg[%d] = %s\n", i, cmds->tab[i]);
 	}
 	execve(cmds->path, cmds->tab, env_array);
 	// Si execve retourne, c'est qu'il y a eu une erreur

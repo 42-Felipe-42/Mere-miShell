@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 09:46:07 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:24:40 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	here_doc(t_cmds *cmds, t_shell *shell)
 	char	*file_name;
 	t_fd	fd;
 	int		tmp;
-	printf("test\n");
+
 	file_name = ft_strdup("42");
 	while (access(file_name, F_OK) == 0)
 		file_name = ft_join_free(file_name, "42");

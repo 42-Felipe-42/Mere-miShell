@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 11:54:12 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:23:00 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,14 @@ int	check_quote_closed(char *word)
 	return (TRUE);
 }
 
-int	count_pipes(t_lexer *lex)
+int	count_arg(t_lexer *lex)
 {
 	int	count;
 
-	count = 0;
-	while (lex)
+	count = 1;
+	while (lex && lex->next && lex->next->token == 0)
 	{
-		if (lex->token == PIPE)
-			count++;
+		count++;
 		lex = lex->next;
 	}
 	return (count);
@@ -80,7 +79,7 @@ char	*remove_quote(char *word, int *i, t_shell *shell)
 	char *dest;
 
 	j = 0;
-	dest = ft_calloc(ft_strlen(word+ 1), sizeof(char *));
+	dest = ft_calloc(ft_strlen(word + 1), sizeof(char *));
 	if (!dest)
 		exit_and_free(shell, "s", 1);
 	while (word[*i])

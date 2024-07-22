@@ -1,10 +1,7 @@
 env
 exec
 expander
-fdsf
 free_shell
-gf
-gfds
 ignore_readline.supp
 include
 lexer
@@ -14,3 +11,4 @@ Makefile
 minishell
 parser
 prompt
+s

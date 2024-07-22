@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 09:48:19 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:25:14 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd, t_shell *shell)
 {
 	if (fd != -1)
 		close(fd);
-	printf("test33\n");
 	if (redirs->token == IN_REDIR)
 	{
 		fd = open(redirs->word, O_RDONLY);
@@ -33,12 +32,10 @@ int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd, t_shell *shell)
 		{
 			perror(redirs->word);
 		}
-		printf("test2\n");
 	}
 	else if (redirs->token == HERE_DOC)
 	{
 		fd = here_doc(cmd, shell);
-		printf("test1\n");
 		// Assurez-vous que here_doc() gère les erreurs
 	}
 	return (fd);

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 14:34:48 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:23:27 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,4 @@ typedef struct s_env
 int					which_quote(char input);
 int					is_token(char *input, int *i);
 int					which_redir(char *input, int *i);
-int					count_pipes(t_lexer *lex);
+int					count_arg(t_lexer *lex);
