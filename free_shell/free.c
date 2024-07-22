@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:34:45 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:38:24 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,44 +31,41 @@ void	free_lexer(t_lexer **lex)
 	*lex = NULL;
 }
 
-void free_cmds(t_cmds **cmds)
+void	free_cmds(t_cmds **cmds)
 {
-    if (!cmds || !*cmds)
-        return;
+	t_cmds	*tmp;
+	t_cmds	*next;
 
-    t_cmds *tmp = *cmds;
-    while (tmp)
-    {
-        t_cmds *next = tmp->next;
-
-        if (tmp->tab)
-        {
-            for (int i = 0; tmp->tab[i]; i++)
-            {
-                free(tmp->tab[i]);
-                tmp->tab[i] = NULL;
-            }
-            free(tmp->tab);
-            tmp->tab = NULL;
-        }
-
-        if (tmp->path)
-        {
-            free(tmp->path);
-            tmp->path = NULL;
-        }
-
-        if (tmp->lex_redir)
-        {
-            free_lexer(&(tmp->lex_redir));
-            tmp->lex_redir = NULL;
-        }
-
-        free(tmp);
-        tmp = next;
-    }
-
-    *cmds = NULL;
+	if (!cmds || !*cmds)
+		return ;
+	tmp = *cmds;
+	while (tmp)
+	{
+		next = tmp->next;
+		if (tmp->tab)
+		{
+			for (int i = 0; tmp->tab[i]; i++)
+			{
+				free(tmp->tab[i]);
+				tmp->tab[i] = NULL;
+			}
+			free(tmp->tab);
+			tmp->tab = NULL;
+		}
+		if (tmp->path)
+		{
+			free(tmp->path);
+			tmp->path = NULL;
+		}
+		if (tmp->lex_redir)
+		{
+			free_lexer(&(tmp->lex_redir));
+			tmp->lex_redir = NULL;
+		}
+		free(tmp);
+		tmp = next;
+	}
+	*cmds = NULL;
 }
 
 void	free_env(t_env *env)
@@ -94,14 +91,27 @@ void	free_env(t_env *env)
 
 void	free_shell(t_shell *shell)
 {
+	if (!shell)
+		return ;
 	if (shell->cmds)
+	{
 		free_cmds(&shell->cmds);
+		shell->cmds = NULL;
+	}
 	if (shell->env)
+	{
 		free_env(shell->env);
+		shell->env = NULL;
+	}
 	// if (shell->lex)
-	// 	free_lexer(&shell->lex);
+	// {
+	//     free_lexer(&shell->lex);
+	//     shell->lex = NULL;
+	// }
 	if (shell->av)
+	{
 		free(shell->av);
-	if (shell)
-		free(shell);
+		shell->av = NULL;
+	}
+	free(shell);
 }
