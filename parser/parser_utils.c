@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/18 11:31:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:54:12 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_cmds	*init_cmds(t_shell *shell)
 {
 	t_cmds	*cmds;
 
-	cmds = malloc(sizeof(t_cmds));
+	cmds = ft_calloc(1, sizeof(t_cmds));
 	if (!cmds)
 		exit_and_free(shell, "Malloc error cmds", 1);
 	ft_bzero(cmds, sizeof(t_cmds));
@@ -80,7 +80,7 @@ char	*remove_quote(char *word, int *i, t_shell *shell)
 	char *dest;
 
 	j = 0;
-	dest = malloc(sizeof(ft_strlen(word)) + 1);
+	dest = ft_calloc(ft_strlen(word+ 1), sizeof(char *));
 	if (!dest)
 		exit_and_free(shell, "s", 1);
 	while (word[*i])

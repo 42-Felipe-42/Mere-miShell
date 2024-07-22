@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/22 11:10:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:15:21 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	t_lexer	*tmp;
 	t_lexer	*new_node;
 
-	new_node = malloc(sizeof(t_lexer));
+	new_node = ft_calloc(1, sizeof(t_lexer));
 	if (!new_node)
 		exit_and_free(shell, "Error malloc redir", 1);
 	new_node->token = lex->token;
@@ -47,22 +47,26 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	tmp = lex;
 	// if (cmds == NULL)
 	// 	cmds = malloc(sizeof(t_cmds));
-	(*cmds)->tab = malloc((count + 1) * (sizeof(char *)));
-	if (!*cmds || !(*cmds)->tab)
+	(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
+	if (!(*cmds)->tab)
 		exit_and_free(shell, "Error malloc redir", 1);
 	while (tmp && tmp->word)
 	{
 		if (tmp->word)
+		{
 			(*cmds)->tab[i] = ft_strdup(tmp->word);
-		if (!(*cmds)->tab)
-			return (NULL);
-		i++;
+			if (!(*cmds)->tab)
+				exit_and_free(shell, "Error malloc redir", 1);
+			// printf("tab[%d] %s\n", i, (*cmds)->tab[i]);
+			i++;
+		}
 		if (tmp->next && tmp->next->word)
 			tmp = tmp->next;
 		else
 			break ;
 	}
-	return ((*cmds)->tab[i] = NULL, tmp);
+	(*cmds)->tab[i] = NULL;
+	return (tmp);
 }
 
 t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)

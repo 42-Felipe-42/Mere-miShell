@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/18 14:57:53 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:13:32 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	run_exec(t_shell *shell)
 	while (tmp_cmd)
 	{
 		/* set_last_cmd(shell, tmp_cmd), */ init_fd(&fds);
+		
 		if (tmp_cmd->next)
 			if (pipe(fds.pipes) == -1)
 				exit_and_free(shell, "pipe", 1);

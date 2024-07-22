@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/18 11:25:23 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:34:30 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*expand(char *input, int i, t_env *envp, t_shell *shell)
 	char	*env;
 	int		j;
 
-	dest = (char *)malloc(strlen(input) + 1);
+	dest = ft_calloc(strlen(input) + 1, sizeof(char *));
 	if (!dest)
 		exit_and_free(shell, "Malloc error expander", 1);
 	env = NULL;
@@ -63,13 +63,13 @@ void	expander(t_lexer *lex, t_shell *shell)
 	{
 		if (tmp->word != NULL)
 		{
-			if (tmp->skip == 0 && ft_strchr(tmp->word, '$')
+			if (/* tmp->skip == 0 &&  */ft_strchr(tmp->word, '$')
 				&& which_quote(tmp->word[0]) == FALSE)
 			{
 				if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
 				{
 					tmp->word = no_guillemets(tmp->word, shell);
-					tmp->skip = 1;
+					// tmp->skip = 1;
 				}
 			}
 		}

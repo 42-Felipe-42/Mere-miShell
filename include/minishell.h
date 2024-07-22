@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 10:58:12 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:18:39 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ void		lex_str(char *input, t_lexer **lex, t_shell *shell);
 void		store_token(t_lexer **lex, int token, t_shell *shell);
 void		store_token_words(char *input, t_lexer **lex, int start, int len,
 				t_shell *shell);
-void		add_node(t_env **env, char *value, t_shell *shell);
-void		lexer(t_lexer **lex, char **av, t_shell *shell);
+t_lexer 	*lexer(char **av, t_shell *shell);
 char		*remove_quote(char *word, int *i, t_shell *shell);
 t_cmds		*create_cmds(t_lexer *lex, t_shell *shell);
 t_lexer		*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell);
@@ -72,11 +71,11 @@ void		expander(t_lexer *lex, t_shell *shell);
 char		*no_guillemets(char *word, t_shell *shell);
 char		*ft_strndup_dol(char *s);
 char		*find_env(char *dest, t_env *envp);
-char	**allocate_env_array(t_shell *shell, int count);
+char		**allocate_env_array(t_shell *shell, int count);
 
 /*--------------------EXEC--------------------*/
 
-void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell);
+void		get_cmds(t_env *env, t_cmds *cmds, t_shell *shell);
 char		*get_path(t_env *env, t_cmds *cmds);
 int			here_doc(t_cmds *cmds, t_shell *shell);
 void		close_all_fds(t_fd *fds);
@@ -84,9 +83,11 @@ void		close_fds_parent(t_fd *fds);
 void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		init_fd(t_fd *fd);
-int			handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd, t_shell *shell);
+int			handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd,
+				t_shell *shell);
 int			handle_output_redir(t_lexer *redirs, int fd);
-void		process_redirections(t_cmds *cmds, int *fd_in, int *fd_out, t_shell *shell);
+void		process_redirections(t_cmds *cmds, int *fd_in, int *fd_out,
+				t_shell *shell);
 void		set_fds(t_fd *fd);
 void		run_exec(t_shell *shell);
 void		child_builtin(t_shell *shell, t_cmds *cmd, t_fd *fd);
@@ -95,7 +96,7 @@ void		wait_child(t_shell *shell);
 /*--------------------FREE--------------------*/
 void		free_lexer(t_lexer **lex);
 void		free_cmds(t_cmds **cmds);
-void		free_env(t_env **env);
+void		free_env(t_env *env);
 void		free_shell(t_shell *shell);
 void		free_before_loop(t_cmds **cmds);
 void		exit_and_free(t_shell *shell, char *str, int sig);

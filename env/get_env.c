@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/17 17:58:54 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 11:47:24 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	get_env(t_shell *shell, char **envp)
 	// }
 	while (envp[index])
 	{
-		new_env_node = malloc(sizeof(t_env));
+		new_env_node = ft_calloc(1, sizeof(t_env));
 		if (!new_env_node)
 		{
 			exit(1);

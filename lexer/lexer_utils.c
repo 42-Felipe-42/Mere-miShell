@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/18 11:19:40 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:25:55 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,3 @@ int	is_token(char *input, int *i)
 	return (FALSE);
 }
 
-void	add_node(t_env **env, char *value, t_shell *shell)
-{
-	t_env	*newnode;
-	t_env	*last;
-
-	newnode = malloc(sizeof(t_env));
-	if (!newnode)
-		exit_and_free(shell, "Malloc error lexer", 1);
-	newnode->value = value;
-	newnode->prev = NULL;
-	newnode->next = NULL;
-	if (*env == NULL)
-	{
-		*env = newnode;
-		return ;
-	}
-	last = *env;
-	while (last->next)
-		last = last->next;
-	last->next = newnode;
-	newnode->prev = last;
-}

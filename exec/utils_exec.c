@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 11:06:23 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:31:39 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	**allocate_env_array(t_shell *shell, int count)
 {
 	char	**env_array;
 
-	env_array = malloc((count + 1) * sizeof(char *));
+	env_array = ft_calloc((count + 1), sizeof(char *));
 	if (!env_array)
 		exit_and_free(shell, "Error malloc env", 1);
 	return (env_array);
@@ -161,6 +161,7 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 static void	child_wtermsig(int sig)
 {
 	int g_return ;
+	g_return = 0;
 	if (sig == 2)
 	{
 		write(1, "\n", 1);
@@ -180,6 +181,7 @@ void	wait_child(t_shell *shell)
 
 	int g_return ;
 	snake = shell->cmds;
+	stat = 0;
 	while (snake)
 	{
 		if (snake->pid != -2 && snake->pid != -1)

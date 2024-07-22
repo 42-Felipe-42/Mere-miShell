@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 10:16:04 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/22 14:51:43 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	store_token(t_lexer **lex, int token, t_shell *shell)
 		exit_and_free(shell, "Malloc error lexer", 1);
 	new->word = NULL;
 	new->token = token;
-	new->skip = 0;
 	if (!*lex)
 	{
 		*lex = new;
@@ -46,12 +45,11 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len,
 	t_lexer	*new;
 	t_lexer	*current;
 
-	new = malloc(sizeof(t_lexer));
+	new = ft_calloc(1, sizeof(t_lexer));
 	if (!new)
 		exit_and_free(shell, "Malloc error lexer", 1);
 	new->word = ft_strndup(input + start, len);
 	new->token = 0;
-	new->skip = 0;
 	if (!*lex)
 	{
 		*lex = new;
@@ -118,13 +116,16 @@ void	lex_str(char *input, t_lexer **lex, t_shell *shell)
 	}
 }
 
-void	lexer(t_lexer **lex, char **av, t_shell *shell)
+t_lexer 	*lexer(char **av, t_shell *shell)
 {
 	char	*input;
+	t_lexer	*lex;
 
+	lex = NULL;
 	input = av[1];
 	input = ft_readline();
 	if (input == NULL)
 		exit_and_free(shell, "Exit", 1);
-	lex_str(input, lex, shell);
+	lex_str(input, &lex, shell);
+	return (lex);
 }
