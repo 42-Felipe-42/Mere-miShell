@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 11:37:30 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:16:18 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_shell
 
 /*-------------------BUILTINS-------------------*/
 void	ft_echo(t_shell *shell, t_cmds *cmd);
+void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds, int flag);
 
 /*--------------------LEXER--------------------*/
 void		lex_str(char *input, t_lexer **lex, t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/23 11:20:26 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:17:08 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	ft_echo(t_shell *shell, t_cmds *cmd)
 	int i;
 	int flag;
 	// int ext;
+	(void)shell;
 
 	flag = 0;
 	i = check_newline(cmd->tab, &flag);
@@ -59,5 +60,4 @@ void	ft_echo(t_shell *shell, t_cmds *cmd)
 	// 	ext = shell->excode;
 	// else
 	// 	ext = shell->tmpexcode;
-	free_shell(shell);
 }

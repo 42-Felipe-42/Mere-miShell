@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/23 11:40:25 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:16:01 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,35 @@
 // ◦ env with no options or arguments
 // ◦ exit with no options
 
-void run_builtins(shell, tmp_cmd, fds, 0)
+void	builtins_fds(t_shell *shell, t_fd *fds)
 {
-	
+	if (fds->input != -2)
+		close(fds->input);
+	if (fds->output == -2)
+		fds->output = dup(STDOUT_FILENO);
+	if (fds->output == -1)
+		(close_all_fds(fds), exit_and_free(shell, "dup2", 1));
+}
+
+void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds, int flag)
+{
+	(void)flag;
+	builtins_fds(shell, fds);
+	if (cmds->builtin == ECHO)
+		ft_echo(shell, cmds);
+	// if (cmds->builtin == CD)
+	// 	cd_builtin(shell, cmds);
+	// if (cmds->builtin == PWD)
+	// 	pwd_builtin(shell, cmds, fds->output);
+	// if (cmds->builtin == ENV)
+	// 	env_builtin(shell, fds->output);
+	// if (cmds->builtin == EXIT)
+	// 	exit_builtin(shell, cmds, fds, flag);
+	// if (cmds->builtin == UNSET)
+	// 	unset_builtin(shell, cmds);
+	// if (cmds->builtin == EXPORT)
+	// 	export_builtin(shell, cmds, fds);
+	printf(RED"\nbuiltins\n"RESET);
 }
 
 void	is_builtin(t_cmds *cmds)
