@@ -26,6 +26,8 @@ C_FILE      =  	lexer/lexer_utils.c \
 				env/get_env.c \
 				free_shell/exit_free.c \
 				free_shell/free.c \
+				builtins/echo.c
+
 				
 OBJS        =   $(C_FILE:.c=.o)
 

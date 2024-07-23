@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:18:39 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 11:37:30 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ typedef struct s_shell
 	t_lexer	*lex;
 
 }			t_shell;
+
+/*-------------------BUILTINS-------------------*/
+void	ft_echo(t_shell *shell, t_cmds *cmd);
+
 /*--------------------LEXER--------------------*/
 void		lex_str(char *input, t_lexer **lex, t_shell *shell);
 void		store_token(t_lexer **lex, int token, t_shell *shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:13:32 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 11:39:42 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	run_exec(t_shell *shell)
 				exit_and_free(shell, "pipe", 1);
 		process_redirections(tmp_cmd, &fds.redir[0], &fds.redir[1], shell);
 		set_fds(&fds);
-		// if (tmp_cmd->builtin && !tmp_cmd->next && !tmp_cmd->prev)
-		// 	run_builtins(shell, tmp_cmd, &fds, 0);
+		if (tmp_cmd->builtin && !tmp_cmd->next && !tmp_cmd->prev)
+			run_builtins(shell, tmp_cmd, &fds, 0);
 		// if (tmp_cmd->tab[0])
 		// printf("fds.redir[0] %d\n",fds.redir[0]);
 		// printf("fds.redir[1] %d\n",fds.redir[1]);

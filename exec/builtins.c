@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/16 11:11:10 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 11:40:25 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 // ◦ unset with no options
 // ◦ env with no options or arguments
 // ◦ exit with no options
+
+void run_builtins(shell, tmp_cmd, fds, 0)
+{
+	
+}
 
 void	is_builtin(t_cmds *cmds)
 {
