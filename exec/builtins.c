@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/23 14:07:58 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:08:18 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		ft_echo(shell, cmds);
 	// if (cmds->builtin == ENV)
 	// 	ft_env(shell, cmds);
-	// if (cmds->builtin == PWD)
-	// 	ft_pwd(shell, cmds);
+	if (cmds->builtin == PWD)
+		ft_pwd( cmds, shell,fds->output);
 	// printf(RED "\nbuiltins\n" RESET);
 }
 void	child_builtins(t_shell *shell, t_fd *fds)
@@ -46,7 +46,7 @@ void	child_builtins(t_shell *shell, t_fd *fds)
 
 void	is_builtin(t_cmds *cmds)
 {
-	if (cmds && cmds->tab[0] != NULL)
+	if (cmds && cmds->tab != NULL)
 	{
 		if (ft_strncmp(cmds->tab[0], "echo", 4) == 0
 			&& ft_strlen(cmds->tab[0]) == 4)

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/22 16:41:03 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:03:01 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,20 @@ void	set_struct(t_shell *shell, char **av, char **envp)
 	get_env(shell, envp);
 }
 
-void	print_lexer_list(t_lexer *head)
+void	print_lexer_list(t_cmds *head)
 {
-	t_lexer	*current;
+	t_cmds	*current;
+	int		i;
 
 	current = head;
 	while (current != NULL)
 	{
-		printf("Token: %d\n", current->token);
-		printf("Word: %s\n", current->word);
+		i = 0;
+		while (current->tab[i])
+		{
+			printf("Token: %s\n", current->tab[i]);
+			i++;
+		}
 		// printf("Skip: %d\n", current->skip);
 		printf("\n");
 		current = current->next;
@@ -80,7 +85,6 @@ int	main(int ac, char **av, char **envp)
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		exit_and_free(shell, "Error malloc shell", 1);
-	;
 	(void)ac;
 	set_struct(shell, av, envp);
 	while (1)

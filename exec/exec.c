@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 14:07:21 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:09:09 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,31 @@ void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 
 void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
-	cmds->pid = fork();
-	if (cmds->pid == -1)
-		(close_all_fds(fds), exit_and_free(shell,"Error Fork",1));
-	if (cmds->pid == 0)
+	// if (cmds->builtin == EXIT)
+	// 	ft_exit(shell, cmds, fds);
+	if (cmds->builtin == CD)
+		ft_cd(shell, cmds);
+	// else if (cmds->builtin == EXPORT)
+	// 	ft_export(shell, cmds);
+	// else if (cmds->builtin == UNSET)
+	// 	ft_unset(shell, cmds);
+	else
 	{
-		if (cmds->builtin)
+		cmds->pid = fork();
+		if (cmds->pid == -1)
+			(close_all_fds(fds), exit_and_free(shell, "Error Fork", 1));
+		if (cmds->pid == 0)
 		{
-			run_builtins(shell, cmds, fds);
-			(close_all_fds(fds), exit(1));
+			if (cmds->builtin)
+				run_builtins(shell, cmds, fds);
+			ft_putstr_fd("test built\n", 2);
+			(close_all_fds(fds), exit (1));
 		}
 		else
+		{
 			execute_child(shell, cmds, fds);
+			ft_putstr_fd("test child\n", 2);
+		}
 	}
 	close_fds_parent(fds);
 	fds->input = fds->pipes[0];
@@ -63,6 +76,8 @@ void	run_exec(t_shell *shell)
 	tmp_cmd->prev = NULL;
 	while (tmp_cmd)
 	{
+		is_builtin(tmp_cmd);
+		printf("built %d\n", tmp_cmd->builtin);
 		/* set_last_cmd(shell, tmp_cmd), */ init_fd(&fds);
 		if (tmp_cmd->next)
 			if (pipe(fds.pipes) == -1)

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 14:03:45 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:00:28 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,17 @@ typedef struct s_shell
 }			t_shell;
 
 /*-------------------BUILTINS-------------------*/
-void	ft_echo(t_shell *shell, t_cmds *cmd);
-void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds);
+void		ft_echo(t_shell *shell, t_cmds *cmd);
+void		run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds);
+void		ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output);
+void		ft_cd(t_shell *shell, t_cmds *cmds);
 
 /*--------------------LEXER--------------------*/
 void		lex_str(char *input, t_lexer **lex, t_shell *shell);
 void		store_token(t_lexer **lex, int token, t_shell *shell);
 void		store_token_words(char *input, t_lexer **lex, int start, int len,
 				t_shell *shell);
-t_lexer 	*lexer(char **av, t_shell *shell);
+t_lexer		*lexer(char **av, t_shell *shell);
 char		*remove_quote(char *word, int *i, t_shell *shell);
 t_cmds		*create_cmds(t_lexer *lex, t_shell *shell);
 t_lexer		*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell);
@@ -95,7 +97,7 @@ void		process_redirections(t_cmds *cmds, int *fd_in, int *fd_out,
 				t_shell *shell);
 void		set_fds(t_fd *fd);
 void		run_exec(t_shell *shell);
-void		child_builtins(t_shell *shell,  t_fd *fd);
+void		child_builtins(t_shell *shell, t_fd *fd);
 void		wait_child(t_shell *shell);
 
 /*--------------------FREE--------------------*/
@@ -105,5 +107,6 @@ void		free_env(t_env *env);
 void		free_shell(t_shell *shell);
 void		free_before_loop(t_cmds **cmds);
 void		exit_and_free(t_shell *shell, char *str, int sig);
+void	ft_freeshell(t_shell *shell);
 
 #endif

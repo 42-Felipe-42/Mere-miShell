@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/23 11:38:18 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:47:46 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,13 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	i = 0;
 	count = count_arg(lex);
 	tmp = lex;
-	(*cmds)->tab = ft_calloc(count +1, sizeof(char *));
+	(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
 	if (!(*cmds)->tab)
 		exit_and_free(shell, "Error malloc redir", 1);
 	while (tmp && tmp->word)
 	{
 		if (tmp->word)
 		{
-			is_builtin(*cmds);
 			(*cmds)->tab[i] = ft_strdup(tmp->word);
 			if (!(*cmds)->tab[i])
 				exit_and_free(shell, "Error malloc redir", 1);

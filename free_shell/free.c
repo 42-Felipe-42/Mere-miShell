@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:41:53 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:04:26 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,20 @@ void	free_shell(t_shell *shell)
 		free(shell->av);
 	if (shell)
 		free(shell);
+}
+
+void	ft_freeshell(t_shell *shell)
+{
+	t_env *env;
+	t_lexer *lex;
+	t_cmds *cmd;
+	
+	env = shell->env;
+	lex = shell->lex;
+	cmd = shell->cmds;
+	if (shell->env)
+		free_env(env);
+	free_cmds(&cmd);
+	free(shell->av);
+	free(shell);
 }
