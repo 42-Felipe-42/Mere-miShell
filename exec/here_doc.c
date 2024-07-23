@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 18:24:40 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 09:57:31 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@ void	loop_here_doc(t_cmds *cmds, int fd)
 	char	*line;
 	char	*limiter;
 
-	limiter = ft_strjoin(cmds->lex_redir->next->word, "\n");
+	limiter = ft_strjoin(cmds->lex_redir->word, "\n");
 	while (1)
 	{
-		line = readline("> ");
-		if (line == NULL || ft_strncmp(line, limiter, ft_strlen(line)) == 0)
+		line = readline(">");
+		if (line == NULL || (ft_strncmp(line, limiter, ft_strlen(line)) == 0 && ft_strlen(line) != 0))
 		{
+			printf("test\n");
 			free(line);
 			break ;
 		}
 		ft_putstr_fd(line, fd);
+		ft_putstr_fd("\n", fd);
 		free(line);
 	}
 	free(limiter);

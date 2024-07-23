@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 17:39:47 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/23 09:27:15 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,28 +165,28 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 	exit_and_free(shell, "Failed to execute command", 126);
 }
 
-static void	child_wtermsig(int sig)
-{
-	int g_return ;
-	g_return = 0;
-	if (sig == 2)
-	{
-		write(1, "\n", 1);
-		g_return = 130;
-	}
-	if (sig == 3)
-	{
-		write(1, "Quit: 3\n", 8);
-		g_return = 131;
-	}
-}
+// static void	child_wtermsig(int sig)
+// {
+// 	int g_return ;
+// 	g_return = 0;
+// 	if (sig == 2)
+// 	{
+// 		write(1, "\n", 1);
+// 		g_return = 130;
+// 	}
+// 	if (sig == 3)
+// 	{
+// 		write(1, "Quit: 3\n", 8);
+// 		g_return = 131;
+// 	}
+// }
 
 void	wait_child(t_shell *shell)
 {
 	int		stat;
 	t_cmds	*snake;
 
-	int g_return ;
+	// int g_return ;
 	snake = shell->cmds;
 	stat = 0;
 	while (snake)
@@ -194,10 +194,10 @@ void	wait_child(t_shell *shell)
 		if (snake->pid != -2 && snake->pid != -1)
 		{
 			waitpid(snake->pid, &stat, 0);
-			if (WIFSIGNALED(stat))
-				child_wtermsig(WTERMSIG(stat));
-			else if (WIFEXITED(stat))
-				g_return = WEXITSTATUS(stat);
+			// if (WIFSIGNALED(stat))
+			// 	child_wtermsig(WTERMSIG(stat));
+			// else if (WIFEXITED(stat))
+			// 	g_return = WEXITSTATUS(stat);
 		}
 		snake = snake->next;
 	}
