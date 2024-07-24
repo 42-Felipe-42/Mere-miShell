@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 16:35:52 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 00:26:58 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 // sortie: valeur associée a env
 char	*expand(char *input, int i, t_env *envp, t_shell *shell)
 {
-	char	*dest;
+	char	*dst;
 	char	*env;
 	int		j;
 
-	dest = ft_calloc(strlen(input) + 1, sizeof(char *));
-	if (!dest)
+	dst = ft_calloc(strlen(input) + 1, sizeof(char *));
+	if (!dst)
 		exit_and_free(shell, "Malloc error expander", 1);
 	env = NULL;
 	if (input[i] == '$')
@@ -33,22 +33,20 @@ char	*expand(char *input, int i, t_env *envp, t_shell *shell)
 	j = 0;
 	while (input[i] && (ft_isalpha(input[i]) || input[i] == '_'))
 	{
-		dest[j++] = input[i];
+		dst[j++] = input[i];
 		i += 1;
 	}
-	dest[j] = '\0';
-	env = find_env(dest, envp);
+	dst[j] = '\0';
+	env = find_env(dst, envp);
 	if (!env)
 		env = "";
-	return (free(dest), env);
+	return (free(dst), env);
 }
 
 char	*find_pwd(char *str, t_shell *shell)
 {
-	if (ft_strncmp(str, "$0", 2) == 0 || ft_strncmp(str, "$0$", 3) == 0)
-	{
+	if (!ft_strncmp(str, "$0", 2) || !ft_strncmp(str, "$0$", 3))
 		str = shell->av;
-	}
 	else
 		return (NULL);
 	return (str);
@@ -58,7 +56,6 @@ void	expander(t_lexer *lex, t_shell *shell)
 {
 	t_lexer	*tmp;
 	char	*expanded_word;
-	char	*original_word;
 
 	tmp = lex;
 	expanded_word = NULL;
@@ -69,9 +66,8 @@ void	expander(t_lexer *lex, t_shell *shell)
 		{
 			if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
 			{
-				original_word = tmp->word;
-				expanded_word = no_guillemets(original_word, shell);
-				free(original_word);
+				expanded_word = no_guillemets(tmp->word, shell);
+				free(tmp->word);
 				tmp->word = expanded_word;
 				tmp->skip = 1;
 			}
@@ -80,6 +76,7 @@ void	expander(t_lexer *lex, t_shell *shell)
 	}
 }
 
+//expand first part of the input. ex: $HOME$$HOME s'arrete au 2eme $
 char	*initialize_expansion(char *word, int *i)
 {
 	char	*exp_w;
@@ -136,27 +133,28 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 	return (exp_w);
 }
 
-
+// returns expanded word
 char	*no_guillemets(char *word, t_shell *shell)
 {
 	char	*exp_w;
 	int		i;
-	char	*init_exp;
+	char	*partial_exp;
 	char	*tmp;
 
 	exp_w = ft_strdup("");
 	i = 0;
 	while (word[i])
 	{
-		init_exp = initialize_expansion(word, &i);
-		tmp = ft_strjoin(exp_w, init_exp);
-		free(init_exp); // Free the memory allocated by initialize_expansion
-		free(exp_w); // Free the previous memory allocated for exp_w
+		partial_exp = initialize_expansion(word, &i);
+		tmp = ft_strjoin(exp_w, partial_exp);
+		free(partial_exp);
+		free(exp_w);
 		exp_w = tmp;
 		if (word[i])
 		{
 			tmp = expand_variable(word, &i, shell, exp_w);
-			// free(exp_w); // Free the previous memory allocated for exp_w
+			if (!exp_w)
+				free(exp_w);
 			exp_w = tmp;
 		}
 		if (ft_strchr(word + i, '$') == NULL)

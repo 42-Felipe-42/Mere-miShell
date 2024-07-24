@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 15:47:02 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:07:39 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,9 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 
 static void	child_wtermsig(int sig)
 {
-	int g_return ;
+	int g_return;
+
+	(void)g_return;
 	g_return = 0;
 	if (sig == 2)
 	{
@@ -184,8 +186,9 @@ void	wait_child(t_shell *shell)
 {
 	int		stat;
 	t_cmds	*snake;
-
 	int g_return ;
+	
+	(void)g_return;
 	snake = shell->cmds;
 	stat = 0;
 	while (snake)

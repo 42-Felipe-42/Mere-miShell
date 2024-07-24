@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/24 10:58:34 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 00:27:49 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	set_env_key_value(t_shell *shell, t_env *new, char **envp, int i)
 	int		key_length;
 	int		value_length;
 
-	equal_sign = NULL;
 	(void)shell;
+	equal_sign = NULL;
 	if (envp && envp[i])
 		equal_sign = ft_strchr(envp[i], '=');
-	// else (!equal_sign)
-	// 	exit_shell(shell, "env format incorrect", 1);
+	else if (!equal_sign)
+		exit_and_free(shell, "env format incorrect", 1);
 	key_length = equal_sign - envp[i];
 	value_length = ft_strlen(equal_sign + 1);
 	new->key = ft_calloc(key_length + 1, sizeof(char));
@@ -49,9 +49,8 @@ void	maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
 	set_env_key_value(shell, new_env_node, envp, index);
 	new_env_node->next = NULL;
 	new_env_node->prev = NULL;
-	if (!current) {
+	if (!current)
 		shell->env = new_env_node;
-	}
 	else
 	{
 		while (current->next)
@@ -90,7 +89,7 @@ char	*find_env(char *key, t_env *envp)
 	len = ft_strlen(key);
 	while (tmp_envp)
 	{
-		if (ft_strncmp(key, tmp_envp->key, len) == 0
+		if (!ft_strncmp(key, tmp_envp->key, len)
 			&& tmp_envp->key[len] == '\0')
 			return (tmp_envp->value);
 		tmp_envp = tmp_envp->next;

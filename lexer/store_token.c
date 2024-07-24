@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 16:08:10 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 23:02:13 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// creation maillon pour stocker donnees d'un TOKEN
+// creation maillon + initialization elements struct pour stocker donnees d'un TOKEN
 void	store_token(t_lexer **lex, int token, t_shell *shell)
 {
 	t_lexer	*new;
@@ -21,25 +21,24 @@ void	store_token(t_lexer **lex, int token, t_shell *shell)
 	new = ft_calloc(1, sizeof(t_lexer));
 	if (!new)
 		exit_and_free(shell, "Malloc error lexer", 1);
-	new->word = NULL;
 	new->token = token;
+	new->word = NULL;
+	new->next = NULL;
+	new->prev = NULL;
 	new->skip = 0;
 	if (!*lex)
-	{
 		*lex = new;
-		new->next = NULL;
-	}
 	else
 	{
 		current = *lex;
 		while (current->next)
 			current = current->next;
 		current->next = new;
-		new->next = NULL;
+		new->prev = current;
 	}
 }
 
-// creation maillon pour stocker donnees d'un WORD
+// creation maillon + intialization elements struct pour stocker donnees d'un WORD
 void	store_token_words(char *input, t_lexer **lex, int start, int len,
 		t_shell *shell)
 {
@@ -49,23 +48,24 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len,
 	new = ft_calloc(1, sizeof(t_lexer));
 	if (!new)
 		exit_and_free(shell, "Malloc error lexer", 1);
+	ft_bzero(new, sizeof(t_lexer));
 	new->word = ft_strndup(input + start, len);
-	new->token = 0;
-	new->skip = 0;
 	if (!new->word)
-		exit_and_free(shell, "Malloc error lexer word", 1);
-	if (!*lex)
 	{
-		*lex = new;
-		new->next = NULL;
+		free(new);
+		exit_and_free(shell, "Malloc error lexer word", 1);
 	}
+	new->next = NULL;
+    new->prev = NULL;
+	if (!*lex)
+		*lex = new;
 	else
 	{
 		current = *lex;
 		while (current->next)
 			current = current->next;
 		current->next = new;
-		new->next = NULL;
+		new->prev = current;
 	}
 }
 
@@ -81,7 +81,7 @@ void	is_quoted(char *input, int *i, int *opened)
 		(*i)++;
 	}
 }
-// parcour input en i tant que diff token
+// parcour input en i tant que diff token, quotes et espace
 void	is_word(char *input, int *i)
 {
 	while (input[*i] && input[*i] != ' ' && which_redir(input, i) == FALSE
@@ -128,7 +128,7 @@ t_lexer	*lexer(char **av, t_shell *shell)
 	lex = NULL;
 	input = av[1];
 	input = ft_readline();
-	if (input == NULL)
+	if (!input)
 		exit_and_free(shell, "Exit", 1);
 	lex_str(input, &lex, shell);
 	shell->lex = lex;

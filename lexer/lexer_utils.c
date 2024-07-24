@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 14:25:55 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:40:13 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+//verifie si input[*i] est un symbol redir
 int	which_redir(char *input, int *i)
 {
 	if (input[*i] == '|' || input[*i] == '<' || input[*i] == '>')
