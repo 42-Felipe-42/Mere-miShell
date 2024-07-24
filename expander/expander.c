@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 14:34:30 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 09:53:56 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	expander(t_lexer *lex, t_shell *shell)
 	{
 		if (tmp->word != NULL)
 		{
-			if (/* tmp->skip == 0 &&  */ft_strchr(tmp->word, '$')
+			if (/* tmp->skip == 0 &&  */ ft_strchr(tmp->word, '$')
 				&& which_quote(tmp->word[0]) == FALSE)
 			{
 				if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
@@ -88,7 +88,9 @@ char	*initialize_expansion(char *word, int *i)
 			(*i)++;
 		return (exp_w);
 	}
-	return ("");
+	else
+		exp_w = strdup("");
+	return (exp_w);
 }
 
 char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
@@ -124,16 +126,25 @@ char	*no_guillemets(char *word, t_shell *shell)
 	char	*exp_w;
 	int		i;
 	int		next_dollar_index;
+	char	*init_exp;
+	char	*tmp;
 
-	exp_w = "";
+	exp_w = strdup("");
 	i = 0;
 	while (word[i])
 	{
-		exp_w = ft_strjoin(exp_w, initialize_expansion(word, &i));
+		init_exp = initialize_expansion(word, &i);
+		tmp = ft_strjoin(exp_w, init_exp);
+		free(init_exp); // Free the memory allocated by initialize_expansion
+		if (exp_w != NULL)
+			free(exp_w);    // Free the previous memory allocated for exp_w
+		exp_w = tmp;
 		if (word[i])
-		{
-			exp_w = expand_variable(word, &i, shell, exp_w);
-		}
+        {
+            tmp = expand_variable(word, &i, shell, exp_w);
+            free(exp_w);  // Free the previous memory allocated for exp_w
+            exp_w = tmp;
+        }
 		next_dollar_index = ft_strchr(word + i + 1, '$') - word;
 		if (next_dollar_index < 0)
 			break ;

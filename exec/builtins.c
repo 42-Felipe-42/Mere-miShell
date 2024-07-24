@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/23 18:08:18 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:05:52 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	// if (cmds->builtin == ENV)
 	// 	ft_env(shell, cmds);
 	if (cmds->builtin == PWD)
-		ft_pwd( cmds, shell,fds->output);
+		ft_pwd( cmds, shell, fds->output);
 	// printf(RED "\nbuiltins\n" RESET);
 }
 void	child_builtins(t_shell *shell, t_fd *fds)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/23 18:03:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:18:42 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,16 @@ void	set_struct(t_shell *shell, char **av, char **envp)
 	char	*pwd;
 
 	pwd = ft_strdup(av[0]);
+	if (!pwd)
+		exit_and_free(shell, "ft_strdup pwd in av", 1);
 	shell->env = NULL;
 	shell->cmds = NULL;
-	shell->av = ft_strdup(pwd);
+	shell->av = pwd;
+	if (!shell->av)
+	{
+		free(pwd);
+		exit_and_free(shell, "ft_strdup pwd in av", 1);
+	}
 	free(pwd);
 	get_env(shell, envp);
 }
@@ -95,7 +102,7 @@ int	main(int ac, char **av, char **envp)
 		shell->cmds = cmds;
 		// print_list_cmds(&shell);
 		run_exec(shell);
-		free_before_loop(&cmds);
+		free_before_loop(shell);
 		shell->cmds = NULL;
 	}
 	return (0);

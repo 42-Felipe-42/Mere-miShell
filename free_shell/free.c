@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 18:04:26 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:30:02 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void	free_shell(t_shell *shell)
 		free_cmds(&shell->cmds);
 	if (shell->env)
 		free_env(shell->env);
-	// if (shell->lex)
-	// 	free_lexer(&shell->lex);
+	if (shell->lex)
+		free_lexer(&shell->lex);
 	if (shell->av)
 		free(shell->av);
 	if (shell)

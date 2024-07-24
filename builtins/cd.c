@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:48:18 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 17:42:49 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:15:56 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,22 @@ static int	go_home(t_shell *shell, char *old_pwd)
 	t_env	*env_entry;
 
 	env_entry = shell->env;
-	home_dir = NULL;
-	while (env_entry)
+	home_dir = ft_strdup("");
+	if (!home_dir)
+		exit_and_free(shell, "malloc failed", 1);
+	while (env_entry && env_entry->next)
 	{
-		if (ft_strcmp(env_entry->key, "HOME"))
+		if (!ft_strncmp(env_entry->key, "HOME=", 4))
 		{
+			free(home_dir);
 			home_dir = ft_strdup(env_entry->value);
 			if (!home_dir)
 				exit_and_free(shell, "malloc failed", 1);
+			break;
 		}
 		env_entry = env_entry->next;
 	}
+	printf("HOME: %s\n", home_dir);
 	if (!home_dir)
 		return (ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO),
 			shell->exit_code = 1, 0);
@@ -86,8 +91,8 @@ void	update_env_vars(t_shell *shell, char *oldpwd, char *currpwd)
 
 void	ft_cd(t_shell *shell, t_cmds *cmds)
 {
-	char *oldpwd;
-	char *currpwd;
+	char	*oldpwd;
+	char	*currpwd;
 
 	if (cmds->tab[1] && cmds->tab[2])
 	{

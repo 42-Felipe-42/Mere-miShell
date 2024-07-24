@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 14:51:43 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:33:35 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len,
 	if (!new)
 		exit_and_free(shell, "Malloc error lexer", 1);
 	new->word = ft_strndup(input + start, len);
+	if (!new->word)
+	{
+		free(new->word); // Free the allocated lexer node if ft_strndup fails
+		exit_and_free(shell, "Malloc error lexer word", 1);
+	}
 	new->token = 0;
 	if (!*lex)
 	{
@@ -116,7 +121,7 @@ void	lex_str(char *input, t_lexer **lex, t_shell *shell)
 	}
 }
 
-t_lexer 	*lexer(char **av, t_shell *shell)
+t_lexer	*lexer(char **av, t_shell *shell)
 {
 	char	*input;
 	t_lexer	*lex;

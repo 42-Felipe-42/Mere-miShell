@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:06:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 18:05:15 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:37:23 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 
-	void	ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output)
+void	ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output)
 {
 	char	*pwd;
 
+	(void)shell;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
