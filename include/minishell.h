@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 18:00:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:25:07 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,8 @@ void		free_lexer(t_lexer **lex);
 void		free_cmds(t_cmds **cmds);
 void		free_env(t_env *env);
 void		free_shell(t_shell *shell);
-void		free_before_loop(t_cmds **cmds);
+void		free_before_loop(t_shell *shell);
 void		exit_and_free(t_shell *shell, char *str, int sig);
-void	ft_freeshell(t_shell *shell);
+void		ft_freeshell(t_shell *shell);
 
 #endif
