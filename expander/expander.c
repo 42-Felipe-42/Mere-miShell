@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 16:18:09 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:35:52 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,23 @@ char	*find_pwd(char *str, t_shell *shell)
 void	expander(t_lexer *lex, t_shell *shell)
 {
 	t_lexer	*tmp;
-	char	*word;
+	char	*expanded_word;
+	char	*original_word;
 
 	tmp = lex;
+	expanded_word = NULL;
 	while (tmp)
 	{
-		if (tmp->word != NULL)
+		if (tmp->word != NULL && tmp->skip == 0 && ft_strchr(tmp->word, '$')
+			&& which_quote(tmp->word[0]) == FALSE)
 		{
-			if (tmp->skip == 0 && ft_strchr(tmp->word, '$')
-				&& which_quote(tmp->word[0]) == FALSE)
+			if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
 			{
-				if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
-				{
-					word = tmp->word;
-					tmp->word = no_guillemets(word, shell);
-					free(word);
-					tmp->skip = 1;
-				}
+				original_word = tmp->word;
+				expanded_word = no_guillemets(original_word, shell);
+				free(original_word);
+				tmp->word = expanded_word;
+				tmp->skip = 1;
 			}
 		}
 		tmp = tmp->next;
@@ -100,58 +100,69 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 {
 	int		dols;
 	char	*tmp;
+	char	*new_exp_w;
 
 	dols = 0;
 	while (word[*i] && word[*i] == '$')
 	{
 		dols++;
-		if (word[*i] && word[*i] == '$' && word[*i + 1] == '$')
-			exp_w = ft_strjoin(exp_w, "$");
+		if (word[*i] == '$' && word[*i + 1] == '$')
+		{
+			new_exp_w = ft_strjoin(exp_w, "$");
+			free(exp_w);
+			exp_w = new_exp_w;
+		}
 		else
 			break ;
 		(*i)++;
 	}
 	if (find_pwd(word + *i, shell))
-		exp_w = ft_strjoin(exp_w, find_pwd(word + *i, shell));
+	{
+		new_exp_w = ft_strjoin(exp_w, find_pwd(word + *i, shell));
+		free(exp_w);
+		exp_w = new_exp_w;
+	}
 	if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
 	{
 		if (dols % 2 != 0)
 			tmp = expand(word, *i, shell->env, shell);
 		else
 			tmp = ft_strndup_dol(word + *i);
-		exp_w = ft_strjoin(exp_w, tmp);
+		new_exp_w = ft_strjoin(exp_w, tmp);
+		free(exp_w);
+		free(tmp);
+		exp_w = new_exp_w;
 	}
 	return (exp_w);
 }
+
 
 char	*no_guillemets(char *word, t_shell *shell)
 {
 	char	*exp_w;
 	int		i;
-	int		next_dollar_index;
 	char	*init_exp;
 	char	*tmp;
 
-	exp_w = strdup("");
+	exp_w = ft_strdup("");
 	i = 0;
 	while (word[i])
 	{
 		init_exp = initialize_expansion(word, &i);
 		tmp = ft_strjoin(exp_w, init_exp);
 		free(init_exp); // Free the memory allocated by initialize_expansion
-		if (exp_w != NULL)
-			free(exp_w); // Free the previous memory allocated for exp_w
+		free(exp_w); // Free the previous memory allocated for exp_w
 		exp_w = tmp;
 		if (word[i])
 		{
 			tmp = expand_variable(word, &i, shell, exp_w);
-			free(exp_w); // Free the previous memory allocated for exp_w
+			// free(exp_w); // Free the previous memory allocated for exp_w
 			exp_w = tmp;
 		}
-		next_dollar_index = ft_strchr(word + i + 1, '$') - word;
-		if (next_dollar_index < 0)
+		if (ft_strchr(word + i, '$') == NULL)
 			break ;
-		i = next_dollar_index;
+		i++;
 	}
 	return (exp_w);
 }
+
