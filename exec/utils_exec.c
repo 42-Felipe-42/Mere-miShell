@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 15:35:58 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:47:02 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 		exit_and_free(shell, "Command not found", 127);
 	}
 	execve(cmds->path, cmds->tab, env_array);
-	// Si execve retourne, c'est qu'il y a eu une erreur
 	perror("execve");
 	free_split(env_array);
 	exit_and_free(shell, "Failed to execute command", 126);

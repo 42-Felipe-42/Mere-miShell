@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/24 14:41:14 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:08:06 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	set_struct(t_shell *shell, char **av, char **envp)
 	pwd = ft_strdup(av[0]);
 	shell->env = NULL;
 	shell->cmds = NULL;
+	shell->lex = NULL;
 	shell->av = ft_strdup(pwd);
 	free(pwd);
 	get_env(shell, envp);
@@ -140,17 +141,14 @@ int	main(int ac, char **av, char **envp)
 		lex = lexer(av, shell);
 		parser(lex, shell);
 		cmds = create_cmds(lex, shell);
-		print_lexer(cmds->lex_redir);
 		shell->cmds = cmds;
 		free_lexer(&lex);
-		free_lexer(&cmds->lex_redir);
 		run_exec(shell);
 		// print_env_list(shell->env);
 		free_before_loop(shell);
 		shell->cmds = NULL;
-		cmds->lex_redir  =  NULL;
-		lex =  NULL;
-		shell->lex = NULL;
+		// cmds->lex_redir  =  NULL;
+		// lex =  NULL;
 	}
 	return (0);
 }

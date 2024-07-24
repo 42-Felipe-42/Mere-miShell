@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 18:23:27 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 15:36:18 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_lexer
 	char			*word;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
-	// int				skip;
+	int				skip;
 }					t_lexer;
 
 typedef struct s_env

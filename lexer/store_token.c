@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 14:25:34 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:08:10 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	store_token(t_lexer **lex, int token, t_shell *shell)
 		exit_and_free(shell, "Malloc error lexer", 1);
 	new->word = NULL;
 	new->token = token;
+	new->skip = 0;
 	if (!*lex)
 	{
 		*lex = new;
@@ -50,6 +51,7 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len,
 		exit_and_free(shell, "Malloc error lexer", 1);
 	new->word = ft_strndup(input + start, len);
 	new->token = 0;
+	new->skip = 0;
 	if (!new->word)
 		exit_and_free(shell, "Malloc error lexer word", 1);
 	if (!*lex)
@@ -129,5 +131,6 @@ t_lexer	*lexer(char **av, t_shell *shell)
 	if (input == NULL)
 		exit_and_free(shell, "Exit", 1);
 	lex_str(input, &lex, shell);
+	shell->lex = lex;
 	return (lex);
 }

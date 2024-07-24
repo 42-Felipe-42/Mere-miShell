@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/24 14:07:19 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:02:11 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	if (!new_node)
 		exit_and_free(shell, "Error malloc redir", 1);
 	new_node->token = lex->token;
+	new_node->skip = lex->skip;
 	if (lex->next->word)
 		new_node->word = ft_strdup(lex->next->word);
 	new_node->next = NULL;
@@ -99,9 +100,12 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 		}
 		else if ((tmp->next && tmp->next->token != PIPE) || (!tmp->next
 				&& skip_redir == 0))
+		{
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
+		}
 		tmp = tmp->next;
 	}
+	free_lexer(&tmp);
 	return (cmds);
 }
 
@@ -120,7 +124,9 @@ void	parser(t_lexer *lex, t_shell *shell)
 		while (lexer->word && lexer->word[i])
 		{
 			if (check_quote_closed(lexer->word) == FALSE)
+			{
 				exit_and_free(shell, "Quote not closed", 1);
+			}
 			if (which_quote(lexer->word[i]))
 			{
 				lexer->word = remove_quote(lexer->word, &i, shell);
@@ -130,4 +136,5 @@ void	parser(t_lexer *lex, t_shell *shell)
 		}
 		lexer = lexer->next;
 	}
+	free_lexer(&lexer);
 }

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 13:45:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:18:09 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,22 @@ char	*find_pwd(char *str, t_shell *shell)
 void	expander(t_lexer *lex, t_shell *shell)
 {
 	t_lexer	*tmp;
+	char	*word;
 
 	tmp = lex;
 	while (tmp)
 	{
 		if (tmp->word != NULL)
 		{
-			if (/* tmp->skip == 0 &&  */ ft_strchr(tmp->word, '$')
+			if (tmp->skip == 0 && ft_strchr(tmp->word, '$')
 				&& which_quote(tmp->word[0]) == FALSE)
 			{
 				if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
 				{
-					tmp->word = no_guillemets(tmp->word, shell);
-					// tmp->skip = 1;
+					word = tmp->word;
+					tmp->word = no_guillemets(word, shell);
+					free(word);
+					tmp->skip = 1;
 				}
 			}
 		}
@@ -137,14 +140,14 @@ char	*no_guillemets(char *word, t_shell *shell)
 		tmp = ft_strjoin(exp_w, init_exp);
 		free(init_exp); // Free the memory allocated by initialize_expansion
 		if (exp_w != NULL)
-			free(exp_w);    // Free the previous memory allocated for exp_w
+			free(exp_w); // Free the previous memory allocated for exp_w
 		exp_w = tmp;
 		if (word[i])
-        {
-            tmp = expand_variable(word, &i, shell, exp_w);
-            free(exp_w);  // Free the previous memory allocated for exp_w
-            exp_w = tmp;
-        }
+		{
+			tmp = expand_variable(word, &i, shell, exp_w);
+			free(exp_w); // Free the previous memory allocated for exp_w
+			exp_w = tmp;
+		}
 		next_dollar_index = ft_strchr(word + i + 1, '$') - word;
 		if (next_dollar_index < 0)
 			break ;

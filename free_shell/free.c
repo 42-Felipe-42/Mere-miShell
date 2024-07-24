@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 14:42:00 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:09:49 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@ void	free_lexer(t_lexer **lex)
 		return ;
 	while (*lex)
 	{
+		printf("free lex\n");
 		to_free = *lex;
 		*lex = (*lex)->next;
 		to_free->next = NULL;
 		free(to_free->word);
 		free(to_free);
 	}
-	*lex = NULL;
 }
-
 
 void	free_cmds(t_cmds **cmds)
 {
@@ -59,7 +58,6 @@ void	free_cmds(t_cmds **cmds)
 		free(tmp);
 		tmp = next;
 	}
-	*cmds = NULL;
 }
 
 void	free_env(t_env *env)
@@ -93,21 +91,21 @@ void	free_shell(t_shell *shell)
 		free_lexer(&shell->lex);
 	if (shell->av)
 		free(shell->av);
+	if (shell)
+		free(shell);
 }
 
 void	ft_freeshell(t_shell *shell)
 {
 	t_env *env;
-	t_lexer *lex;
 	t_cmds *cmd;
-	
+
 	env = shell->env;
-	lex = shell->lex;
 	cmd = shell->cmds;
 	if (shell->env)
 		free_env(env);
 	free_cmds(&cmd);
 	free(shell->av);
-	if(shell)
+	if (shell)
 		free(shell);
 }
