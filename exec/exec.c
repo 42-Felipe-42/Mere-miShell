@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 10:15:27 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:01:52 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		ft_cd(shell, cmds);
 	// else if (cmds->builtin == EXPORT)
 	// 	ft_export(shell, cmds);
-	// else if (cmds->builtin == UNSET)
-	// 	ft_unset(shell, cmds);
+	else if (cmds->builtin == UNSET)
+		ft_unset_builtin(shell, cmds);
 	else
 	{
 		cmds->pid = fork();
@@ -44,14 +44,17 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		if (cmds->pid == 0)
 		{
 			if (cmds->builtin)
+			{
 				run_builtins(shell, cmds, fds);
-			ft_putstr_fd("test built\n", 2);
-			(close_all_fds(fds), exit (1));
-		}
-		else
-		{
-			execute_child(shell, cmds, fds);
-			ft_putstr_fd("test child\n", 2);
+				ft_putstr_fd("test built\n", 2);
+				printf("test exec\n");
+				(close_all_fds(fds), exit(1));
+			}
+			else
+			{
+				execute_child(shell, cmds, fds);
+				ft_putstr_fd("test child\n", 2);
+			}
 		}
 	}
 	close_fds_parent(fds);
@@ -77,7 +80,6 @@ void	run_exec(t_shell *shell)
 	while (tmp_cmd)
 	{
 		is_builtin(tmp_cmd);
-		printf("built %d\n", tmp_cmd->builtin);
 		/* set_last_cmd(shell, tmp_cmd), */ init_fd(&fds);
 		if (tmp_cmd->next)
 			if (pipe(fds.pipes) == -1)
@@ -93,6 +95,7 @@ void	run_exec(t_shell *shell)
 		if (tmp_cmd->next)
 			tmp_cmd->next->prev = tmp_cmd;
 		tmp_cmd = tmp_cmd->next;
+		printf("test exec\n");
 	}
 	(wait_child(shell), close_all_fds(&fds));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 10:30:02 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:42:00 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,21 @@
 
 void	free_lexer(t_lexer **lex)
 {
-	t_lexer	*tmp;
-	t_lexer	*next;
+	t_lexer	*to_free;
 
-	if (!lex || !*lex)
+	if (!(*lex))
 		return ;
-	tmp = *lex;
-	while (tmp)
+	while (*lex)
 	{
-		next = tmp->next;
-		if (tmp->word)
-			free(tmp->word);
-		free(tmp);
-		tmp = next;
+		to_free = *lex;
+		*lex = (*lex)->next;
+		to_free->next = NULL;
+		free(to_free->word);
+		free(to_free);
 	}
 	*lex = NULL;
 }
+
 
 void	free_cmds(t_cmds **cmds)
 {
@@ -55,7 +54,8 @@ void	free_cmds(t_cmds **cmds)
 		}
 		if (tmp->path)
 			free(tmp->path);
-		free_lexer(&(tmp->lex_redir));
+		if (tmp->lex_redir)
+			free_lexer(&(tmp->lex_redir));
 		free(tmp);
 		tmp = next;
 	}
@@ -93,8 +93,6 @@ void	free_shell(t_shell *shell)
 		free_lexer(&shell->lex);
 	if (shell->av)
 		free(shell->av);
-	if (shell)
-		free(shell);
 }
 
 void	ft_freeshell(t_shell *shell)
@@ -110,5 +108,6 @@ void	ft_freeshell(t_shell *shell)
 		free_env(env);
 	free_cmds(&cmd);
 	free(shell->av);
-	free(shell);
+	if(shell)
+		free(shell);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/24 10:36:35 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:07:19 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
 		tmp = tmp->next;
 	}
-	free_lexer(&lex);
 	return (cmds);
 }
 

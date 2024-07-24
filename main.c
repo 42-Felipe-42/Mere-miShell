@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/24 11:18:42 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/24 14:41:14 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,23 @@ void	set_struct(t_shell *shell, char **av, char **envp)
 	char	*pwd;
 
 	pwd = ft_strdup(av[0]);
-	if (!pwd)
-		exit_and_free(shell, "ft_strdup pwd in av", 1);
 	shell->env = NULL;
 	shell->cmds = NULL;
-	shell->av = pwd;
-	if (!shell->av)
-	{
-		free(pwd);
-		exit_and_free(shell, "ft_strdup pwd in av", 1);
-	}
+	shell->av = ft_strdup(pwd);
 	free(pwd);
 	get_env(shell, envp);
+}
+
+void	print_env_list(t_env *env_list)
+{
+	t_env	*current;
+
+	current = env_list;
+	while (current)
+	{
+		printf(" %s: %s\n", current->key, current->value);
+		current = current->next;
+	}
 }
 
 void	print_lexer_list(t_cmds *head)
@@ -83,6 +88,42 @@ void	print_lexer_list(t_cmds *head)
 		current = current->next;
 	}
 }
+void	free_tokens(t_lexer *lexer)
+{
+	t_lexer	*temp;
+
+	while (lexer)
+	{
+		temp = lexer;
+		lexer = lexer->next;
+		if (temp->word)
+			free(temp->word);
+		free(temp);
+	}
+}
+
+// Fonction pour afficher un maillon de la liste t_lexer
+void	print_lexer(t_lexer *lexer)
+{
+	if (!lexer)
+	{
+		printf("The lexer list is empty.\n");
+		return ;
+	}
+	while (lexer)
+	{
+		printf("Token: %d\n", lexer->token);
+		if (lexer->word)
+			printf("Word: %s\n", lexer->word);
+		else
+			printf("Word: NULL\n");
+		printf("Next: %p\n", (void *)lexer->next);
+		printf("Prev: %p\n", (void *)lexer->prev);
+		printf("----------\n");
+		lexer = lexer->next;
+	}
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_lexer	*lex;
@@ -99,11 +140,17 @@ int	main(int ac, char **av, char **envp)
 		lex = lexer(av, shell);
 		parser(lex, shell);
 		cmds = create_cmds(lex, shell);
+		print_lexer(cmds->lex_redir);
 		shell->cmds = cmds;
-		// print_list_cmds(&shell);
+		free_lexer(&lex);
+		free_lexer(&cmds->lex_redir);
 		run_exec(shell);
+		// print_env_list(shell->env);
 		free_before_loop(shell);
 		shell->cmds = NULL;
+		cmds->lex_redir  =  NULL;
+		lex =  NULL;
+		shell->lex = NULL;
 	}
 	return (0);
 }

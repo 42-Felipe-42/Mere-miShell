@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:48:18 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 11:15:56 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:11:40 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	go_home(t_shell *shell, char *old_pwd)
 			home_dir = ft_strdup(env_entry->value);
 			if (!home_dir)
 				exit_and_free(shell, "malloc failed", 1);
-			break;
+			break ;
 		}
 		env_entry = env_entry->next;
 	}
@@ -103,10 +103,16 @@ void	ft_cd(t_shell *shell, t_cmds *cmds)
 	if (!cmds->tab[1])
 	{
 		if (!go_home(shell, oldpwd))
+		{
+			free(oldpwd);
 			return ;
+		}
 	}
 	else if (!change_dir(shell, cmds))
-		return ;
+		{
+			free(oldpwd);
+			return ;
+		}
 	currpwd = getcwd(NULL, 0);
 	update_env_vars(shell, oldpwd, currpwd);
 	shell->exit_code = 0;

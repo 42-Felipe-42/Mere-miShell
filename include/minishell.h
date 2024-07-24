@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 11:25:07 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:29:03 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void		ft_echo(t_shell *shell, t_cmds *cmd);
 void		run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output);
 void		ft_cd(t_shell *shell, t_cmds *cmds);
+void		ft_unset_builtin(t_shell *shell, t_cmds *cmds);
 
 /*--------------------LEXER--------------------*/
 void		lex_str(char *input, t_lexer **lex, t_shell *shell);
