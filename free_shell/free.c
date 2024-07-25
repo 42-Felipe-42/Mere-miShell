@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 10:59:05 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:01:13 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,35 +28,26 @@ void	free_lexer(t_lexer **lex)
 	}
 }
 
-void	free_cmds(t_cmds **cmds)
+void free_cmds(t_cmds **cmd)
 {
-	t_cmds	*tmp;
-	t_cmds	*next;
-	int		i;
+    t_cmds *tmp;
+    t_lexer *cmdlex;
 
-	if (!cmds || !*cmds)
-		return ;
-	tmp = *cmds;
-	while (tmp)
-	{
-		i = 0;
-		next = tmp->next;
-		if (tmp->tab)
-		{
-			while (tmp->tab[i])
-			{
-				free(tmp->tab[i]);
-				i++;
-			}
-			free(tmp->tab);
-		}
-		if (tmp->path)
-			free(tmp->path);
-		if (tmp->lex_redir)
-			free_lexer(&(tmp->lex_redir));
-		tmp = next;
-	}
-	*cmds = NULL; // Mettre le pointeur à NULL après libération
+    if (!cmd || !*cmd)
+        return;
+    while (*cmd)
+    {
+        cmdlex = (*cmd)->lex_redir;
+        free_lexer(&cmdlex);  // Libération de redir
+        if ((*cmd)->tab)
+            free_split((*cmd)->tab);  // Libération de tab
+        if ((*cmd)->path)
+            free((*cmd)->path);  // Libération de path
+        tmp = (*cmd)->next;
+        free(*cmd);
+        *cmd = tmp;
+    }
+    *cmd = NULL;  // Mettre le pointeur à NULL après libération
 }
 
 void	free_env(t_env *env)
