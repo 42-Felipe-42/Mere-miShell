@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 10:13:29 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:59:05 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	free_lexer(t_lexer **lex)
 		return ;
 	while (*lex)
 	{
-		printf("free lex\n");
 		to_free = *lex;
 		*lex = (*lex)->next;
 		to_free->next = NULL;
@@ -55,9 +54,9 @@ void	free_cmds(t_cmds **cmds)
 			free(tmp->path);
 		if (tmp->lex_redir)
 			free_lexer(&(tmp->lex_redir));
-		free(tmp);
 		tmp = next;
 	}
+	*cmds = NULL; // Mettre le pointeur à NULL après libération
 }
 
 void	free_env(t_env *env)
@@ -102,10 +101,8 @@ void	ft_freeshell(t_shell *shell)
 
 	env = shell->env;
 	cmd = shell->cmds;
-	if (env)
-		free_env(env);
-	if (cmd)
-		free_cmds(&cmd);
+	free_env(env);
+	free_cmds(&cmd);
 	free(shell->av);
 	if (shell)
 		free(shell);

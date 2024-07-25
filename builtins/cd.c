@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:48:18 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 10:03:09 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:17:59 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,19 +110,20 @@ void	ft_cd(t_shell *shell, t_cmds *cmds)
 	{
 		if (!go_home(shell, oldpwd))
 		{
+			printf("test pwd Home\n");
 			free(oldpwd);
 			return ;
 		}
 	}
 	else if (!change_dir(shell, cmds))
 	{
+		printf("test pwd dir\n");
 		free(oldpwd);
 		return ;
 	}
 	currpwd = getcwd(NULL, 0);
 	update_env_vars(shell, oldpwd, currpwd);
 	shell->exit_code = 0;
-	printf("test pwd \n");
 	free(oldpwd);
 	free(currpwd);
 }

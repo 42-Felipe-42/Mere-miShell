@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/25 09:53:48 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:58:30 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		lex = lexer(av, shell);
+		if (!lex)
+			free_lexer(&lex);
 		parser(lex, shell);
 		cmds = create_cmds(lex, shell);
 		shell->cmds = cmds;

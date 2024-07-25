@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/23 13:41:03 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:57:24 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ void	ft_echo(t_shell *shell, t_cmds *cmd)
 	int i;
 	int flag;
 	// int ext;
-	(void)shell;
-
 	flag = 0;
+	(void)shell;
 	i = check_newline(cmd->tab, &flag);
 	if (cmd->tab[1])
 	{

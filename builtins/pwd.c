@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:06:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 10:12:10 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:57:04 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ void	ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output)
 		ft_putstr_fd(pwd, fd_output);
 		ft_putstr_fd("\n", fd_output);
 	}
-	ft_freeshell(shell);
 	free(pwd);
 }

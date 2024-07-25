@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 16:45:17 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:56:59 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 			if (cmds->builtin)
 			{
 				run_builtins(shell, cmds, fds);
-				(close_all_fds(fds), exit(1));
+				(close_all_fds(fds), exit_and_free(shell, "",1));
 			}
 			else
 				execute_child(shell, cmds, fds);
