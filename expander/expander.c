@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 11:13:18 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:44:28 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*initialize_expansion(char *word, int *i)
 		return (exp_w);
 	}
 	else
-		exp_w = strdup("");
+		exp_w = ft_strdup("");
 	return (exp_w);
 }
 
@@ -103,9 +103,10 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 	while (word[*i] && word[*i] == '$')
 	{
 		dols++;
-		if (word[*i] == '$' && word[*i + 1] == '$')
+		if ((word[*i] == '$' && word[*i + 1] == '$') || (word[*i] == '$' &&  word[*i + 1] == '\0' && dols != 1))
 		{
 			new_exp_w = ft_strjoin(exp_w, "$");
+			if (!new_exp_w)
 			{
 				free(exp_w);
 				exit_and_free(shell, "error ft_strjoin expander", 1);
@@ -130,10 +131,20 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 	}
 	if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
 	{
+
 		if (dols % 2 != 0)
 			tmp = expand(word, *i, shell->env, shell);
 		else
+		{
+			if (tmp && tmp[0] == '\0')
+				free(tmp);
 			tmp = ft_strndup_dol(word + *i);
+		}
+		if (!tmp)
+		{
+			free(exp_w);
+			exit_and_free(shell, "error ft_strjoin expander", 1);
+		}
 		new_exp_w = ft_strjoin(exp_w, tmp);
 		if (!new_exp_w)
 		{
@@ -141,7 +152,8 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 			exit_and_free(shell, "error ft_strjoin expander", 1);
 		}
 		free(exp_w);
-		free(tmp);
+		if (tmp[0] == '\0')
+			free(tmp);
 		exp_w = new_exp_w;
 	}
 	return (exp_w);
@@ -167,8 +179,9 @@ char	*no_guillemets(char *word, t_shell *shell)
 		if (word[i])
 		{
 			tmp = expand_variable(word, &i, shell, exp_w);
-			if (!exp_w)
-				free(exp_w);
+			// if (exp_w)
+			// 	free(exp_w);
+			// free(tmp);
 			exp_w = tmp;
 		}
 		if (ft_strchr(word + i, '$') == NULL)

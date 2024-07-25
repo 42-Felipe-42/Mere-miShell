@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 22:07:39 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:46:01 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,18 @@ char	**convert_env_to_array(t_env *env, t_shell *shell)
 	return (env_array);
 }
 
+#include <sys/stat.h>
+
+// Ajoutez cette fonction pour vérifier si le chemin est un répertoire
+int	is_directory(const char *path)
+{
+	struct stat	path_stat;
+
+	if (stat(path, &path_stat) != 0)
+		return (0); // Impossible de récupérer les informations du chemin
+	return (S_ISDIR(path_stat.st_mode));
+}
+
 void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 {
 	char	**env_array;
@@ -143,10 +155,19 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 	{
 		exit_and_free(shell, "Failed to convert environment", 1);
 	}
-	if (ft_strchr(cmds->tab[0], '/') != NULL && access(cmds->tab[0],
-			F_OK | X_OK) == 0)
+	if (ft_strchr(cmds->tab[0], '/') != NULL)
 	{
-		cmds->path = ft_strdup(cmds->tab[0]);
+		if (is_directory(cmds->tab[0]))
+		{
+			ft_putstr_fd(cmds->tab[0], STDERR_FILENO);
+			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+			free_split(env_array);
+			exit_and_free(shell, "", 126);
+		}
+		else if (access(cmds->tab[0], F_OK | X_OK) == 0)
+		{
+			cmds->path = ft_strdup(cmds->tab[0]);
+		}
 	}
 	else
 	{
@@ -166,9 +187,8 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 
 static void	child_wtermsig(int sig)
 {
-	int g_return;
-
-	(void)g_return;
+	int g_return ;
+	(void)g_return ;
 	g_return = 0;
 	if (sig == 2)
 	{
@@ -186,9 +206,9 @@ void	wait_child(t_shell *shell)
 {
 	int		stat;
 	t_cmds	*snake;
+
 	int g_return ;
-	
-	(void)g_return;
+	(void)g_return ;
 	snake = shell->cmds;
 	stat = 0;
 	while (snake)
