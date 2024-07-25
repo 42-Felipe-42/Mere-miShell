@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/24 23:33:41 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 09:53:48 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,7 @@ void	print_list_cmds(t_shell *shell)
 
 void	set_struct(t_shell *shell, char **av, char **envp)
 {
-	char	*pwd;
-
-	pwd = ft_strdup(av[0]);
-	shell->av = ft_strdup(pwd);
-	free(pwd);
+	shell->av = ft_strdup(av[0]);
 	shell->cmds = NULL;
 	shell->env = NULL;
 	get_env(shell, envp);

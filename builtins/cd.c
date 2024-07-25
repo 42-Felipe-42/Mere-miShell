@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:48:18 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 13:11:40 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:03:09 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,20 @@ void	update_env_vars(t_shell *shell, char *oldpwd, char *currpwd)
 			free(env_entry->value);
 			env_entry->value = ft_strdup(oldpwd);
 			if (!env_entry->value)
+			{
+				free(oldpwd);
 				exit_and_free(shell, "malloc failed", 1);
+			}
 		}
 		if (ft_strcmp(env_entry->key, "PWD"))
 		{
 			free(env_entry->value);
 			env_entry->value = ft_strdup(currpwd);
 			if (!env_entry->value)
+			{
+				free(oldpwd);
 				exit_and_free(shell, "malloc failed", 1);
+			}
 		}
 		env_entry = env_entry->next;
 	}
@@ -109,10 +115,10 @@ void	ft_cd(t_shell *shell, t_cmds *cmds)
 		}
 	}
 	else if (!change_dir(shell, cmds))
-		{
-			free(oldpwd);
-			return ;
-		}
+	{
+		free(oldpwd);
+		return ;
+	}
 	currpwd = getcwd(NULL, 0);
 	update_env_vars(shell, oldpwd, currpwd);
 	shell->exit_code = 0;

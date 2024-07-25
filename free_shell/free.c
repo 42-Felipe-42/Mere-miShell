@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 16:09:49 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:13:29 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,10 @@ void	ft_freeshell(t_shell *shell)
 
 	env = shell->env;
 	cmd = shell->cmds;
-	if (shell->env)
+	if (env)
 		free_env(env);
-	free_cmds(&cmd);
+	if (cmd)
+		free_cmds(&cmd);
 	free(shell->av);
 	if (shell)
 		free(shell);
