@@ -3,27 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/23 09:57:31 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/25 16:53:50 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	loop_here_doc(t_cmds *cmds, int fd)
+void	loop_here_doc(t_lexer *redirs, int fd)
 {
 	char	*line;
 	char	*limiter;
 
-	limiter = ft_strjoin(cmds->lex_redir->word, "\n");
+	limiter = ft_strjoin(redirs->word, "\n");
 	while (1)
 	{
 		line = readline(">");
 		if (line == NULL || (ft_strncmp(line, limiter, ft_strlen(line)) == 0 && ft_strlen(line) != 0))
 		{
-			printf("test\n");
 			free(line);
 			break ;
 		}
@@ -34,7 +33,7 @@ void	loop_here_doc(t_cmds *cmds, int fd)
 	free(limiter);
 }
 
-int	here_doc(t_cmds *cmds, t_shell *shell)
+int	here_doc(t_shell *shell, t_lexer *redirs)
 {
 	char	*file_name;
 	t_fd	fd;
@@ -50,7 +49,7 @@ int	here_doc(t_cmds *cmds, t_shell *shell)
 	if (fd.input == -1)
 		exit_and_free(shell, "Fail to open file", 1);
 	unlink(file_name);
-	loop_here_doc(cmds, tmp);
+	loop_here_doc(redirs, tmp);
 	free(file_name);
 	close(tmp);
 	return (fd.input);

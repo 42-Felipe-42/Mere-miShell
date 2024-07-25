@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 11:26:29 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:54:40 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,13 @@ char		**allocate_env_array(t_shell *shell, int count);
 
 void		get_cmds(t_env *env, t_cmds *cmds, t_shell *shell);
 char		*get_path(t_env *env, t_cmds *cmds);
-int			here_doc(t_cmds *cmds, t_shell *shell);
+int			here_doc(t_shell *shell, t_lexer *redirs);
 void		close_all_fds(t_fd *fds);
 void		close_fds_parent(t_fd *fds);
 void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		init_fd(t_fd *fd);
-int			handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd,
+int			handle_input_redir(t_lexer *redirs,int fd,
 				t_shell *shell);
 int			handle_output_redir(t_lexer *redirs, int fd);
 void		process_redirections(t_cmds *cmds, int *fd_in, int *fd_out,

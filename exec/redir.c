@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 18:25:14 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:54:56 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_fd(t_fd *fd)
 	fd->output = -2;
 }
 
-int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd, t_shell *shell)
+int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 {
 	if (fd != -1)
 		close(fd);
@@ -35,7 +35,8 @@ int	handle_input_redir(t_lexer *redirs, t_cmds *cmd, int fd, t_shell *shell)
 	}
 	else if (redirs->token == HERE_DOC)
 	{
-		fd = here_doc(cmd, shell);
+		printf("limiter %s\n", redirs->word);
+		fd = here_doc(shell, redirs);
 		// Assurez-vous que here_doc() gère les erreurs
 	}
 	return (fd);
@@ -74,7 +75,7 @@ void	process_redirections(t_cmds *cmds, int *fd_in, int *fd_out,
 	{
 		if (redirs->token == IN_REDIR || redirs->token == HERE_DOC)
 		{
-			*fd_in = handle_input_redir(redirs, cmds, *fd_in, shell);
+			*fd_in = handle_input_redir(redirs, *fd_in, shell);
 		}
 		else if (redirs->token == OUT_REDIR || redirs->token == APPEND)
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 11:46:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:48:54 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,12 @@ char	*create_env_entry(char *key, char *value, t_shell *shell)
 	if (!tmp)
 		exit_and_free(shell, "Error malloc env", 1);
 	entry = ft_strjoin(tmp, value);
-	free(tmp);
 	if (!entry)
+	{
+		free(tmp);
 		exit_and_free(shell, "Error malloc env", 1);
+	}
+	free(tmp);
 	return (entry);
 }
 

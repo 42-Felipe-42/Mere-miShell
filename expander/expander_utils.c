@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:04:33 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/22 14:25:45 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:29:32 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strndup_dol(char *s)
 		i++;
 	while (s[i] && s[i] != '$')
 		i++;
-	dst = ft_calloc((i + 1) ,sizeof(char));
+	dst = ft_calloc((i + 1), sizeof(char));
 	if (!dst)
 		return (NULL);
 	i = 0;

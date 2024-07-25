@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 12:44:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:32:03 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,68 +93,65 @@ char	*initialize_expansion(char *word, int *i)
 	return (exp_w);
 }
 
+static char	*join_and_free(char *exp_w, const char *suffix, t_shell *shell)
+{
+	char	*new_exp_w;
+
+	new_exp_w = NULL;
+	new_exp_w = ft_strjoin(exp_w, suffix);
+	if (!new_exp_w)
+	{
+		free(exp_w);
+		exit_and_free(shell, "error ft_strjoin expander", 1);
+	}
+	free(exp_w);
+	return (new_exp_w);
+}
+
 char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 {
 	int		dols;
 	char	*tmp;
-	char	*new_exp_w;
+	int		flag;
 
 	dols = 0;
+	flag = 0;
 	while (word[*i] && word[*i] == '$')
 	{
 		dols++;
-		if ((word[*i] == '$' && word[*i + 1] == '$') || (word[*i] == '$' &&  word[*i + 1] == '\0' && dols != 1))
-		{
-			new_exp_w = ft_strjoin(exp_w, "$");
-			if (!new_exp_w)
-			{
-				free(exp_w);
-				exit_and_free(shell, "error ft_strjoin expander", 1);
-			}
-			free(exp_w);
-			exp_w = new_exp_w;
-		}
+		printf("dols: %d, exp_w: %s\n", dols, exp_w);
+		if ((word[*i] == '$' && word[*i + 1] == '$') || (word[*i] == '$'
+				&& word[*i + 1] == '\0' && dols != 1))
+			exp_w = join_and_free(exp_w, "$", shell);
 		else
 			break ;
 		(*i)++;
 	}
 	if (!ft_strncmp(word + *i, "$0", 2) || !ft_strncmp(word + *i, "$0$", 3))
+		exp_w = join_and_free(exp_w, find_pwd(word + *i, shell), shell);
+	else if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
 	{
-		new_exp_w = ft_strjoin(exp_w, find_pwd(word + *i, shell));
-		if (!new_exp_w)
-		{
-			free(exp_w);
-			exit_and_free(shell, "error ft_strjoin expander", 1);
-		}
-		free(exp_w);
-		exp_w = new_exp_w;
-	}
-	if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
-	{
-
+		printf("dols: %d\n", dols);
+		tmp = NULL;
 		if (dols % 2 != 0)
+		{
 			tmp = expand(word, *i, shell->env, shell);
+			if (tmp[0] == '\0')
+				flag = 1;
+		}
 		else
 		{
-			if (tmp && tmp[0] == '\0')
-				free(tmp);
 			tmp = ft_strndup_dol(word + *i);
+			flag = 1;
+			if (!tmp)
+			{
+				free(exp_w);
+				exit_and_free(shell, "error ft_strjoin expander", 1);
+			}
 		}
-		if (!tmp)
-		{
-			free(exp_w);
-			exit_and_free(shell, "error ft_strjoin expander", 1);
-		}
-		new_exp_w = ft_strjoin(exp_w, tmp);
-		if (!new_exp_w)
-		{
-			free(exp_w);
-			exit_and_free(shell, "error ft_strjoin expander", 1);
-		}
-		free(exp_w);
-		if (tmp[0] == '\0')
+		exp_w = join_and_free(exp_w, tmp, shell);
+		if (flag == 1)
 			free(tmp);
-		exp_w = new_exp_w;
 	}
 	return (exp_w);
 }
@@ -172,16 +169,11 @@ char	*no_guillemets(char *word, t_shell *shell)
 	while (word[i])
 	{
 		partial_exp = initialize_expansion(word, &i);
-		tmp = ft_strjoin(exp_w, partial_exp);
+		exp_w = join_and_free(exp_w, partial_exp, shell);
 		free(partial_exp);
-		free(exp_w);
-		exp_w = tmp;
 		if (word[i])
 		{
 			tmp = expand_variable(word, &i, shell, exp_w);
-			// if (exp_w)
-			// 	free(exp_w);
-			// free(tmp);
 			exp_w = tmp;
 		}
 		if (ft_strchr(word + i, '$') == NULL)

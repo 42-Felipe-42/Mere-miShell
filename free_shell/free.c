@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 11:01:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:04:31 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,26 @@ void	free_lexer(t_lexer **lex)
 	}
 }
 
-void free_cmds(t_cmds **cmd)
+void	free_cmds(t_cmds **cmd)
 {
-    t_cmds *tmp;
-    t_lexer *cmdlex;
+	t_cmds	*tmp;
+	t_lexer	*cmdlex;
 
-    if (!cmd || !*cmd)
-        return;
-    while (*cmd)
-    {
-        cmdlex = (*cmd)->lex_redir;
-        free_lexer(&cmdlex);  // Libération de redir
-        if ((*cmd)->tab)
-            free_split((*cmd)->tab);  // Libération de tab
-        if ((*cmd)->path)
-            free((*cmd)->path);  // Libération de path
-        tmp = (*cmd)->next;
-        free(*cmd);
-        *cmd = tmp;
-    }
-    *cmd = NULL;  // Mettre le pointeur à NULL après libération
+	if (!cmd || !*cmd)
+		return ;
+	while (*cmd)
+	{
+		cmdlex = (*cmd)->lex_redir;
+		free_lexer(&cmdlex); // Libération de redir
+		if ((*cmd)->tab)
+			free_split((*cmd)->tab); // Libération de tab
+		if ((*cmd)->path)
+			free((*cmd)->path); // Libération de path
+		tmp = (*cmd)->next;
+		free(*cmd);
+		*cmd = tmp;
+	}
+	*cmd = NULL; // Mettre le pointeur à NULL après libération
 }
 
 void	free_env(t_env *env)
@@ -92,8 +92,10 @@ void	ft_freeshell(t_shell *shell)
 
 	env = shell->env;
 	cmd = shell->cmds;
-	free_env(env);
-	free_cmds(&cmd);
+	if (env)
+		free_env(env);
+	if (cmd)
+		free_cmds(&cmd);
 	free(shell->av);
 	if (shell)
 		free(shell);
