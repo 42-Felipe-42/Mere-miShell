@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 00:26:58 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:13:18 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ char	*expand(char *input, int i, t_env *envp, t_shell *shell)
 	while (input[i] && (ft_isalpha(input[i]) || input[i] == '_'))
 	{
 		dst[j++] = input[i];
-		i += 1;
+		i++;
 	}
 	dst[j] = '\0';
 	env = find_env(dst, envp);
 	if (!env)
-		env = "";
+		env = ft_strdup("");
 	return (free(dst), env);
 }
 
@@ -76,7 +76,7 @@ void	expander(t_lexer *lex, t_shell *shell)
 	}
 }
 
-//expand first part of the input. ex: $HOME$$HOME s'arrete au 2eme $
+// expand first part of the input. ex: $HOME$$HOME s'arrete au 2eme $
 char	*initialize_expansion(char *word, int *i)
 {
 	char	*exp_w;
@@ -106,6 +106,10 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 		if (word[*i] == '$' && word[*i + 1] == '$')
 		{
 			new_exp_w = ft_strjoin(exp_w, "$");
+			{
+				free(exp_w);
+				exit_and_free(shell, "error ft_strjoin expander", 1);
+			}
 			free(exp_w);
 			exp_w = new_exp_w;
 		}
@@ -113,9 +117,14 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 			break ;
 		(*i)++;
 	}
-	if (find_pwd(word + *i, shell))
+	if (!ft_strncmp(word + *i, "$0", 2) || !ft_strncmp(word + *i, "$0$", 3))
 	{
 		new_exp_w = ft_strjoin(exp_w, find_pwd(word + *i, shell));
+		if (!new_exp_w)
+		{
+			free(exp_w);
+			exit_and_free(shell, "error ft_strjoin expander", 1);
+		}
 		free(exp_w);
 		exp_w = new_exp_w;
 	}
@@ -126,6 +135,11 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 		else
 			tmp = ft_strndup_dol(word + *i);
 		new_exp_w = ft_strjoin(exp_w, tmp);
+		if (!new_exp_w)
+		{
+			free(exp_w);
+			exit_and_free(shell, "error ft_strjoin expander", 1);
+		}
 		free(exp_w);
 		free(tmp);
 		exp_w = new_exp_w;
@@ -163,4 +177,3 @@ char	*no_guillemets(char *word, t_shell *shell)
 	}
 	return (exp_w);
 }
-
