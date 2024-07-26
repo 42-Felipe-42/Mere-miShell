@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/24 10:05:52 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/26 12:05:36 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	child_builtins(shell, fds);
 	if (cmds->builtin == ECHO)
 		ft_echo(shell, cmds);
-	// if (cmds->builtin == ENV)
-	// 	ft_env(shell, cmds);
+	if (cmds->builtin == ENV)
+		ft_env(shell, cmds, fds->output);
 	if (cmds->builtin == PWD)
 		ft_pwd( cmds, shell, fds->output);
 	// printf(RED "\nbuiltins\n" RESET);

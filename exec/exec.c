@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 10:56:59 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:13:48 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 
 void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
-	// if (cmds->builtin == EXIT)
-	// 	ft_exit(shell, cmds, fds);
+	if (cmds->builtin == EXIT)
+		ft_exit(shell, cmds, fds);
 	if (cmds->builtin == CD)
 		ft_cd(shell, cmds);
 	// else if (cmds->builtin == EXPORT)
