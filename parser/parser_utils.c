@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/22 18:23:00 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/26 17:21:07 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*remove_quote(char *word, int *i, t_shell *shell)
 	j = 0;
 	dest = ft_calloc(ft_strlen(word + 1), sizeof(char *));
 	if (!dest)
-		exit_and_free(shell, "s", 1);
+		exit_and_free(shell, "Error malloc parser", 1);
 	while (word[*i])
 	{
 		if ((which_quote(word[*i]) && *i == 0) || (which_quote(word[*i])

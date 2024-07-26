@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 17:04:02 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/26 18:33:58 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ int	is_valid_identifier(const char *str)
 	int	i;
 
 	i = 0;
-	if (!str || !str[i] || (!ft_isalpha(str[i]) && str[i] != '_' ) )
+	if (!str || !str[i] || (!ft_isalpha(str[i]) && str[i] != '_'))
 		return (0);
 	while (str[i])
 	{
-		if(which_quote(str[i]) && i == 0 )
-			i++;
-		if (!ft_isalnum(str[i]) && str[i] != '_' ) 
+		// if(which_quote(str[i]) && i == 0 )
+		// 	i++;
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
 	}
@@ -38,10 +38,14 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 	temp = *env;
 	while (temp)
 	{
+		printf("key %s\n", key);
+		printf("tmp key %s\n", temp->key);
 		if (ft_strncmp(temp->key, key, ft_strlen(temp->key)) == 0)
 		{
+			printf("value %s\n", value);
 			free(temp->value);
 			temp->value = ft_strdup(value);
+			printf("tmp value %s\n", temp->value);
 			return ;
 		}
 		temp = temp->next;
@@ -95,6 +99,7 @@ void	ft_export(t_env **env, t_cmds *cmd)
 	int		i;
 	char	*arg;
 	char	*equal_sign;
+	char	*joined_arg;
 
 	i = 1;
 	if (!cmd->tab[1])
@@ -105,33 +110,34 @@ void	ft_export(t_env **env, t_cmds *cmd)
 	while (cmd->tab[i])
 	{
 		arg = cmd->tab[i];
+		joined_arg = NULL;
+		if (arg[ft_strlen(arg) - 1] == '=' && cmd->tab[i + 1])
+		{
+			joined_arg = ft_strjoin(arg, cmd->tab[i + 1]);
+			arg = joined_arg;
+			i++;
+		}
 		equal_sign = ft_strchr(arg, '=');
 		if (equal_sign)
 		{
 			*equal_sign = '\0';
 			if (is_valid_identifier(arg))
-			{
 				add_or_update_env(env, arg, equal_sign + 1);
-			}
 			else
-			{
 				fprintf(stderr,
 					"minishell: export: `%s': not a valid identifier\n", arg);
-			}
 			*equal_sign = '=';
 		}
 		else
 		{
 			if (is_valid_identifier(arg))
-			{
 				add_or_update_env(env, arg, "");
-			}
 			else
-			{
 				fprintf(stderr,
 					"minishell: export: `%s': not a valid identifier\n", arg);
-			}
 		}
+		if (joined_arg)
+			free(joined_arg);
 		i++;
 	}
 }
