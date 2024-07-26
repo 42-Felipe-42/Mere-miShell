@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:24:43 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 13:57:40 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/26 15:20:34 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,7 @@ static t_env	*find_env_node(t_shell *shell, const char *key)
 	while (current)
 	{
 		if (ft_strncmp(current->key, key, ft_strlen(key)) == 0)
-
-		{ // Utilisez strcmp pour une comparaison complète
-			printf("Found key: %s, Value: %s\n", current->key, current->value);
 			return (current);
-		}
 		current = current->next;
 	}
 	return (NULL);
@@ -61,7 +57,6 @@ static void	unset_multiple_envs(t_shell *shell, char **keys)
 	while (keys[i])
 	{
 		target = find_env_node(shell, keys[i]);
-		printf("key [%d]%s\n", i, keys[i]);
 		unset_single_env(shell, target);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 12:05:36 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/26 16:37:58 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	is_builtin(t_cmds *cmds)
 		else if (ft_strcmp(cmds->tab[0], "pwd") == 0
 			&& ft_strlen(cmds->tab[0]) == 3)
 			cmds->builtin = PWD;
-		else if (ft_strcmp(cmds->tab[0], "export") == 0
+		else if (ft_strncmp(cmds->tab[0], "export", 6) == 0
 			&& ft_strlen(cmds->tab[0]) == 6)
 			cmds->builtin = EXPORT;
 		else if (ft_strcmp(cmds->tab[0], "unset") == 0

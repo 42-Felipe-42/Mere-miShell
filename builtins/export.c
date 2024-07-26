@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 15:12:58 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/26 17:04:02 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ int	is_valid_identifier(const char *str)
 	int	i;
 
 	i = 0;
-	if (!str || !str[i] || (!ft_isalpha(str[i]) && str[i] != '_'))
+	if (!str || !str[i] || (!ft_isalpha(str[i]) && str[i] != '_' ) )
 		return (0);
 	while (str[i])
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if(which_quote(str[i]) && i == 0 )
+			i++;
+		if (!ft_isalnum(str[i]) && str[i] != '_' ) 
 			return (0);
 		i++;
 	}
@@ -44,7 +46,7 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 		}
 		temp = temp->next;
 	}
-	new_node = ft_calloc(1,sizeof(t_env));
+	new_node = ft_calloc(1, sizeof(t_env));
 	new_node->key = ft_strdup(key);
 	new_node->value = ft_strdup(value);
 	new_node->next = *env;
