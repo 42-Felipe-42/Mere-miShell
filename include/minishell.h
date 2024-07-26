@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/26 12:04:57 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/26 12:38:37 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_shell
 	t_cmds	*cmds;
 	t_env	*env;
 	t_lexer	*lex;
+	int		flag;
 
 }			t_shell;
 
@@ -67,7 +68,7 @@ t_lexer		*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell);
 
 /*--------------------PARSER--------------------*/
 void		parser(t_lexer *lex, t_shell *shell);
-char		*expand(char *input, int i, t_env *envp, t_shell *shell);
+char		*expand(char *input, int i, t_shell *shell);
 t_cmds		*init_cmds(t_shell *shell);
 void		syntaxe(t_lexer *lex, t_shell *shell);
 

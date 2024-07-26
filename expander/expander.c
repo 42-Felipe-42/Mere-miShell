@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 16:32:03 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/26 12:51:29 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // stocker dans 'dest' et comp avec env
 // entrée: input sur indice $
 // sortie: valeur associée a env
-char	*expand(char *input, int i, t_env *envp, t_shell *shell)
+char	*expand(char *input, int i, t_shell *shell)
 {
 	char	*dst;
 	char	*env;
@@ -37,7 +37,7 @@ char	*expand(char *input, int i, t_env *envp, t_shell *shell)
 		i++;
 	}
 	dst[j] = '\0';
-	env = find_env(dst, envp);
+	env = find_env(dst, shell->env);
 	if (!env)
 		env = ft_strdup("");
 	return (free(dst), env);
@@ -108,51 +108,73 @@ static char	*join_and_free(char *exp_w, const char *suffix, t_shell *shell)
 	return (new_exp_w);
 }
 
-char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
+int handle_dols(char *word, int *i, t_shell *shell, char **exp_w)
 {
-	int		dols;
-	char	*tmp;
-	int		flag;
+    int dols = 0;
 
+    while (word[*i] && word[*i] == '$')
+    {
+        dols++;
+        if ((word[*i] == '$' && word[*i + 1] == '$') || (word[*i] == '$' && word[*i + 1] == '\0' && dols != 1))
+            *exp_w = join_and_free(*exp_w, "$", shell);
+        else
+            break;
+        (*i)++;
+    }
+    return (dols);
+}
+
+int	count_dols(char *word, int n)
+{
+	int i;
+	int	dols;
+
+	i = 0;
 	dols = 0;
-	flag = 0;
-	while (word[*i] && word[*i] == '$')
+	while (word[i] == '$' && i <= n)
+	{	dols++;
+		i++;}
+	return(dols);
+}
+
+
+char *expand_join(char *word, int *i, char *exp_w, t_shell *shell)
+{
+	char	*tmp;
+	int		dols;
+
+	dols = count_dols(word, *i);
+	tmp = NULL;
+	shell->flag = 0;
+	if (dols % 2 != 0)
 	{
-		dols++;
-		printf("dols: %d, exp_w: %s\n", dols, exp_w);
-		if ((word[*i] == '$' && word[*i + 1] == '$') || (word[*i] == '$'
-				&& word[*i + 1] == '\0' && dols != 1))
-			exp_w = join_and_free(exp_w, "$", shell);
-		else
-			break ;
-		(*i)++;
+		tmp = expand(word, *i, shell);
+		if (tmp[0] == '\0')
+			shell->flag = 1;
 	}
+	else
+	{
+		tmp = ft_strndup_dol(word + *i);
+		shell->flag = 1;
+		if (!tmp)
+		{
+			free(exp_w);
+			exit_and_free(shell, "error ft_strjoin expander", 1);
+		}
+	}
+	exp_w = join_and_free(exp_w, tmp, shell);
+	if (shell->flag == 1)
+		free(tmp);
+	return(exp_w);
+}
+
+char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
+{	
+	handle_dols(word, i, shell, &exp_w);
 	if (!ft_strncmp(word + *i, "$0", 2) || !ft_strncmp(word + *i, "$0$", 3))
 		exp_w = join_and_free(exp_w, find_pwd(word + *i, shell), shell);
 	else if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
-	{
-		printf("dols: %d\n", dols);
-		tmp = NULL;
-		if (dols % 2 != 0)
-		{
-			tmp = expand(word, *i, shell->env, shell);
-			if (tmp[0] == '\0')
-				flag = 1;
-		}
-		else
-		{
-			tmp = ft_strndup_dol(word + *i);
-			flag = 1;
-			if (!tmp)
-			{
-				free(exp_w);
-				exit_and_free(shell, "error ft_strjoin expander", 1);
-			}
-		}
-		exp_w = join_and_free(exp_w, tmp, shell);
-		if (flag == 1)
-			free(tmp);
-	}
+		exp_w = expand_join(word, i, exp_w, shell);
 	return (exp_w);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/26 12:01:54 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/26 12:43:34 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	set_struct(t_shell *shell, char **av, char **envp)
 	shell->av = ft_strdup(av[0]);
 	shell->cmds = NULL;
 	shell->env = NULL;
+	shell->flag = 0;
 	get_env(shell, envp);
 	shell->lex = NULL;
 }
