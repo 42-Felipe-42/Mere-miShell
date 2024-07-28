@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 18:33:58 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/28 23:56:29 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 	new_node->next = *env;
 	*env = new_node;
 }
+
 int	compare_env(const void *a, const void *b)
 {
 	t_env	*env_a;
@@ -65,31 +66,37 @@ int	compare_env(const void *a, const void *b)
 	env_b = *(t_env **)b;
 	return (ft_strcmp(env_a->key, env_b->key));
 }
+
 void	print_sorted_env(t_env *env)
 {
 	int		count;
-	t_env	*temp;
+	int		i;
+	t_env	*tmp;
 	t_env	**env_array;
 
 	count = 0;
-	temp = env;
-	while (temp)
+	tmp = env;
+	while (tmp)
 	{
 		count++;
-		temp = temp->next;
+		tmp = tmp->next;
 	}
 	env_array = malloc(count * sizeof(t_env *));
-	temp = env;
-	for (int i = 0; i < count; i++)
+	tmp = env;
+	i = 0;
+	while (i < count)
 	{
-		env_array[i] = temp;
-		temp = temp->next;
+		env_array[i] = tmp;
+		tmp = tmp->next;
+		i++;
 	}
-	qsort(env_array, count, sizeof(t_env *), compare_env);
-	for (int i = 0; i < count; i++)
+	qsort(env_array, count, sizeof(t_env *), compare_env); //pas sur quon ait le droit de l'utiliser??
+	i = 0;
+	while (i < count)
 	{
 		printf("declare -x %s=\"%s\"\n", env_array[i]->key,
 			env_array[i]->value);
+		i++;
 	}
 	free(env_array);
 }

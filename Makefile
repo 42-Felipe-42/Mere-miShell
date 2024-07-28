@@ -10,29 +10,46 @@ LIBFT_FILE  =   libft.a
 
 LIBFT_LIB   =   $(LIBFT_PATH)/$(LIBFT_FILE)
 
-C_FILE      =  	lexer/lexer_utils.c \
-				lexer/store_token.c \
-				prompt/readline.c	\
-				main.c \
-				expander/expander.c \
-				expander/expander_utils.c \
-				parser/parser_utils.c \
-				parser/parser.c \
-				exec/exec.c \
-				exec/redir.c \
-				exec/here_doc.c \
-				exec/utils_exec.c \
-				exec/builtins.c \
-				env/get_env.c \
-				free_shell/exit_free.c \
-				free_shell/free.c \
-				builtins/echo.c \
-				builtins/exit.c \
-				builtins/env.c \
-				builtins/export.c \
-				builtins/unset.c \
-				builtins/cd.c \
-				builtins/pwd.c \
+C_FILE		 = 	$(addsuffix .c,						\
+				$(addprefix builtins/, 				\
+					echo 							\
+					exit 							\
+					env 							\
+					export 							\
+					unset 							\
+					cd 								\
+					pwd								\
+				)									\
+				env/get_env 						\
+				$(addprefix exec/, 					\
+					exec 							\
+					exec_utils_1					\
+					exec_utils_2					\
+					exec_utils_3					\
+					redir 							\
+					here_doc 						\
+					builtins 						\
+				)									\
+				$(addprefix expander/, 				\
+					expander 						\
+					expander_utils 					\
+					expander_utils_1 				\
+				)									\
+				$(addprefix free_shell/, 			\
+					exit_free 						\
+					free 							\
+				)									\
+				$(addprefix lexer/, 				\
+					lexer_utils 					\
+					store_token 					\
+				)									\
+				$(addprefix parser/, 				\
+					parser_utils 					\
+					parser 							\
+				)									\
+				prompt/readline 					\
+				main								\
+				)									\
 
 OBJS        =   $(C_FILE:.c=.o)
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/25 00:29:28 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/28 23:52:42 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	t_lexer	*tmp;
 	int		count;
 	int		i;
+	int		j;
 
 	i = 0;
 	count = count_arg(lex);
@@ -56,8 +57,12 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 			(*cmds)->tab[i] = ft_strdup(tmp->word);
 			if (!(*cmds)->tab[i])
 			{
-				for (int j = 0; j < i; j++)
+				j = 0;
+				while (j < i)
+				{
 					free((*cmds)->tab[j]);
+					j++;
+				}
 				free((*cmds)->tab);
 				exit_and_free(shell, "Error malloc redir", 1);
 			}
@@ -100,9 +105,7 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 		}
 		else if ((tmp->next && tmp->next->token != PIPE) || (!tmp->next
 				&& skip_redir == 0))
-		{
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
-		}
 		tmp = tmp->next;
 	}
 	free_lexer(&tmp);
@@ -124,9 +127,7 @@ void	parser(t_lexer *lex, t_shell *shell)
 		while (lexer->word && lexer->word[i])
 		{
 			if (check_quote_closed(lexer->word) == FALSE)
-			{
 				exit_and_free(shell, "Quote not closed", 1);
-			}
 			if (which_quote(lexer->word[i]))
 			{
 				lexer->word = remove_quote(lexer->word, &i, shell);

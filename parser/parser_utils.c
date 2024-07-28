@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/26 17:21:07 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/28 23:40:29 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ void	syntaxe(t_lexer *lex, t_shell *shell)
 
 char	*remove_quote(char *word, int *i, t_shell *shell)
 {
-	int j;
-	char *dest;
+	int		j;
+	char	*dest;
 
 	j = 0;
 	dest = ft_calloc(ft_strlen(word + 1), sizeof(char *));

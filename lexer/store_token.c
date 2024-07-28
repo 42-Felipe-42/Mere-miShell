@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 23:02:13 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/28 23:49:35 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// creation maillon + initialization elements struct pour stocker donnees d'un TOKEN
+//creat maillon + init elements struct pour stock donnees d'un TOKEN
 void	store_token(t_lexer **lex, int token, t_shell *shell)
 {
 	t_lexer	*new;
@@ -38,9 +38,8 @@ void	store_token(t_lexer **lex, int token, t_shell *shell)
 	}
 }
 
-// creation maillon + intialization elements struct pour stocker donnees d'un WORD
-void	store_token_words(char *input, t_lexer **lex, int start, int len,
-		t_shell *shell)
+// crea maillon + init elements struct pour stocker donnees d'un WORD
+void	store_token_words(char *input, t_lexer **lex, int len, t_shell *shell)
 {
 	t_lexer	*new;
 	t_lexer	*current;
@@ -49,14 +48,14 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len,
 	if (!new)
 		exit_and_free(shell, "Malloc error lexer", 1);
 	ft_bzero(new, sizeof(t_lexer));
-	new->word = ft_strndup(input + start, len);
+	new->word = ft_strndup(input, len);
 	if (!new->word)
 	{
 		free(new);
 		exit_and_free(shell, "Malloc error lexer word", 1);
 	}
 	new->next = NULL;
-    new->prev = NULL;
+	new->prev = NULL;
 	if (!*lex)
 		*lex = new;
 	else
@@ -66,28 +65,6 @@ void	store_token_words(char *input, t_lexer **lex, int start, int len,
 			current = current->next;
 		current->next = new;
 		new->prev = current;
-	}
-}
-
-// parcour le input du premier au dernier quote identique
-void	is_quoted(char *input, int *i, int *opened)
-{
-	*opened = which_quote(input[*i]);
-	(*i)++;
-	while (*opened && input[*i])
-	{
-		if (*opened == which_quote(input[*i]))
-			*opened = 0;
-		(*i)++;
-	}
-}
-// parcour input en i tant que diff token, quotes et espace
-void	is_word(char *input, int *i)
-{
-	while (input[*i] && input[*i] != ' ' && which_redir(input, i) == FALSE
-		&& !which_quote(input[*i]))
-	{
-		(*i)++;
 	}
 }
 
@@ -111,7 +88,7 @@ void	lex_str(char *input, t_lexer **lex, t_shell *shell)
 		else
 			is_word(input, &i);
 		if (i > start)
-			store_token_words(input, lex, start, i - start, shell);
+			store_token_words(input + start, lex, i - start, shell);
 		else
 		{
 			store_token(lex, is_token(input, &i), shell);

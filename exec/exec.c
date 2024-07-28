@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/26 15:14:16 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/28 23:46:30 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		if (cmds->pid == 0)
 		{
 			if (cmds->builtin)
-			{
-				run_builtins(shell, cmds, fds);
-				(close_all_fds(fds), exit_and_free(shell, "",1));
-			}
+				(run_builtins(shell, cmds, fds),
+					close_all_fds(fds), exit_and_free(shell, "", 1));
 			else
 				execute_child(shell, cmds, fds);
 		}
@@ -75,7 +73,8 @@ void	run_exec(t_shell *shell)
 	while (tmp_cmd)
 	{
 		is_builtin(tmp_cmd);
-		/* set_last_cmd(shell, tmp_cmd), */ init_fd(&fds);
+		/* set_last_cmd(shell, tmp_cmd), */
+		init_fd(&fds);
 		if (tmp_cmd->next)
 			if (pipe(fds.pipes) == -1)
 				exit_and_free(shell, "pipe", 1);
@@ -93,10 +92,3 @@ void	run_exec(t_shell *shell)
 	}
 	(wait_child(shell), close_all_fds(&fds));
 }
-
-// printf("fds.redir[0] %d\n", fds.redir[0]);
-// printf("fds.redir[1] %d\n", fds.redir[1]);
-// printf("fds.pipe[0] %d\n", fds.pipes[0]);
-// printf("fds.pipe[1] %d\n", fds.pipes[1]);
-// printf("fds.input %d\n", fds.input);
-// printf("fds.output %d\n", fds.output);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/25 10:57:24 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/28 23:36:31 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ int	check_newline(char **tab, int *flag)
 
 void	ft_echo(t_shell *shell, t_cmds *cmd)
 {
-	int i;
-	int flag;
+	int	i;
+	int	flag;
 	// int ext;
+
 	flag = 0;
 	(void)shell;
 	i = check_newline(cmd->tab, &flag);

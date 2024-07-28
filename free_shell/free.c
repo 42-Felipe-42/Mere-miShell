@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 16:04:31 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/28 22:47:21 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,16 @@ void	free_cmds(t_cmds **cmd)
 	while (*cmd)
 	{
 		cmdlex = (*cmd)->lex_redir;
-		free_lexer(&cmdlex); // Libération de redir
+		free_lexer(&cmdlex);
 		if ((*cmd)->tab)
-			free_split((*cmd)->tab); // Libération de tab
+			free_split((*cmd)->tab);
 		if ((*cmd)->path)
-			free((*cmd)->path); // Libération de path
+			free((*cmd)->path);
 		tmp = (*cmd)->next;
 		free(*cmd);
 		*cmd = tmp;
 	}
-	*cmd = NULL; // Mettre le pointeur à NULL après libération
+	*cmd = NULL;
 }
 
 void	free_env(t_env *env)
@@ -87,8 +87,8 @@ void	free_shell(t_shell *shell)
 
 void	ft_freeshell(t_shell *shell)
 {
-	t_env *env;
-	t_cmds *cmd;
+	t_env	*env;
+	t_cmds	*cmd;
 
 	env = shell->env;
 	cmd = shell->cmds;

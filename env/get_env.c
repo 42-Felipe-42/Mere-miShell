@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 12:06:33 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/28 22:49:41 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ void	set_env_key_value(t_shell *shell, t_env *new, char **envp, int i)
 void	maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
 		int index)
 {
-	t_env	*current = NULL;
+	t_env	*current;
 
+	current = NULL;
 	current = shell->env;
 	new_env_node->index = index;
 	set_env_key_value(shell, new_env_node, envp, index);
@@ -75,15 +76,16 @@ void	get_env(t_shell *shell, char **envp)
 	{
 		new_env_node = ft_calloc(1, sizeof(t_env));
 		if (!new_env_node)
-			exit_and_free(shell,"get_env", 1);
+			exit_and_free(shell, "get_env", 1);
 		maj_env_node(shell, new_env_node, envp, index);
 		index++;
 	}
 }
+
 char	*find_env(char *key, t_env *envp)
 {
-	int len;
-	t_env *tmp_envp;
+	int		len;
+	t_env	*tmp_envp;
 
 	tmp_envp = envp;
 	len = ft_strlen(key);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/24 22:40:13 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/28 23:48:19 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,3 +55,25 @@ int	is_token(char *input, int *i)
 	return (FALSE);
 }
 
+// parcour le input du premier au dernier quote identique
+void	is_quoted(char *input, int *i, int *opened)
+{
+	*opened = which_quote(input[*i]);
+	(*i)++;
+	while (*opened && input[*i])
+	{
+		if (*opened == which_quote(input[*i]))
+			*opened = 0;
+		(*i)++;
+	}
+}
+
+// parcour input en i tant que diff token, quotes et espace
+void	is_word(char *input, int *i)
+{
+	while (input[*i] && input[*i] != ' ' && which_redir(input, i) == FALSE
+		&& !which_quote(input[*i]))
+	{
+		(*i)++;
+	}
+}

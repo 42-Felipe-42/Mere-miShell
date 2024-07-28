@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 11:28:03 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/28 23:59:50 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ static int	is_valid_number(const char *str)
 	int	i;
 
 	i = 0;
-	if (str[i] == '+' || str[i] == '-') // gérer les signes
+	if (str[i] == '+' || str[i] == '-')
 		i++;
-	if (str[i] == '\0') // Si seulement un signe, ce n'est pas valide
+	if (str[i] == '\0')
 		return (0);
 	while (str[i])
 	{
-		if (!isdigit(str[i])) // vérifier que tous les caractères restants sont des chiffres
+		if (!isdigit(str[i]))
 			return (0);
 		i++;
 	}
@@ -46,26 +46,25 @@ static int	is_valid_number(const char *str)
 // Fonction pour gérer les arguments de exit
 static int	exit_args(char **tab, int *flag)
 {
-	if (!tab[1]) // Aucun argument fourni après exit
+	if (!tab[1])
 	{
-		return (0); // code de sortie par défaut
+		return (0);
 	}
-
 	if (!is_valid_number(tab[1]))
 	{
 		ft_putstr_fd("exit: ", STDERR_FILENO);
 		ft_putstr_fd(tab[1], STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 		*flag = 1;
-		return (2); // code d'erreur pour argument invalide
+		return (2);
 	}
 	if (tab[2])
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		*flag = 1;
-		return (1); // code d'erreur pour trop d'arguments
+		return (1);
 	}
-	return (atoi(tab[1]) % 256); // retourner le code de sortie
+	return (atoi(tab[1]) % 256);
 }
 
 void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
@@ -79,15 +78,12 @@ void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		shell->exit_code = 1;
-		return;
+		return ;
 	}
 	if (cmd->next || cmd->prev)
-		return;
+		return ;
 	ft_freeshell(shell);
 	close_all_fds(fd);
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	exit(ext);
 }
-
-
-

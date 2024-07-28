@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/25 16:53:50 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/28 22:51:25 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ void	loop_here_doc(t_lexer *redirs, int fd)
 	while (1)
 	{
 		line = readline(">");
-		if (line == NULL || (ft_strncmp(line, limiter, ft_strlen(line)) == 0 && ft_strlen(line) != 0))
+		if (line == NULL
+			|| (!ft_strncmp(line, limiter, ft_strlen(line))
+				&& ft_strlen(line) != 0))
 		{
 			free(line);
 			break ;

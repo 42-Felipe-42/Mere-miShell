@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 16:37:58 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/28 22:50:17 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 // ◦ env with no options or arguments
 // ◦ exit with no options
 
-
 void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
 	child_builtins(shell, fds);
@@ -30,9 +29,9 @@ void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	if (cmds->builtin == ENV)
 		ft_env(shell, cmds, fds->output);
 	if (cmds->builtin == PWD)
-		ft_pwd( cmds, shell, fds->output);
-	// printf(RED "\nbuiltins\n" RESET);
+		ft_pwd(cmds, shell, fds->output);
 }
+
 void	child_builtins(t_shell *shell, t_fd *fds)
 {
 	if (fds->input != -2)
@@ -42,7 +41,6 @@ void	child_builtins(t_shell *shell, t_fd *fds)
 	if (fds->output == -1)
 		(close_all_fds(fds), exit_and_free(shell, "dup2 test2", 1));
 }
-
 
 void	is_builtin(t_cmds *cmds)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:47:49 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/26 12:07:39 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/28 22:48:00 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	ft_env(t_shell *shell, t_cmds *cmd, int fd_output)
 {
-	t_env *env;
+	t_env	*env;
+
 	if (cmd->tab[1])
 	{
 		perror(cmd->tab[1]);
