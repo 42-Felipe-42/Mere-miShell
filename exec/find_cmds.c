@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils_1.c                                     :+:      :+:    :+:   */
+/*   find_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:01:33 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:38:44 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,45 +47,54 @@ void	ft_cmd_no_found(char *str)
 	ft_putstr_fd("\n", 2);
 }
 
-int	count_env_vars(t_env *env)
+int	is_directory(const char *path)
 {
-	int		count;
-	t_env	*tmp;
+	struct stat	path_stat;
 
-	count = 0;
-	tmp = env;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->next;
-	}
-	return (count);
+	if (stat(path, &path_stat) != 0)
+		return (0);
+	return (S_ISDIR(path_stat.st_mode));
 }
 
-char	**allocate_env_array(t_shell *shell, int count)
+void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 {
 	char	**env_array;
 
-	env_array = ft_calloc((count + 1), sizeof(char *));
+	if (!cmds || !cmds->tab || !cmds->tab[0])
+		exit_and_free(shell, "Error : command structure");
+	env_array = convert_env_to_array(env, shell);
 	if (!env_array)
-		exit_and_free(shell, "Error malloc env", 1);
-	return (env_array);
-}
-
-char	*create_env_entry(char *key, char *value, t_shell *shell)
-{
-	char	*entry;
-	char	*tmp;
-
-	tmp = ft_strjoin(key, "=");
-	if (!tmp)
-		exit_and_free(shell, "Error malloc env", 1);
-	entry = ft_strjoin(tmp, value);
-	if (!entry)
 	{
-		free(tmp);
-		exit_and_free(shell, "Error malloc env", 1);
+		exit_and_free(shell, "Error : convert environment");
 	}
-	free(tmp);
-	return (entry);
+	if (ft_strchr(cmds->tab[0], '/') != NULL)
+	{
+		if (is_directory(cmds->tab[0]))
+		{
+			ft_putstr_fd(cmds->tab[0], STDERR_FILENO);
+			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+			free_split(env_array);
+			shell->exit_code = 126;
+			exit_and_free(shell, "");
+		}
+		else if (access(cmds->tab[0], F_OK | X_OK) == 0)
+		{
+			cmds->path = ft_strdup(cmds->tab[0]);
+		}
+	}
+	else
+	{
+		cmds->path = get_path(env, cmds);
+	}
+	if (!cmds->path)
+	{
+		ft_cmd_no_found(cmds->tab[0]);
+		free_split(env_array);
+		shell->exit_code = 127;
+		exit_and_free(shell, "");
+	}
+	execve(cmds->path, cmds->tab, env_array);
+	free_split(env_array);
+	shell->exit_code = 126;
+	exit_and_free(shell, "execve");
 }

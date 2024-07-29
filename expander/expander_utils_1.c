@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 23:24:56 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/29 02:02:17 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:39:07 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*join_and_free(char *exp_w, const char *suffix, t_shell *shell)
 	if (!new_exp_w)
 	{
 		free(exp_w);
-		exit_and_free(shell, "error ft_strjoin expander", 1);
+		exit_and_free(shell, "Error : ft_strjoin expander");
 	}
 	free(exp_w);
 	return (new_exp_w);
@@ -82,7 +82,7 @@ char	*expand_join(char *word, int *i, char *exp_w, t_shell *shell)
 		if (!tmp)
 		{
 			free(exp_w);
-			exit_and_free(shell, "error ft_strjoin expander", 1);
+			exit_and_free(shell, "Error :  ft_strjoin expander");
 		}
 	}
 	exp_w = join_and_free(exp_w, tmp, shell);

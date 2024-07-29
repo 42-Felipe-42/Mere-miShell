@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/28 23:39:12 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:36:09 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	main(int ac, char **av, char **envp)
 
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
-		exit_and_free(shell, "Error malloc shell", 1);
+		exit_and_free(shell, "Error : malloc shell");
 	(void)ac;
 	set_struct(shell, av, envp);
 	while (1)

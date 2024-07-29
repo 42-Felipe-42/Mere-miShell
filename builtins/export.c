@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/28 23:56:29 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:08:20 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	is_valid_identifier(const char *str)
 		return (0);
 	while (str[i])
 	{
-		// if(which_quote(str[i]) && i == 0 )
-		// 	i++;
+
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
@@ -38,14 +37,11 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 	temp = *env;
 	while (temp)
 	{
-		printf("key %s\n", key);
-		printf("tmp key %s\n", temp->key);
+
 		if (ft_strncmp(temp->key, key, ft_strlen(temp->key)) == 0)
 		{
-			printf("value %s\n", value);
 			free(temp->value);
 			temp->value = ft_strdup(value);
-			printf("tmp value %s\n", temp->value);
 			return ;
 		}
 		temp = temp->next;

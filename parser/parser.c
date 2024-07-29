@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/28 23:52:42 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:40:56 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 
 	new_node = ft_calloc(1, sizeof(t_lexer));
 	if (!new_node)
-		exit_and_free(shell, "Error malloc redir", 1);
+		exit_and_free(shell, "Error :  malloc redir");
 	new_node->token = lex->token;
 	new_node->skip = lex->skip;
 	if (lex->next->word)
@@ -49,7 +49,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	tmp = lex;
 	(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
 	if (!(*cmds)->tab)
-		exit_and_free(shell, "Error malloc redir", 1);
+		exit_and_free(shell, "Error : malloc redir");
 	while (tmp && tmp->word)
 	{
 		if (tmp->word)
@@ -64,7 +64,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 					j++;
 				}
 				free((*cmds)->tab);
-				exit_and_free(shell, "Error malloc redir", 1);
+				exit_and_free(shell, "Error : malloc redir");
 			}
 			i++;
 		}
@@ -116,7 +116,8 @@ void	parser(t_lexer *lex, t_shell *shell)
 {
 	int		i;
 	t_lexer	*lexer;
-
+	char *tmp;
+	
 	lexer = lex;
 	i = 0;
 	syntaxe(lexer, shell);
@@ -127,10 +128,12 @@ void	parser(t_lexer *lex, t_shell *shell)
 		while (lexer->word && lexer->word[i])
 		{
 			if (check_quote_closed(lexer->word) == FALSE)
-				exit_and_free(shell, "Quote not closed", 1);
+				exit_and_free(shell, "Error : quote not closed");
 			if (which_quote(lexer->word[i]))
 			{
-				lexer->word = remove_quote(lexer->word, &i, shell);
+				tmp = remove_quote(lexer->word, &i, shell);
+				free(lex->word);
+				lexer->word = tmp;
 				break ;
 			}
 			i++;

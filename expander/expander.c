@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 01:59:06 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:39:13 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*expand(char *input, int i, t_shell *shell)
 
 	dst = ft_calloc(strlen(input) + 1, sizeof(char *));
 	if (!dst)
-		exit_and_free(shell, "Malloc error expander", 1);
+		exit_and_free(shell, "Error : Malloc expander");
 	env = NULL;
 	if (input[i] == '$')
 		i++;

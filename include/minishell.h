@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:48:47 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:18:34 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void		get_env(t_shell *shell, char **envp);
 char		*ft_readline(void);
 char		*find_env(char *dest, t_env *envp);
 char		**allocate_env_array(t_shell *shell, int count);
+void		handle_empty_env(t_shell *shell);
 
 /*--------------------EXEC--------------------*/
 void		get_cmds(t_env *env, t_cmds *cmds, t_shell *shell);
@@ -123,7 +124,7 @@ void		free_cmds(t_cmds **cmds);
 void		free_env(t_env *env);
 void		free_shell(t_shell *shell);
 void		free_before_loop(t_shell *shell);
-void		exit_and_free(t_shell *shell, char *str, int sig);
+void		exit_and_free(t_shell *shell, char *str);
 void		ft_freeshell(t_shell *shell);
 
 #endif

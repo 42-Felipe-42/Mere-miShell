@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:46:30 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:38:21 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		close(fds->pipes[0]);
 	if (fds->input != -2)
 		if (dup2(fds->input, STDIN_FILENO) == -1)
-			(close_all_fds(fds), exit_and_free(shell, "dup2", 1));
+			(close_all_fds(fds), exit_and_free(shell, "Error : dup2"));
 	if (fds->output != -2)
 		if (dup2(fds->output, STDOUT_FILENO) == -1)
-			(close_all_fds(fds), exit_and_free(shell, "dup2", 1));
+			(close_all_fds(fds), exit_and_free(shell, "Error : dup2"));
 	close_all_fds(fds);
 	get_cmds(shell->env, cmds, shell);
 }
@@ -40,12 +40,12 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	{
 		cmds->pid = fork();
 		if (cmds->pid == -1)
-			(close_all_fds(fds), exit_and_free(shell, "Error Fork", 1));
+			(close_all_fds(fds), exit_and_free(shell, "Error : Fork"));
 		if (cmds->pid == 0)
 		{
 			if (cmds->builtin)
 				(run_builtins(shell, cmds, fds),
-					close_all_fds(fds), exit_and_free(shell, "", 1));
+					close_all_fds(fds), exit_and_free(shell, ""));
 			else
 				execute_child(shell, cmds, fds);
 		}
@@ -54,13 +54,6 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	fds->input = fds->pipes[0];
 }
 
-void	close_fds_parent(t_fd *fds)
-{
-	if (fds->input != -2 && fds->input >= 0)
-		close(fds->input);
-	if (fds->output != -2 && fds->output >= 0)
-		close(fds->output);
-}
 
 void	run_exec(t_shell *shell)
 {
@@ -77,11 +70,9 @@ void	run_exec(t_shell *shell)
 		init_fd(&fds);
 		if (tmp_cmd->next)
 			if (pipe(fds.pipes) == -1)
-				exit_and_free(shell, "pipe", 1);
+				exit_and_free(shell, "Error : pipe");
 		process_redirections(tmp_cmd, &fds.redir[0], &fds.redir[1], shell);
 		set_fds(&fds);
-		// if (tmp_cmd->builtin && !tmp_cmd->next && !tmp_cmd->prev)
-		// 	child_builtins(shell, tmp_cmd, &fds);
 		if (tmp_cmd->tab && tmp_cmd->tab[0])
 			execute_cmd(shell, tmp_cmd, &fds);
 		if (!tmp_cmd->next)

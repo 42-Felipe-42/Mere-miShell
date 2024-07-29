@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:49:35 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:39:53 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	store_token(t_lexer **lex, int token, t_shell *shell)
 
 	new = ft_calloc(1, sizeof(t_lexer));
 	if (!new)
-		exit_and_free(shell, "Malloc error lexer", 1);
+		exit_and_free(shell, "Error : malloc  lexer");
 	new->token = token;
 	new->word = NULL;
 	new->next = NULL;
@@ -46,13 +46,13 @@ void	store_token_words(char *input, t_lexer **lex, int len, t_shell *shell)
 
 	new = ft_calloc(1, sizeof(t_lexer));
 	if (!new)
-		exit_and_free(shell, "Malloc error lexer", 1);
+		exit_and_free(shell, "Error : malloc lexer");
 	ft_bzero(new, sizeof(t_lexer));
 	new->word = ft_strndup(input, len);
 	if (!new->word)
 	{
 		free(new);
-		exit_and_free(shell, "Malloc error lexer word", 1);
+		exit_and_free(shell, "Error : malloc lexer");
 	}
 	new->next = NULL;
 	new->prev = NULL;
@@ -106,7 +106,7 @@ t_lexer	*lexer(char **av, t_shell *shell)
 	input = av[1];
 	input = ft_readline();
 	if (!input)
-		exit_and_free(shell, "Exit", 1);
+		exit_and_free(shell, "Exit");
 	lex_str(input, &lex, shell);
 	shell->lex = lex;
 	return (lex);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:40:29 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:40:28 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_cmds	*init_cmds(t_shell *shell)
 
 	cmds = ft_calloc(1, sizeof(t_cmds));
 	if (!cmds)
-		exit_and_free(shell, "Malloc error cmds", 1);
+		exit_and_free(shell, "Error : malloc cmds");
 	ft_bzero(cmds, sizeof(t_cmds));
 	return (cmds);
 }
@@ -66,9 +66,9 @@ void	syntaxe(t_lexer *lex, t_shell *shell)
 	while (tmp)
 	{
 		if (tmp->token == PIPE && (!tmp->next || tmp->next->token == PIPE))
-			exit_and_free(shell, "syntax error near unexpected token", 1);
+			exit_and_free(shell, "Error : syntax error near unexpected token");
 		if (tmp->token != 0 && (!tmp->next || tmp->next->token != 0))
-			exit_and_free(shell, "syntax error near unexpected token", 1);
+			exit_and_free(shell, "Error : syntax error near unexpected token");
 		tmp = tmp->next;
 	}
 }
@@ -81,7 +81,7 @@ char	*remove_quote(char *word, int *i, t_shell *shell)
 	j = 0;
 	dest = ft_calloc(ft_strlen(word + 1), sizeof(char *));
 	if (!dest)
-		exit_and_free(shell, "Error malloc parser", 1);
+		exit_and_free(shell, "Error :  malloc parser");
 	while (word[*i])
 	{
 		if ((which_quote(word[*i]) && *i == 0) || (which_quote(word[*i])

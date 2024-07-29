@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/28 22:49:41 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:36:48 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,17 @@ void	set_env_key_value(t_shell *shell, t_env *new, char **envp, int i)
 	if (envp && envp[i])
 		equal_sign = ft_strchr(envp[i], '=');
 	else if (!equal_sign)
-		exit_and_free(shell, "env format incorrect", 1);
+		exit_and_free(shell, "Error : malloc failed env");
 	key_length = equal_sign - envp[i];
 	value_length = ft_strlen(equal_sign + 1);
 	new->key = ft_calloc(key_length + 1, sizeof(char));
 	if (!new->key)
-		exit_and_free(shell, "env_key", 1);
+		exit_and_free(shell, "Error : malloc failed env");
 	new->value = ft_calloc(value_length + 1, sizeof(char));
 	if (!new->value)
 	{
 		free(new->key);
-		exit_and_free(shell, "env_value", 1);
+		exit_and_free(shell, "Error : malloc failed env_value");
 	}
 	ft_strncpy(new->key, envp[i], key_length);
 	ft_strncpy(new->value, equal_sign + 1, value_length);
@@ -61,27 +61,6 @@ void	maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,
 	}
 }
 
-void	get_env(t_shell *shell, char **envp)
-{
-	int		index;
-	t_env	*new_env_node;
-
-	index = 0;
-	// if (!envp || !envp[0])
-	// {
-	// 	handle_no_env(shell);
-	// 	return ;
-	// }
-	while (envp[index])
-	{
-		new_env_node = ft_calloc(1, sizeof(t_env));
-		if (!new_env_node)
-			exit_and_free(shell, "get_env", 1);
-		maj_env_node(shell, new_env_node, envp, index);
-		index++;
-	}
-}
-
 char	*find_env(char *key, t_env *envp)
 {
 	int		len;
@@ -97,4 +76,25 @@ char	*find_env(char *key, t_env *envp)
 		tmp_envp = tmp_envp->next;
 	}
 	return (NULL);
+}
+
+void	get_env(t_shell *shell, char **envp)
+{
+	int		index;
+	t_env	*new_env_node;
+
+	index = 0;
+	if (!envp || !envp[0])
+	{
+		handle_empty_env(shell);
+		return ;
+	}
+	while (envp[index])
+	{
+		new_env_node = ft_calloc(1, sizeof(t_env));
+		if (!new_env_node)
+			exit_and_free(shell, "Error : malloc failed get_env");
+		maj_env_node(shell, new_env_node, envp, index);
+		index++;
+	}
 }

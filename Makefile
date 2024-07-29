@@ -20,12 +20,13 @@ C_FILE		 = 	$(addsuffix .c,						\
 					cd 								\
 					pwd								\
 				)									\
-				env/get_env 						\
+				env/get_env							\
+				env/set_no_env						\
 				$(addprefix exec/, 					\
 					exec 							\
-					exec_utils_1					\
-					exec_utils_2					\
-					exec_utils_3					\
+					exec_utils						\
+					convert_env						\
+					find_cmds						\
 					redir 							\
 					here_doc 						\
 					builtins 						\

@@ -1,57 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils_3.c                                     :+:      :+:    :+:   */
+/*   exec_utils_1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:15:22 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 09:23:08 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
-{
-	char	**env_array;
-
-	if (!cmds || !cmds->tab || !cmds->tab[0])
-		exit_and_free(shell, "Invalid command structure", 1);
-	env_array = convert_env_to_array(env, shell);
-	if (!env_array)
-	{
-		exit_and_free(shell, "Failed to convert environment", 1);
-	}
-	if (ft_strchr(cmds->tab[0], '/') != NULL)
-	{
-		if (is_directory(cmds->tab[0]))
-		{
-			ft_putstr_fd(cmds->tab[0], STDERR_FILENO);
-			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-			free_split(env_array);
-			exit_and_free(shell, "", 126);
-		}
-		else if (access(cmds->tab[0], F_OK | X_OK) == 0)
-		{
-			cmds->path = ft_strdup(cmds->tab[0]);
-		}
-	}
-	else
-	{
-		cmds->path = get_path(env, cmds);
-	}
-	if (!cmds->path)
-	{
-		ft_cmd_no_found(cmds->tab[0]);
-		free_split(env_array);
-		exit_and_free(shell, "Command not found", 127);
-	}
-	execve(cmds->path, cmds->tab, env_array);
-	perror("execve");
-	free_split(env_array);
-	exit_and_free(shell, "Failed to execute command", 126);
-}
 
 void	close_all_fds(t_fd *fds)
 {
@@ -67,6 +26,14 @@ void	close_all_fds(t_fd *fds)
 		close(fds->output);
 	if (!(fds->input == -2) && fds->input >= 0)
 		close(fds->input);
+}
+
+void	close_fds_parent(t_fd *fds)
+{
+	if (fds->input != -2 && fds->input >= 0)
+		close(fds->input);
+	if (fds->output != -2 && fds->output >= 0)
+		close(fds->output);
 }
 
 static void	child_wtermsig(int sig)
@@ -109,3 +76,4 @@ void	wait_child(t_shell *shell)
 		snake = snake->next;
 	}
 }
+

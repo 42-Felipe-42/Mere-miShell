@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/28 22:50:17 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:53:39 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ void	child_builtins(t_shell *shell, t_fd *fds)
 	if (fds->output == -2)
 		fds->output = dup(STDOUT_FILENO);
 	if (fds->output == -1)
-		(close_all_fds(fds), exit_and_free(shell, "dup2 test2", 1));
+		(close_all_fds(fds), exit_and_free(shell, "Error : dup2"));
 }
 
 void	is_builtin(t_cmds *cmds)
 {
 	if (cmds && cmds->tab != NULL)
 	{
+		printf("test %s\n", cmds->tab[0]);
 		if (ft_strncmp(cmds->tab[0], "echo", 4) == 0
 			&& ft_strlen(cmds->tab[0]) == 4)
 			cmds->builtin = ECHO;

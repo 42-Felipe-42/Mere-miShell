@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 22:51:25 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:38:56 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ int	here_doc(t_shell *shell, t_lexer *redirs)
 		file_name = ft_join_free(file_name, "42");
 	tmp = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (tmp == -1)
-		exit_and_free(shell, "Fail to open file", 1);
+		exit_and_free(shell, "Error : Fail to open file");
 	fd.input = open(file_name, O_RDONLY);
 	if (fd.input == -1)
-		exit_and_free(shell, "Fail to open file", 1);
+		exit_and_free(shell, "Error : Fail to open file");
 	unlink(file_name);
 	loop_here_doc(redirs, tmp);
 	free(file_name);
