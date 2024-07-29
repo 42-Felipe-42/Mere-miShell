@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 23:24:56 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/29 00:12:06 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/29 02:02:17 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*expand_join(char *word, int *i, char *exp_w, t_shell *shell)
 
 	dols = count_dols(word, *i);
 	shell->flag = 0;
-	if (dols != 1 && dols % 2 != 0)
+	if (dols % 2 != 0)
 	{
 		tmp = expand(word, *i, shell);
 		if (tmp[0] == '\0')
@@ -90,6 +90,7 @@ char	*expand_join(char *word, int *i, char *exp_w, t_shell *shell)
 		free(tmp);
 	return (exp_w);
 }
+
 
 char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 {

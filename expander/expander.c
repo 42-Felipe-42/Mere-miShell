@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:25:23 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 01:59:06 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*expand(char *input, int i, t_shell *shell)
 	dst[j] = '\0';
 	env = find_env(dst, shell->env);
 	if (!env)
-		env = ft_strdup("");
+		env = ft_strdup(dst);
 	return (free(dst), env);
 }
 

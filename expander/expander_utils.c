@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:04:33 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/28 23:46:13 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 01:54:49 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	count_dols(char *word, int i)
 	while (word[n] == '$')
 	{
 		dols++;
-		n++;
+		n--;
 	}
 	return (dols);
 }
