@@ -3,30 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 10:38:56 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/29 16:28:14 by aurlic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	loop_here_doc(t_lexer *redirs, int fd)
+void loop_here_doc(t_lexer *redirs, int fd)
 {
-	char	*line;
-	char	*limiter;
+	char *line;
+	char *limiter;
 
 	limiter = ft_strjoin(redirs->word, "\n");
 	while (1)
 	{
 		line = readline(">");
-		if (line == NULL
-			|| (!ft_strncmp(line, limiter, ft_strlen(line))
-				&& ft_strlen(line) != 0))
+		if (line == NULL || (!ft_strncmp(line, limiter, ft_strlen(line)) && ft_strlen(line) != 0))
 		{
 			free(line);
-			break ;
+			break;
 		}
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
@@ -35,11 +33,11 @@ void	loop_here_doc(t_lexer *redirs, int fd)
 	free(limiter);
 }
 
-int	here_doc(t_shell *shell, t_lexer *redirs)
+int here_doc(t_shell *shell, t_lexer *redirs)
 {
-	char	*file_name;
-	t_fd	fd;
-	int		tmp;
+	char *file_name;
+	t_fd fd;
+	int tmp;
 
 	file_name = ft_strdup("42");
 	while (access(file_name, F_OK) == 0)
@@ -54,5 +52,12 @@ int	here_doc(t_shell *shell, t_lexer *redirs)
 	loop_here_doc(redirs, tmp);
 	free(file_name);
 	close(tmp);
+	if (g_signal == SIGINT)
+	{
+		shell->exit_code = 130;
+		g_signal = 0;
+		close(fd.input);
+		return (-1);
+	}
 	return (fd.input);
 }

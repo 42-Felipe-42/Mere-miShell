@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/28 23:59:50 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:09:17 by aurlic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@
 #include <stdio.h>
 
 // Fonction pour vérifier si la chaîne représente un nombre valide avec signe
-static int	is_valid_number(const char *str)
+static int is_valid_number(const char *str)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (str[i] == '+' || str[i] == '-')
@@ -44,7 +44,7 @@ static int	is_valid_number(const char *str)
 }
 
 // Fonction pour gérer les arguments de exit
-static int	exit_args(char **tab, int *flag)
+static int exit_args(char **tab, int *flag)
 {
 	if (!tab[1])
 	{
@@ -67,10 +67,10 @@ static int	exit_args(char **tab, int *flag)
 	return (atoi(tab[1]) % 256);
 }
 
-void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
+void ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 {
-	int	flag;
-	int	ext;
+	int flag;
+	int ext;
 
 	flag = 0;
 	ext = exit_args(cmd->tab, &flag);
@@ -78,12 +78,11 @@ void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		shell->exit_code = 1;
-		return ;
+		return;
 	}
 	if (cmd->next || cmd->prev)
-		return ;
+		return;
 	ft_freeshell(shell);
 	close_all_fds(fd);
-	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	exit(ext);
 }

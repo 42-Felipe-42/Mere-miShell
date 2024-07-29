@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 10:38:21 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:53:28 by aurlic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
+void execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
 	if (fds->pipes[1] != -2)
 		close(fds->pipes[0]);
@@ -26,7 +26,7 @@ void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	get_cmds(shell->env, cmds, shell);
 }
 
-void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
+void execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
 	if (cmds->builtin == EXIT)
 		ft_exit(shell, cmds, fds);
@@ -45,7 +45,7 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		{
 			if (cmds->builtin)
 				(run_builtins(shell, cmds, fds),
-					close_all_fds(fds), exit_and_free(shell, ""));
+				 close_all_fds(fds), exit_and_free(shell, ""));
 			else
 				execute_child(shell, cmds, fds);
 		}
@@ -53,12 +53,34 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	close_fds_parent(fds);
 	fds->input = fds->pipes[0];
 }
-
-
-void	run_exec(t_shell *shell)
+void update_last_cmd(t_shell *shell, t_cmds *cmds)
 {
-	t_cmds	*tmp_cmd;
-	t_fd	fds;
+	t_env *tmp;
+	char *last_cmd;
+
+	tmp = shell->env;
+	if (!cmds->tab)
+		return;
+	if (!cmds->tab[0])
+		return;
+	last_cmd = cmds->tab[0];
+	while (tmp)
+	{
+		if (ft_strictcmp(tmp->key, "_") == 1)
+		{
+			free(tmp->value);
+			tmp->value = ft_strdup(last_cmd);
+			if (!tmp->value)
+				(exit_and_free(shell, "Error : malloc failed"));
+			return;
+		}
+		tmp = tmp->next;
+	}
+}
+void run_exec(t_shell *shell)
+{
+	t_cmds *tmp_cmd;
+	t_fd fds;
 
 	fds.input = -2;
 	tmp_cmd = shell->cmds;
@@ -66,7 +88,7 @@ void	run_exec(t_shell *shell)
 	while (tmp_cmd)
 	{
 		is_builtin(tmp_cmd);
-		/* set_last_cmd(shell, tmp_cmd), */
+		update_last_cmd(shell, tmp_cmd);
 		init_fd(&fds);
 		if (tmp_cmd->next)
 			if (pipe(fds.pipes) == -1)

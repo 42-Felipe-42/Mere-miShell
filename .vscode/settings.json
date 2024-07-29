@@ -1,9 +1,10 @@
 {
     "files.associations": {
-        "libft.h": "c",
-        "push_swap.h": "c",
-        "minishell.h": "c"
-    },
+		"libft.h": "c",
+		"push_swap.h": "c",
+		"minishell.h": "c",
+		"stat.h": "c"
+	},
     "files.exclude": {
         "**/*.o": true
     }

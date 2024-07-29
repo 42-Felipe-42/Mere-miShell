@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/28 23:36:31 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:25:48 by aurlic           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_newline(char **tab, int *flag)
+int check_newline(char **tab, int *flag)
 {
-	int	n;
-	int	i;
+	int n;
+	int i;
 
 	n = 1;
 	while (tab[n] && tab[n][0] == '-' && tab[n][1] == 'n')
@@ -34,11 +34,10 @@ int	check_newline(char **tab, int *flag)
 	return (n);
 }
 
-void	ft_echo(t_shell *shell, t_cmds *cmd)
+void ft_echo(t_shell *shell, t_cmds *cmd)
 {
-	int	i;
-	int	flag;
-	// int ext;
+	int i;
+	int flag;
 
 	flag = 0;
 	(void)shell;
@@ -55,8 +54,4 @@ void	ft_echo(t_shell *shell, t_cmds *cmd)
 	}
 	if (!flag)
 		printf("\n");
-	// if (cmd->next)
-	// 	ext = shell->excode;
-	// else
-	// 	ext = shell->tmpexcode;
 }
