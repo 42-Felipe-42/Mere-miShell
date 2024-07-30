@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/29 17:41:25 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/30 15:04:13 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ void is_builtin(t_cmds *cmds)
 	{
 		if (ft_strncmp(cmds->tab[0], "echo", 4) == 0 && ft_strlen(cmds->tab[0]) == 4)
 			cmds->builtin = ECHO;
-		else if (ft_strcmp(cmds->tab[0], "cd") == 0 && ft_strlen(cmds->tab[0]) == 2)
+		else if (ft_strncmp(cmds->tab[0], "cd", 3) == 0 && ft_strlen(cmds->tab[0]) == 2)
 			cmds->builtin = CD;
-		else if (ft_strcmp(cmds->tab[0], "pwd") == 0 && ft_strlen(cmds->tab[0]) == 3)
+		else if (ft_strncmp(cmds->tab[0], "pwd", 3) == 0 && ft_strlen(cmds->tab[0]) == 3)
 			cmds->builtin = PWD;
 		else if (ft_strncmp(cmds->tab[0], "export", 6) == 0 && ft_strlen(cmds->tab[0]) == 6)
 			cmds->builtin = EXPORT;
-		else if (ft_strcmp(cmds->tab[0], "unset") == 0 && ft_strlen(cmds->tab[0]) == 5)
+		else if (ft_strncmp(cmds->tab[0], "unset", 5) == 0 && ft_strlen(cmds->tab[0]) == 5)
 			cmds->builtin = UNSET;
 		else if (ft_strncmp(cmds->tab[0], "env", 3) == 0 && ft_strlen(cmds->tab[0]) == 3)
 			cmds->builtin = ENV;
