@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:04:33 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/29 01:54:49 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:45:15 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	count_dols(char *word, int i)
 	{
 		dols++;
 		n--;
+		if(n <= 0)
+			break;
 	}
 	return (dols);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:48:18 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 15:27:17 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/30 09:54:13 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,7 @@ static int go_home(t_shell *shell, char *old_pwd)
 	}
 	return (free(home_dir), 0);
 }
-void print_env_list(t_env *env_list)
-{
-	t_env *current;
 
-	current = env_list;
-	while (current)
-	{
-		printf(" %s: %s\n", current->key, current->value);
-		current = current->next;
-	}
-}
 void update_env_vars(t_shell *shell, char *oldpwd, char *currpwd)
 {
 	t_env *env_entry;

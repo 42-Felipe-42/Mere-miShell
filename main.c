@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/29 17:08:00 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/30 10:53:46 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/minishell.h"
 
-int g_signal = 0;
-void set_struct(t_shell *shell, char **av, char **envp)
+int		g_signal = 0;
+void	set_struct(t_shell *shell, char **av, char **envp)
 {
 	shell->av = ft_strdup(av[0]);
 	shell->cmds = NULL;
@@ -24,11 +24,11 @@ void set_struct(t_shell *shell, char **av, char **envp)
 	shell->lex = NULL;
 }
 
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-	t_lexer *lex;
-	t_shell *shell;
-	t_cmds *cmds;
+	t_lexer	*lex;
+	t_shell	*shell;
+	t_cmds	*cmds;
 
 	shell = malloc(sizeof(t_shell));
 	if (!shell)

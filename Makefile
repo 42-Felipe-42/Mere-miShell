@@ -51,6 +51,7 @@ C_FILE		 = 	$(addsuffix .c,						\
 				prompt/readline						\
 				prompt/signal						\
 				main								\
+				utils								\
 				)									\
 
 OBJS        =   $(C_FILE:.c=.o)

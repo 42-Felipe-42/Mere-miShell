@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 16:32:14 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/30 09:59:25 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,12 +113,17 @@ void free_shell(t_shell *shell);
 void free_before_loop(t_shell *shell);
 void exit_and_free(t_shell *shell, char *str);
 void ft_freeshell(t_shell *shell);
-void print_env_list(t_env *env_list);
 
 /*--------------------SIGNALS--------------------*/
 bool check_captured_signals(void);
 void setup_shell_signals(void);
 void handle_heredoc_signal(int signal);
 void setup_heredoc_signals(void);
+
+/*--------------------UTILS--------------------*/
+void print_env_list(t_env *env_list);
+void	print_lexer(t_lexer *lexer);
+void	print_list_cmds(t_shell *shell);
+void	print_lexer_list(t_cmds *head);
 
 #endif

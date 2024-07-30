@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/29 17:51:46 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/30 10:55:44 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 // copie des donnee de lex vers cmds->lex
-void redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
+void	redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 {
-	t_lexer *tmp;
-	t_lexer *new_node;
+	t_lexer	*tmp;
+	t_lexer	*new_node;
 
 	new_node = ft_calloc(1, sizeof(t_lexer));
 	if (!new_node)
@@ -29,7 +29,7 @@ void redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	if ((*cmds)->lex_redir == NULL)
 	{
 		(*cmds)->lex_redir = new_node;
-		return;
+		return ;
 	}
 	tmp = (*cmds)->lex_redir;
 	while (tmp->next)
@@ -37,12 +37,12 @@ void redir_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	tmp->next = new_node;
 }
 
-t_lexer *lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
+t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 {
-	t_lexer *tmp;
-	int count;
-	int i;
-	int j;
+	t_lexer	*tmp;
+	int		count;
+	int		i;
+	int		j;
 
 	i = 0;
 	count = count_arg(lex);
@@ -71,18 +71,18 @@ t_lexer *lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 		if (tmp->next && tmp->next->word)
 			tmp = tmp->next;
 		else
-			break;
+			break ;
 	}
 	(*cmds)->tab[i] = NULL;
 	return (tmp);
 }
 
-t_cmds *create_cmds(t_lexer *lex, t_shell *shell)
+t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 {
-	t_lexer *tmp;
-	t_cmds *cmds;
-	t_cmds *current_cmd;
-	int skip_redir;
+	t_lexer	*tmp;
+	t_cmds	*cmds;
+	t_cmds	*current_cmd;
+	int		skip_redir;
 
 	cmds = init_cmds(shell);
 	current_cmd = cmds;
@@ -90,7 +90,8 @@ t_cmds *create_cmds(t_lexer *lex, t_shell *shell)
 	skip_redir = 0;
 	while (tmp)
 	{
-		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR || tmp->token == APPEND || tmp->token == HERE_DOC)
+		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR
+			|| tmp->token == APPEND || tmp->token == HERE_DOC)
 		{
 			redir_to_cmds(tmp, &current_cmd, shell);
 			tmp = tmp->next;
@@ -102,7 +103,8 @@ t_cmds *create_cmds(t_lexer *lex, t_shell *shell)
 			current_cmd->next->prev = current_cmd;
 			current_cmd = current_cmd->next;
 		}
-		else if ((tmp->next && tmp->next->token != PIPE) || (!tmp->next && skip_redir == 0))
+		else if ((tmp->next && tmp->next->token != PIPE) || (!tmp->next
+				&& skip_redir == 0))
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
 		tmp = tmp->next;
 	}
@@ -110,12 +112,12 @@ t_cmds *create_cmds(t_lexer *lex, t_shell *shell)
 	return (cmds);
 }
 
-void parser(t_lexer *lex, t_shell *shell)
+void	parser(t_lexer *lex, t_shell *shell)
 {
-	int i;
-	t_lexer *lexer;
-	char *tmp;
+	int		i;
+	t_lexer	*lexer;
 
+	char	*tmp;
 	lexer = lex;
 	i = 0;
 	syntaxe(lexer, shell);
@@ -130,14 +132,11 @@ void parser(t_lexer *lex, t_shell *shell)
 			if (which_quote(lexer->word[i]))
 			{
 				tmp = remove_quote(lexer->word, &i, shell);
-				if (tmp != NULL)
-				{
-					free(lex->word);
-					lexer->word = tmp;
-				}
-				break;
+				free(lexer->word);
+				lexer->word = tmp;
+	
+				break ;
 			}
-			printf("lex word %s\n", lexer->word);
 			i++;
 		}
 		lexer = lexer->next;
