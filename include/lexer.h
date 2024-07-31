@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:39:48 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 23:49:24 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/31 17:24:12 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ typedef struct s_env
 	struct s_env	*prev;
 }					t_env;
 
-#define IN_REDIR 500 	// <
-#define HERE_DOC 501 	// <<
-#define APPEND 502 		// >>
-#define OUT_REDIR 503 	// >
-#define PIPE 504 		// |
+#define IN_REDIR 500 // <
+#define HERE_DOC 501 // <<
+#define APPEND 502 // >>
+#define OUT_REDIR 503 // >
+#define PIPE 504 // |
 
-#define S_QUOTE 1 		// '
-#define D_QUOTE 2 		// "
+#define S_QUOTE 1 // '
+#define D_QUOTE 2 // "
 
 int					which_quote(char input);
 int					is_token(char *input, int *i);

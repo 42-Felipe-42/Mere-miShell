@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 23:24:56 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/31 13:28:09 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:23:39 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 	handle_dols(word, i, shell, &exp_w);
 	if (!ft_strncmp(word + *i, "$0", 2) || !ft_strncmp(word + *i, "$0$", 3))
 	{
-	exp_w = join_and_free(exp_w, find_pwd(word + *i, shell), shell);
+		exp_w = join_and_free(exp_w, find_pwd(word + *i, shell), shell);
 	}
 	else if (!ft_strncmp(word + *i, "$?", 2) || !ft_strncmp(word + *i, "$?$",
 			3))

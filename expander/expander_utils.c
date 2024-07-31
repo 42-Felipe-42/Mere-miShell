@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 11:04:33 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/30 10:45:15 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 17:23:42 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//copier chars entre dollars ex: $$HOME$PWD 
+// copier chars entre dollars ex: $$HOME$PWD
 char	*ft_strndup_dol(char *s)
 {
 	int		i;
@@ -52,8 +52,8 @@ int	count_dols(char *word, int i)
 	{
 		dols++;
 		n--;
-		if(n <= 0)
-			break;
+		if (n <= 0)
+			break ;
 	}
 	return (dols);
 }

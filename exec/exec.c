@@ -6,15 +6,15 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 16:08:01 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:23:23 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
+void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
-	find_path(shell->env , cmds, shell, fds);		
+	find_path(shell->env, cmds, shell, fds);
 	if (fds->pipes[0] != -2)
 		close(fds->pipes[0]);
 	if (fds->input != -2)
@@ -27,7 +27,7 @@ void execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	get_cmds(shell->env, cmds, shell);
 }
 
-void execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
+void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
 	if (cmds->builtin == EXIT)
 		ft_exit(shell, cmds, fds);
@@ -45,8 +45,8 @@ void execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		if (cmds->pid == 0)
 		{
 			if (cmds->builtin)
-				(run_builtins(shell, cmds, fds),
-				 close_all_fds(fds), exit_and_free(shell, ""));
+				(run_builtins(shell, cmds, fds), close_all_fds(fds),
+					exit_and_free(shell, ""));
 			else
 				execute_child(shell, cmds, fds);
 		}
@@ -54,16 +54,16 @@ void execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	close_fds_parent(fds);
 	fds->input = fds->pipes[0];
 }
-void update_last_cmd(t_shell *shell, t_cmds *cmds)
+void	update_last_cmd(t_shell *shell, t_cmds *cmds)
 {
-	t_env *tmp;
-	char *last_cmd;
+	t_env	*tmp;
+	char	*last_cmd;
 
 	tmp = shell->env;
 	if (!cmds->tab)
-		return;
+		return ;
 	if (!cmds->tab[0])
-		return;
+		return ;
 	last_cmd = cmds->tab[0];
 	while (tmp)
 	{
@@ -73,15 +73,15 @@ void update_last_cmd(t_shell *shell, t_cmds *cmds)
 			tmp->value = ft_strdup(last_cmd);
 			if (!tmp->value)
 				(exit_and_free(shell, "Error : malloc failed"));
-			return;
+			return ;
 		}
 		tmp = tmp->next;
 	}
 }
-void run_exec(t_shell *shell)
+void	run_exec(t_shell *shell)
 {
-	t_cmds *tmp_cmd;
-	t_fd fds;
+	t_cmds	*tmp_cmd;
+	t_fd	fds;
 
 	fds.input = -2;
 	tmp_cmd = shell->cmds;

@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 15:03:46 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:23:00 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	is_valid_identifier(const char *str)
 		return (0);
 	while (str[i])
 	{
-
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
@@ -37,7 +36,6 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 	temp = *env;
 	while (temp)
 	{
-
 		if (ft_strncmp(temp->key, key, ft_strlen(temp->key)) == 0)
 		{
 			free(temp->value);
@@ -53,54 +51,63 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 	*env = new_node;
 }
 
-int compare_env(const t_env *a, const t_env *b) {
-    return ft_strcmp(a->key, b->key);
+int	compare_env(const t_env *a, const t_env *b)
+{
+	return (ft_strcmp(a->key, b->key));
 }
 
-void insertion_sort(t_env **arr, int n, int (*cmp)(const t_env *, const t_env *)) {
-    int i, j;
-    t_env *key;
+void	insertion_sort(t_env **arr, int n, int (*cmp)(const t_env *,
+			const t_env *))
+{
+	t_env	*key;
 
-    for (i = 1; i < n; i++) {
-        key = arr[i];
-        j = i - 1;
-
-        while (j >= 0 && cmp(arr[j], key) > 0) {
-            arr[j + 1] = arr[j];
-            j = j - 1;
-        }
-        arr[j + 1] = key;
-    }
+	int i, j;
+	for (i = 1; i < n; i++)
+	{
+		key = arr[i];
+		j = i - 1;
+		while (j >= 0 && cmp(arr[j], key) > 0)
+		{
+			arr[j + 1] = arr[j];
+			j = j - 1;
+		}
+		arr[j + 1] = key;
+	}
 }
 
-void print_sorted_env(t_env *env) {
-    int count = 0;
-    int i;
-    t_env *tmp = env;
-    t_env **env_array;
+void	print_sorted_env(t_env *env)
+{
+	int		count;
+	int		i;
+	t_env	*tmp;
+	t_env	**env_array;
 
-    while (tmp) {
-        count++;
-        tmp = tmp->next;
-    }
-    env_array = malloc(count * sizeof(t_env *));
-    if (!env_array) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-
-    tmp = env;
-    for (i = 0; i < count; i++) {
-        env_array[i] = tmp;
-        tmp = tmp->next;
-    }
-    insertion_sort(env_array, count, compare_env);
-
-    for (i = 0; i < count; i++) {
-        printf("declare -x %s=\"%s\"\n", env_array[i]->key, env_array[i]->value);
-    }
-
-    free(env_array);
+	count = 0;
+	tmp = env;
+	while (tmp)
+	{
+		count++;
+		tmp = tmp->next;
+	}
+	env_array = malloc(count * sizeof(t_env *));
+	if (!env_array)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	tmp = env;
+	for (i = 0; i < count; i++)
+	{
+		env_array[i] = tmp;
+		tmp = tmp->next;
+	}
+	insertion_sort(env_array, count, compare_env);
+	for (i = 0; i < count; i++)
+	{
+		printf("declare -x %s=\"%s\"\n", env_array[i]->key,
+			env_array[i]->value);
+	}
+	free(env_array);
 }
 
 void	ft_export(t_env **env, t_cmds *cmd)

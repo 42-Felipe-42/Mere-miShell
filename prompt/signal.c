@@ -58,7 +58,6 @@ bool	check_captured_signals(t_shell *shell)
 {
 	if (g_signal == SIGINT)
 	{
-		
 		shell->tmpexit_code = 130;
 		g_signal = 0;
 		return (true);

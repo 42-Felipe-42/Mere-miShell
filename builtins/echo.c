@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/31 15:51:32 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:22:44 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_echo(t_shell *shell, t_cmds *cmd)
 {
 	int	i;
 	int	flag;
-	
+
 	flag = 0;
 	(void)shell;
 	i = check_newline(cmd->tab, &flag);

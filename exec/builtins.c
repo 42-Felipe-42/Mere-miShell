@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/30 15:04:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 17:23:15 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // ◦ env with no options or arguments
 // ◦ exit with no options
 
-void run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
+void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
 	child_builtins(shell, fds);
 	if (cmds->builtin == ECHO)
@@ -32,7 +32,7 @@ void run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		ft_pwd(cmds, shell, fds->output);
 }
 
-void child_builtins(t_shell *shell, t_fd *fds)
+void	child_builtins(t_shell *shell, t_fd *fds)
 {
 	if (fds->input != -2)
 		close(fds->input);
@@ -42,23 +42,30 @@ void child_builtins(t_shell *shell, t_fd *fds)
 		(close_all_fds(fds), exit_and_free(shell, "Error : dup2"));
 }
 
-void is_builtin(t_cmds *cmds)
+void	is_builtin(t_cmds *cmds)
 {
 	if (cmds && cmds->tab != NULL)
 	{
-		if (ft_strncmp(cmds->tab[0], "echo", 4) == 0 && ft_strlen(cmds->tab[0]) == 4)
+		if (ft_strncmp(cmds->tab[0], "echo", 4) == 0
+			&& ft_strlen(cmds->tab[0]) == 4)
 			cmds->builtin = ECHO;
-		else if (ft_strncmp(cmds->tab[0], "cd", 3) == 0 && ft_strlen(cmds->tab[0]) == 2)
+		else if (ft_strncmp(cmds->tab[0], "cd", 3) == 0
+			&& ft_strlen(cmds->tab[0]) == 2)
 			cmds->builtin = CD;
-		else if (ft_strncmp(cmds->tab[0], "pwd", 3) == 0 && ft_strlen(cmds->tab[0]) == 3)
+		else if (ft_strncmp(cmds->tab[0], "pwd", 3) == 0
+			&& ft_strlen(cmds->tab[0]) == 3)
 			cmds->builtin = PWD;
-		else if (ft_strncmp(cmds->tab[0], "export", 6) == 0 && ft_strlen(cmds->tab[0]) == 6)
+		else if (ft_strncmp(cmds->tab[0], "export", 6) == 0
+			&& ft_strlen(cmds->tab[0]) == 6)
 			cmds->builtin = EXPORT;
-		else if (ft_strncmp(cmds->tab[0], "unset", 5) == 0 && ft_strlen(cmds->tab[0]) == 5)
+		else if (ft_strncmp(cmds->tab[0], "unset", 5) == 0
+			&& ft_strlen(cmds->tab[0]) == 5)
 			cmds->builtin = UNSET;
-		else if (ft_strncmp(cmds->tab[0], "env", 3) == 0 && ft_strlen(cmds->tab[0]) == 3)
+		else if (ft_strncmp(cmds->tab[0], "env", 3) == 0
+			&& ft_strlen(cmds->tab[0]) == 3)
 			cmds->builtin = ENV;
-		else if (ft_strncmp(cmds->tab[0], "exit", 4) == 0 && ft_strlen(cmds->tab[0]) == 4)
+		else if (ft_strncmp(cmds->tab[0], "exit", 4) == 0
+			&& ft_strlen(cmds->tab[0]) == 4)
 			cmds->builtin = EXIT;
 	}
 }

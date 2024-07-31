@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/29 10:36:48 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 17:23:09 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,7 @@ char	*find_env(char *key, t_env *envp)
 	len = ft_strlen(key);
 	while (tmp_envp)
 	{
-		if (!ft_strncmp(key, tmp_envp->key, len)
-			&& tmp_envp->key[len] == '\0')
+		if (!ft_strncmp(key, tmp_envp->key, len) && tmp_envp->key[len] == '\0')
 			return (tmp_envp->value);
 		tmp_envp = tmp_envp->next;
 	}
@@ -80,8 +79,8 @@ char	*find_env(char *key, t_env *envp)
 
 void	get_env(t_shell *shell, char **envp)
 {
-	int		index;
-	t_env	*new_env_node;
+	int index;
+	t_env *new_env_node;
 
 	index = 0;
 	if (!envp || !envp[0])

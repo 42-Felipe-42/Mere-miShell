@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 22:46:47 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/31 17:24:19 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ typedef struct s_cmds
 	struct s_cmds	*prev;
 }					t_cmds;
 
-#define ECHO 	601
-#define CD 		602
-#define PWD 	603
-#define EXPORT 	604
-#define UNSET 	605
-#define ENV 	606
-#define EXIT 	607
+#define ECHO 601
+#define CD 602
+#define PWD 603
+#define EXPORT 604
+#define UNSET 605
+#define ENV 606
+#define EXIT 607
 
 int					check_quote_closed(char *word);
 void				is_builtin(t_cmds *cmds);

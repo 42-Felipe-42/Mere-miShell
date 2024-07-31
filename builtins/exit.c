@@ -6,28 +6,16 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 16:00:58 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:22:54 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <stdio.h>
-
-#include <stdlib.h>
-#include <ctype.h>
-#include <stdio.h>
-
-#include <stdlib.h>
-#include <ctype.h>
-#include <stdio.h>
-
 // Fonction pour verifier si la chaîne représente un nombre valide avec signe
-static int is_valid_number(const char *str)
+static int	is_valid_number(const char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '+' || str[i] == '-')
@@ -44,7 +32,7 @@ static int is_valid_number(const char *str)
 }
 
 // Fonction pour gerer les arguments de exit
-static int exit_args(char **tab, int *flag)
+static int	exit_args(char **tab, int *flag)
 {
 	if (!tab[1])
 	{
@@ -67,20 +55,20 @@ static int exit_args(char **tab, int *flag)
 	return (atoi(tab[1]) % 256);
 }
 
-void ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
+void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 {
-	int flag;
-	int ext;
+	int	flag;
+	int	ext;
 
 	flag = 0;
 	ext = exit_args(cmd->tab, &flag);
 	if (cmd->tab[1] && cmd->tab[2] && !flag)
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		return;
+		return ;
 	}
 	if (cmd->next || cmd->prev)
-		return;
+		return ;
 	ft_freeshell(shell);
 	close_all_fds(fd);
 	exit(ext);

@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 15:16:45 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:23:33 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,20 @@ void	ctrlc(t_shell *shell, t_fd *fd)
 	}
 }
 
-void loop_here_doc(t_lexer *redirs, int fd)
+void	loop_here_doc(t_lexer *redirs, int fd)
 {
-	char *line;
-	char *limiter;
+	char	*line;
+	char	*limiter;
 
 	limiter = ft_strjoin(redirs->word, "\n");
 	while (1)
 	{
 		line = readline(">");
-		if (line == NULL || (!ft_strncmp(line, limiter, ft_strlen(line)) && ft_strlen(line) != 0))
+		if (line == NULL || (!ft_strncmp(line, limiter, ft_strlen(line))
+				&& ft_strlen(line) != 0))
 		{
 			free(line);
-			break;
+			break ;
 		}
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
@@ -44,11 +45,11 @@ void loop_here_doc(t_lexer *redirs, int fd)
 	free(limiter);
 }
 
-int here_doc(t_shell *shell, t_lexer *redirs)
+int	here_doc(t_shell *shell, t_lexer *redirs)
 {
-	char *file_name;
-	t_fd fd;
-	int tmp;
+	char	*file_name;
+	t_fd	fd;
+	int		tmp;
 
 	file_name = ft_strdup("42");
 	while (access(file_name, F_OK) == 0)

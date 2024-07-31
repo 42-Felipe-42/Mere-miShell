@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/31 12:08:57 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:24:32 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ void	parser(t_lexer *lex, t_shell *shell)
 {
 	int		i;
 	t_lexer	*lexer;
-
 	char	*tmp;
+
 	lexer = lex;
 	i = 0;
 	syntaxe(lexer, shell);
