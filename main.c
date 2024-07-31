@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/31 16:17:53 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:17:29 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,8 @@ int	main(int ac, char **av, char **envp)
 			parser(lex, shell);
 			cmds = create_cmds(lex, shell);
 			shell->cmds = cmds;
-			free_lexer(&lex);
 			run_exec(shell);
-			free_before_loop(shell);
-			shell->cmds = NULL;
+			(free_before_loop(shell), shell->cmds = NULL);
 		}
 	}
 	return (0);

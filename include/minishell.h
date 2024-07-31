@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 16:13:58 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:17:51 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char		*expand_join(char *word, int *i, char *exp_w, t_shell *shell);
 char		*expand_variable(char *word, int *i, t_shell *shell, char *exp_w);
 int			count_dols(char *word, int i);
 char		*find_pwd(char *str, t_shell *shell);
-char	*find_excode(char *str, t_shell *shell);
+char		*find_excode(char *str, t_shell *shell);
 
 /*--------------------ENV--------------------*/
 void		set_env_key_value(t_shell *shell, t_env *new, char **envp, int i);
