@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 12:11:34 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 13:30:14 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,15 @@ char	*find_pwd(char *str, t_shell *shell)
 {
 	if (!ft_strncmp(str, "$0", 2) || !ft_strncmp(str, "$0$", 3))
 		str = shell->av;
+	else
+		return (NULL);
+	return (str);
+}
+
+char	*find_excode(char *str, t_shell *shell)
+{
+	if (!ft_strncmp(str, "$?", 2) || !ft_strncmp(str, "$?$", 3))
+		str = ft_itoa(shell->tmpexit_code);
 	else
 		return (NULL);
 	return (str);

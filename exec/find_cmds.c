@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 12:43:50 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 14:51:38 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 	{
 		exit_and_free(shell, "Error : convert environment");
 	}
-			ft_putstr_fd("ploufy\n", STDERR_FILENO);
-
 	execve(cmds->path, cmds->tab, env_array);
 	free_split(env_array);
 	shell->exit_code = 126;

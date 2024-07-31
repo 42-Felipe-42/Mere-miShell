@@ -6,26 +6,31 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:16 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 12:02:25 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 16:19:03 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void free_before_loop(t_shell *shell)
+void	free_before_loop(t_shell *shell)
 {
+	t_cmds	*cmds;
+
+	cmds = shell->cmds;
 	if (!shell)
-		return;
-	free_cmds(&(shell->cmds));
+		return ;
+	free_cmds(&cmds);
+	shell->tmpexit_code = shell->exit_code;
+	shell->exit_code = 0;
 }
 
-void exit_and_free(t_shell *shell, char *str)
+void	exit_and_free(t_shell *shell, char *str)
 {
-	int ext_code;
+	int	ext_code;
 
-	if (ft_strncmp(str, "Exit",4) == 0)
-		ft_printf("Exit\n");
-	else if (ft_strnstr(str, "Error", 5))
+	if (ft_strncmp(str, "exit", 4) == 0)
+		ft_printf("exit\n");
+	else if (ft_strncmp(str, "Error", 5) == 0)
 	{
 		shell->exit_code = 1;
 		perror(str);

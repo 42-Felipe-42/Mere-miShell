@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/29 14:09:17 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/31 16:00:58 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-// Fonction pour vérifier si la chaîne représente un nombre valide avec signe
+// Fonction pour verifier si la chaîne représente un nombre valide avec signe
 static int is_valid_number(const char *str)
 {
 	int i;
@@ -43,7 +43,7 @@ static int is_valid_number(const char *str)
 	return (1);
 }
 
-// Fonction pour gérer les arguments de exit
+// Fonction pour gerer les arguments de exit
 static int exit_args(char **tab, int *flag)
 {
 	if (!tab[1])
@@ -77,7 +77,6 @@ void ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 	if (cmd->tab[1] && cmd->tab[2] && !flag)
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		shell->exit_code = 1;
 		return;
 	}
 	if (cmd->next || cmd->prev)

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/29 11:25:48 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/31 15:51:32 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int check_newline(char **tab, int *flag)
+int	check_newline(char **tab, int *flag)
 {
-	int n;
-	int i;
+	int	n;
+	int	i;
 
 	n = 1;
 	while (tab[n] && tab[n][0] == '-' && tab[n][1] == 'n')
@@ -34,11 +34,11 @@ int check_newline(char **tab, int *flag)
 	return (n);
 }
 
-void ft_echo(t_shell *shell, t_cmds *cmd)
+void	ft_echo(t_shell *shell, t_cmds *cmd)
 {
-	int i;
-	int flag;
-
+	int	i;
+	int	flag;
+	
 	flag = 0;
 	(void)shell;
 	i = check_newline(cmd->tab, &flag);

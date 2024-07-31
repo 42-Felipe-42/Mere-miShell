@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:48:18 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/30 09:54:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:55:10 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void update_env_vars(t_shell *shell, char *oldpwd, char *currpwd)
 			if (!env_entry->value)
 			{
 				free(oldpwd);
-				exit_and_free(shell, "Error : malloc failed");
+				exit_and_free(shell, " : malloc failed");
 			}
 		}
 		if (ft_strncmp(env_entry->key, "PWD", ft_strlen(env_entry->key)) == 0)
@@ -93,6 +93,7 @@ void update_env_vars(t_shell *shell, char *oldpwd, char *currpwd)
 		env_entry = env_entry->next;
 	}
 }
+
 char *get_old(t_shell *shell)
 {
 	t_env *env;

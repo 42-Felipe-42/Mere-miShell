@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 12:47:29 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 16:08:01 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		close(fds->pipes[0]);
 	if (fds->input != -2)
 		if (dup2(fds->input, STDIN_FILENO) == -1)
-			(close_all_fds(fds), exit_and_free(shell, "Error : dup2d"));
+			(close_all_fds(fds), exit_and_free(shell, ""));
 	if (fds->output != -2)
 		if (dup2(fds->output, STDOUT_FILENO) == -1)
-			(close_all_fds(fds), exit_and_free(shell, "Error : dup2f"));
+			(close_all_fds(fds), exit_and_free(shell, ""));
 	close_all_fds(fds);
 	get_cmds(shell->env, cmds, shell);
 }

@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 11:38:47 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 15:03:46 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,8 @@ void print_sorted_env(t_env *env) {
         count++;
         tmp = tmp->next;
     }
-
     env_array = malloc(count * sizeof(t_env *));
     if (!env_array) {
-        // Handle memory allocation error
         perror("malloc");
         exit(EXIT_FAILURE);
     }
@@ -96,8 +94,6 @@ void print_sorted_env(t_env *env) {
         env_array[i] = tmp;
         tmp = tmp->next;
     }
-
-    // Replace qsort with insertion_sort
     insertion_sort(env_array, count, compare_env);
 
     for (i = 0; i < count; i++) {

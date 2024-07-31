@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 12:40:12 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 16:13:58 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_shell
 {
 	char	*av;
 	int		exit_code;
+	int		tmpexit_code;
 	t_cmds	*cmds;
 	t_env	*env;
 	t_lexer	*lex;
@@ -71,6 +72,7 @@ char		*expand_join(char *word, int *i, char *exp_w, t_shell *shell);
 char		*expand_variable(char *word, int *i, t_shell *shell, char *exp_w);
 int			count_dols(char *word, int i);
 char		*find_pwd(char *str, t_shell *shell);
+char	*find_excode(char *str, t_shell *shell);
 
 /*--------------------ENV--------------------*/
 void		set_env_key_value(t_shell *shell, t_env *new, char **envp, int i);
@@ -116,7 +118,7 @@ void		exit_and_free(t_shell *shell, char *str);
 void		ft_freeshell(t_shell *shell);
 
 /*--------------------SIGNALS--------------------*/
-bool		check_captured_signals(void);
+bool		check_captured_signals(t_shell *shell);
 void		setup_shell_signals(void);
 void		handle_heredoc_signal(int signal);
 void		setup_heredoc_signals(void);

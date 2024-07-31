@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 14:17:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 16:28:14 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/31 15:16:45 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	ctrlc(t_shell *shell, t_fd *fd)
+{
+	if (g_signal == SIGINT)
+	{
+		shell->exit_code = 130;
+		g_signal = 0;
+		close(fd->input);
+		dup2(fd->input, STDIN_FILENO);
+	}
+}
 
 void loop_here_doc(t_lexer *redirs, int fd)
 {
@@ -52,12 +63,6 @@ int here_doc(t_shell *shell, t_lexer *redirs)
 	loop_here_doc(redirs, tmp);
 	free(file_name);
 	close(tmp);
-	if (g_signal == SIGINT)
-	{
-		shell->exit_code = 130;
-		g_signal = 0;
-		close(fd.input);
-		return (-1);
-	}
+	ctrlc(shell, &fd);
 	return (fd.input);
 }

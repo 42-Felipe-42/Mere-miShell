@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 11:59:42 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 15:35:20 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_lexer	*lexer(char **av, t_shell *shell)
 	input = ft_readline();
 	if (!input)
 	{
-		exit_and_free(shell, "Exit");
+		exit_and_free(shell, "exit");
 	}
 	lex_str(input, &lex, shell);
 	shell->lex = lex;

@@ -1,7 +1,7 @@
 #include "../include/minishell.h"
 
-// Gestionnaire de signal pour les interruptions générales
-void handle_signal(int signal)
+// Gestionnaire de signal pour les interruptions generales
+void	handle_signal(int signal)
 {
 	g_signal = signal;
 	if (wait(NULL) != -1)
@@ -20,18 +20,19 @@ void handle_signal(int signal)
 	}
 }
 
-// Gestionnaire de signal spécifique pour heredoc
-void handle_heredoc_signal(int signal)
+// Gestionnaire de signal specifique pour heredoc
+void	handle_heredoc_signal(int signal)
 {
 	g_signal = signal;
 	close(STDIN_FILENO);
-	write(STDERR_FILENO, "^C\n", 3);
+	write(STDERR_FILENO, "^C", 3);
 }
 
 // Configuration des signaux pour heredoc
-void setup_heredoc_signals(void)
+void	setup_heredoc_signals(void)
 {
-	struct sigaction sig;
+	struct sigaction	sig;
+
 	sig.sa_flags = 0;
 	sig.sa_handler = handle_heredoc_signal;
 	sigemptyset(&sig.sa_mask);
@@ -39,9 +40,10 @@ void setup_heredoc_signals(void)
 }
 
 // Configuration des signaux pour le shell principal
-void setup_shell_signals(void)
+void	setup_shell_signals(void)
 {
-	struct sigaction sig;
+	struct sigaction	sig;
+
 	rl_catch_signals = 0;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = SA_RESTART;
@@ -52,17 +54,20 @@ void setup_shell_signals(void)
 }
 
 // Vérification et gestion des signaux capturés
-bool check_captured_signals(void)
+bool	check_captured_signals(t_shell *shell)
 {
 	if (g_signal == SIGINT)
 	{
+		
+		shell->tmpexit_code = 130;
 		g_signal = 0;
-		return true;
+		return (true);
 	}
 	else if (g_signal == SIGQUIT)
 	{
+		shell->tmpexit_code = 130;
 		g_signal = 0;
-		return true;
+		return (true);
 	}
-	return false;
+	return (false);
 }

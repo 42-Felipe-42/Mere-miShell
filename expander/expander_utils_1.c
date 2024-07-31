@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 23:24:56 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/29 10:39:07 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:28:09 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,27 @@ char	*expand_join(char *word, int *i, char *exp_w, t_shell *shell)
 	return (exp_w);
 }
 
-
 char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 {
+	char	*tmp;
+	char	*expansion_result;
+
 	handle_dols(word, i, shell, &exp_w);
 	if (!ft_strncmp(word + *i, "$0", 2) || !ft_strncmp(word + *i, "$0$", 3))
-		exp_w = join_and_free(exp_w, find_pwd(word + *i, shell), shell);
+	{
+	exp_w = join_and_free(exp_w, find_pwd(word + *i, shell), shell);
+	}
+	else if (!ft_strncmp(word + *i, "$?", 2) || !ft_strncmp(word + *i, "$?$",
+			3))
+	{
+		tmp = find_excode(word + *i, shell);
+		expansion_result = join_and_free(exp_w, tmp, shell);
+		free(tmp);
+		exp_w = expansion_result;
+	}
 	else if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
+	{
 		exp_w = expand_join(word, i, exp_w, shell);
+	}
 	return (exp_w);
 }
