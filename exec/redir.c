@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 12:16:31 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 12:53:58 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_fd(t_fd *fd)
 
 int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 {
-	if (fd != -1)
+	if (fd != -2)
 		close(fd);
 	if (redirs->token == IN_REDIR)
 	{
@@ -31,6 +31,7 @@ int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 		if (fd == -1)
 		{
 			perror(redirs->word);
+			return (fd);
 		}
 	}
 	else if (redirs->token == HERE_DOC)
@@ -42,7 +43,7 @@ int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 
 int	handle_output_redir(t_lexer *redirs, int fd)
 {
-	if (fd != -1)
+	if (fd != -2)
 		close(fd);
 	if (redirs->token == OUT_REDIR)
 	{
@@ -50,6 +51,7 @@ int	handle_output_redir(t_lexer *redirs, int fd)
 		if (fd == -1)
 		{
 			perror(redirs->word);
+			return (fd);
 		}
 	}
 	else if (redirs->token == APPEND)
@@ -58,6 +60,7 @@ int	handle_output_redir(t_lexer *redirs, int fd)
 		if (fd == -1)
 		{
 			perror(redirs->word);
+			return (fd);
 		}
 	}
 	return (fd);

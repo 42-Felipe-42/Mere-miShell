@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 11:44:28 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 12:40:12 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int			count_env_vars(t_env *env);
 void		ft_cmd_no_found(char *str);
 int			is_directory(const char *path);
 char		**convert_env_to_array(t_env *env, t_shell *shell);
+void		find_path(t_env *env, t_cmds *cmds, t_shell *shell, t_fd *fds);
 
 /*--------------------FREE--------------------*/
 void		free_lexer(t_lexer **lex);

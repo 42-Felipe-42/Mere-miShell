@@ -6,7 +6,7 @@
 /*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 12:26:08 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 12:47:29 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
+	find_path(shell->env , cmds, shell, fds);		
 	if (fds->pipes[0] != -2)
 		close(fds->pipes[0]);
 	if (fds->input != -2)
