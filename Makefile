@@ -57,7 +57,7 @@ C_FILE		 = 	$(addsuffix .c,						\
 OBJS        =   $(C_FILE:.c=.o)
 
 .c.o:
-	@printf "\r\033[K[Mere-MiShell] \033[0;32mBuilding : $<\n\033[0m"
+	@printf "\r\033[K[Mere-MiShell] \033[0;32mBuilding : $<\033[0m"
 	@$(CC) $(FLAG) -c $< -o $@
 
 all: $(NAME)

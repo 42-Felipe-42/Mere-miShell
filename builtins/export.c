@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/29 10:08:20 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:38:47 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,48 +53,58 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 	*env = new_node;
 }
 
-int	compare_env(const void *a, const void *b)
-{
-	t_env	*env_a;
-	t_env	*env_b;
-
-	env_a = *(t_env **)a;
-	env_b = *(t_env **)b;
-	return (ft_strcmp(env_a->key, env_b->key));
+int compare_env(const t_env *a, const t_env *b) {
+    return ft_strcmp(a->key, b->key);
 }
 
-void	print_sorted_env(t_env *env)
-{
-	int		count;
-	int		i;
-	t_env	*tmp;
-	t_env	**env_array;
+void insertion_sort(t_env **arr, int n, int (*cmp)(const t_env *, const t_env *)) {
+    int i, j;
+    t_env *key;
 
-	count = 0;
-	tmp = env;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->next;
-	}
-	env_array = malloc(count * sizeof(t_env *));
-	tmp = env;
-	i = 0;
-	while (i < count)
-	{
-		env_array[i] = tmp;
-		tmp = tmp->next;
-		i++;
-	}
-	qsort(env_array, count, sizeof(t_env *), compare_env); //pas sur quon ait le droit de l'utiliser??
-	i = 0;
-	while (i < count)
-	{
-		printf("declare -x %s=\"%s\"\n", env_array[i]->key,
-			env_array[i]->value);
-		i++;
-	}
-	free(env_array);
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+
+        while (j >= 0 && cmp(arr[j], key) > 0) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void print_sorted_env(t_env *env) {
+    int count = 0;
+    int i;
+    t_env *tmp = env;
+    t_env **env_array;
+
+    while (tmp) {
+        count++;
+        tmp = tmp->next;
+    }
+
+    env_array = malloc(count * sizeof(t_env *));
+    if (!env_array) {
+        // Handle memory allocation error
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    tmp = env;
+    for (i = 0; i < count; i++) {
+        env_array[i] = tmp;
+        tmp = tmp->next;
+    }
+
+    // Replace qsort with insertion_sort
+    insertion_sort(env_array, count, compare_env);
+
+    for (i = 0; i < count; i++) {
+        printf("declare -x %s=\"%s\"\n", env_array[i]->key, env_array[i]->value);
+    }
+
+    free(env_array);
 }
 
 void	ft_export(t_env **env, t_cmds *cmd)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/28 22:51:43 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:16:31 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 	}
 	else if (redirs->token == HERE_DOC)
 	{
-		printf("limiter %s\n", redirs->word);
 		fd = here_doc(shell, redirs);
 	}
 	return (fd);

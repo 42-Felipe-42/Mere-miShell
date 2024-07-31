@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 10:38:44 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:24:24 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 {
 	char	**env_array;
 
-	if (!cmds || !cmds->tab || !cmds->tab[0])
-		exit_and_free(shell, "Error : command structure");
+	if (!cmds || !cmds->tab || cmds->tab[0][0] == '\0')
+		exit_and_free(shell, "");
 	env_array = convert_env_to_array(env, shell);
 	if (!env_array)
 	{
@@ -75,6 +75,7 @@ void	get_cmds(t_env *env, t_cmds *cmds, t_shell *shell)
 			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
 			free_split(env_array);
 			shell->exit_code = 126;
+			// close_all_fds()
 			exit_and_free(shell, "");
 		}
 		else if (access(cmds->tab[0], F_OK | X_OK) == 0)

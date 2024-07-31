@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/30 10:53:46 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:41:32 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int ac, char **av, char **envp)
 		exit_and_free(shell, "Error : malloc shell");
 	(void)ac;
 	set_struct(shell, av, envp);
-	// setup_shell_signals();
+	setup_shell_signals();
 	while (1)
 	{
 		lex = lexer(av, shell);

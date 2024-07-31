@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 17:21:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/30 11:25:35 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:28:20 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	close_all_fds(t_fd *fds)
 {
 	if (!(fds->pipes[0] == -2) && fds->pipes[0] >= 0)
-		close(fds->pipes[1]);
+		close(fds->pipes[0]);
 	if (!(fds->pipes[1] == -2) && fds->pipes[1] >= 0)
 		close(fds->pipes[1]);
 	if (!(fds->redir[0] == -2) && fds->redir[0] >= 0)

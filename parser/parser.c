@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/30 10:55:44 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:08:57 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ void	parser(t_lexer *lex, t_shell *shell)
 				tmp = remove_quote(lexer->word, &i, shell);
 				free(lexer->word);
 				lexer->word = tmp;
-	
 				break ;
 			}
 			i++;

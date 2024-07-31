@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 10:39:53 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:59:42 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-//creat maillon + init elements struct pour stock donnees d'un TOKEN
+// creat maillon + init elements struct pour stock donnees d'un TOKEN
 void	store_token(t_lexer **lex, int token, t_shell *shell)
 {
 	t_lexer	*new;
@@ -106,7 +106,9 @@ t_lexer	*lexer(char **av, t_shell *shell)
 	input = av[1];
 	input = ft_readline();
 	if (!input)
+	{
 		exit_and_free(shell, "Exit");
+	}
 	lex_str(input, &lex, shell);
 	shell->lex = lex;
 	return (lex);

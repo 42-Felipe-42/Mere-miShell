@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/30 11:23:36 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:26:08 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
-	if (fds->pipes[1] != -2)
+	if (fds->pipes[0] != -2)
 		close(fds->pipes[0]);
 	if (fds->input != -2)
 		if (dup2(fds->input, STDIN_FILENO) == -1)
-			(close_all_fds(fds), exit_and_free(shell, "Error : dup2"));
+			(close_all_fds(fds), exit_and_free(shell, "Error : dup2d"));
 	if (fds->output != -2)
 		if (dup2(fds->output, STDOUT_FILENO) == -1)
-			(close_all_fds(fds), exit_and_free(shell, "Error : dup2"));
+			(close_all_fds(fds), exit_and_free(shell, "Error : dup2f"));
 	close_all_fds(fds);
 	get_cmds(shell->env, cmds, shell);
 }

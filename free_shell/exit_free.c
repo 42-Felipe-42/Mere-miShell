@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aurlic <aurlic@student.42.fr>              +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:16 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/29 11:58:15 by aurlic           ###   ########.fr       */
+/*   Updated: 2024/07/31 12:02:25 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void exit_and_free(t_shell *shell, char *str)
 {
 	int ext_code;
 
-	if (ft_strcmp(str, "Exit") == 0)
+	if (ft_strncmp(str, "Exit",4) == 0)
 		ft_printf("Exit\n");
 	else if (ft_strnstr(str, "Error", 5))
 	{

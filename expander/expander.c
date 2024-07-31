@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/30 10:53:38 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:11:34 by felipe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*expand(char *input, int i, t_shell *shell)
 	dst[j] = '\0';
 	env = find_env(dst, shell->env);
 	if (!env)
-		env = ft_strdup(dst);
+		env = ft_strdup("");
 	return (free(dst), env);
 }
 
@@ -90,13 +90,10 @@ char	*no_guillemets(char *word, t_shell *shell)
 	{
 		partial_exp = initialize_expansion(word, &i);
 		exp_w = join_and_free(exp_w, partial_exp, shell);
-		printf("exp %s\n", exp_w);
 		free(partial_exp);
 		if (word[i])
 		{
 			tmp = expand_variable(word, &i, shell, exp_w);
-			printf("exp after %s\n", exp_w);
-			// free(exp_w);
 			exp_w = tmp;
 		}
 		if (ft_strchr(word + i, '$') == NULL)
