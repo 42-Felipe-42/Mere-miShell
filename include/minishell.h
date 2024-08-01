@@ -6,7 +6,7 @@
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 17:17:51 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/31 18:54:18 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void		ft_unset_builtin(t_shell *shell, t_cmds *cmds);
 void		ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd);
 void		ft_env(t_shell *shell, t_cmds *cmd, int fd_output);
 void		ft_export(t_env **env, t_cmds *cmd);
+void		print_error(char *str);
 
 /*--------------------LEXER--------------------*/
 void		lex_str(char *input, t_lexer **lex, t_shell *shell);

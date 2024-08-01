@@ -6,7 +6,7 @@
 /*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 23:18:29 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/31 17:14:36 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/07/31 17:26:57 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	print_lexer_list(t_cmds *head)
 	current_cmd = head;
 	while (current_cmd != NULL)
 	{
-
 		i = 0;
 		while (current_cmd->tab && current_cmd->tab[i])
 		{

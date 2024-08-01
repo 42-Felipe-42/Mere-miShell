@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:39:29 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 17:23:23 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 18:46:10 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	close_fds_parent(fds);
 	fds->input = fds->pipes[0];
 }
+
 void	update_last_cmd(t_shell *shell, t_cmds *cmds)
 {
 	t_env	*tmp;
@@ -78,6 +79,7 @@ void	update_last_cmd(t_shell *shell, t_cmds *cmds)
 		tmp = tmp->next;
 	}
 }
+
 void	run_exec(t_shell *shell)
 {
 	t_cmds	*tmp_cmd;

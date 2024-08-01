@@ -18,6 +18,7 @@ C_FILE		 = 	$(addsuffix .c,						\
 					export 							\
 					unset 							\
 					cd 								\
+					cd2								\
 					pwd								\
 				)									\
 				env/get_env							\

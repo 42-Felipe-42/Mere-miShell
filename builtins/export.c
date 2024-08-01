@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 17:23:00 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 22:14:39 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,11 @@ void	insertion_sort(t_env **arr, int n, int (*cmp)(const t_env *,
 			const t_env *))
 {
 	t_env	*key;
+	int		i;
+	int		j;
 
-	int i, j;
-	for (i = 1; i < n; i++)
+	i = 1;
+	while (i < n)
 	{
 		key = arr[i];
 		j = i - 1;
@@ -72,6 +74,7 @@ void	insertion_sort(t_env **arr, int n, int (*cmp)(const t_env *,
 			j = j - 1;
 		}
 		arr[j + 1] = key;
+		i++;
 	}
 }
 
@@ -82,78 +85,24 @@ void	print_sorted_env(t_env *env)
 	t_env	*tmp;
 	t_env	**env_array;
 
-	count = 0;
+	count = -1;
 	tmp = env;
-	while (tmp)
-	{
-		count++;
+	while (tmp && ++count)
 		tmp = tmp->next;
-	}
 	env_array = malloc(count * sizeof(t_env *));
 	if (!env_array)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
+		(perror("malloc"), exit(EXIT_FAILURE));
 	tmp = env;
-	for (i = 0; i < count; i++)
+	i = -1;
+	while (++i < count)
 	{
 		env_array[i] = tmp;
 		tmp = tmp->next;
 	}
 	insertion_sort(env_array, count, compare_env);
-	for (i = 0; i < count; i++)
-	{
+	i = -1;
+	while (++i < count)
 		printf("declare -x %s=\"%s\"\n", env_array[i]->key,
 			env_array[i]->value);
-	}
 	free(env_array);
-}
-
-void	ft_export(t_env **env, t_cmds *cmd)
-{
-	int		i;
-	char	*arg;
-	char	*equal_sign;
-	char	*joined_arg;
-
-	i = 1;
-	if (!cmd->tab[1])
-	{
-		print_sorted_env(*env);
-		return ;
-	}
-	while (cmd->tab[i])
-	{
-		arg = cmd->tab[i];
-		joined_arg = NULL;
-		if (arg[ft_strlen(arg) - 1] == '=' && cmd->tab[i + 1])
-		{
-			joined_arg = ft_strjoin(arg, cmd->tab[i + 1]);
-			arg = joined_arg;
-			i++;
-		}
-		equal_sign = ft_strchr(arg, '=');
-		if (equal_sign)
-		{
-			*equal_sign = '\0';
-			if (is_valid_identifier(arg))
-				add_or_update_env(env, arg, equal_sign + 1);
-			else
-				fprintf(stderr,
-					"minishell: export: `%s': not a valid identifier\n", arg);
-			*equal_sign = '=';
-		}
-		else
-		{
-			if (is_valid_identifier(arg))
-				add_or_update_env(env, arg, "");
-			else
-				fprintf(stderr,
-					"minishell: export: `%s': not a valid identifier\n", arg);
-		}
-		if (joined_arg)
-			free(joined_arg);
-		i++;
-	}
 }

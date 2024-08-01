@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 15:22:55 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 17:52:38 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 	}
 	else if (redirs->token == HERE_DOC)
 	{
-		setup_heredoc_signals();
+		// setup_heredoc_signals();
 		fd = here_doc(shell, redirs);
-		setup_shell_signals();
+		// setup_shell_signals();
 	}
 	return (fd);
 }

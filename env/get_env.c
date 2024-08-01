@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 17:23:09 by felipe           ###   ########.fr       */
+/*   Updated: 2024/07/31 18:46:47 by louismdv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ char	*find_env(char *key, t_env *envp)
 
 void	get_env(t_shell *shell, char **envp)
 {
-	int index;
-	t_env *new_env_node;
+	int		index;
+	t_env	*new_env_node;
 
 	index = 0;
 	if (!envp || !envp[0])
