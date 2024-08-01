@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 10:13:38 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:43:33 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_cmds
 	char			*path;
 	int				builtin;
 	pid_t			pid;
+	int				skip_redir;
 	struct s_lexer	*lex_redir;
 	struct s_cmds	*next;
 	struct s_cmds	*prev;

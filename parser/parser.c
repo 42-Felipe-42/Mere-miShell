@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/01 10:35:23 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:44:05 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,28 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	tmp = lex;
 	(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
 	if (!(*cmds)->tab)
-		exit_and_free(shell, "Error : malloc redir");
+		exit_and_free(shell, "Error malloc redir");
 	while (tmp && tmp->word)
 	{
 		if (tmp->word)
 		{
 			(*cmds)->tab[i] = ft_strdup(tmp->word);
-			if (!(*cmds)->tab[i++])
-				(free_lexer(&tmp),
-					exit_and_free(shell, "Error : malloc redir"));
+			if (!(*cmds)->tab[i])
+			{
+				for (int j = 0; j < i; j++)
+					free((*cmds)->tab[j]);
+				free((*cmds)->tab);
+				exit_and_free(shell, "Error malloc redir");
+			}
+			i++;
 		}
 		if (tmp->next && tmp->next->word)
 			tmp = tmp->next;
 		else
 			break ;
 	}
-	return ((*cmds)->tab[i] = NULL, (tmp));
+	(*cmds)->tab[i] = NULL;
+	return (tmp);
 }
 
 void	tmp_is_token(t_cmds *current_cmd, t_shell *shell)
@@ -73,34 +79,41 @@ void	tmp_is_token(t_cmds *current_cmd, t_shell *shell)
 	current_cmd = current_cmd->next;
 }
 
+void handle_pipe(t_cmds **current_cmd, t_shell *shell)
+{
+	(*current_cmd)->next = init_cmds(shell);
+	(*current_cmd)->next->prev = *current_cmd;
+	*current_cmd = (*current_cmd)->next;
+}
+
 t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 {
 	t_lexer	*tmp;
 	t_cmds	*cmds;
 	t_cmds	*current_cmd;
-	int		skip_redir;
 
 	cmds = init_cmds(shell);
 	current_cmd = cmds;
 	tmp = lex;
-	skip_redir = 0;
 	while (tmp)
 	{
 		if (tmp->token == IN_REDIR || tmp->token == OUT_REDIR
 			|| tmp->token == APPEND || tmp->token == HERE_DOC)
 		{
 			redir_to_cmds(tmp, &current_cmd, shell);
-			skip_redir = 1;
+			tmp = tmp->next;
+			cmds->skip_redir = 1;
 		}
 		else if (tmp->token == PIPE)
-			tmp_is_token(current_cmd, shell);
-		else if ((tmp->next && tmp->next->token != PIPE) || (!tmp->next
-				&& skip_redir == 0))
+			handle_pipe(&current_cmd, shell);
+		else if ((tmp->next && tmp->next->token != PIPE)
+			|| (!tmp->next && !cmds->skip_redir))
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
 		tmp = tmp->next;
 	}
 	return (free_lexer(&lex), cmds);
 }
+
 
 void	parser(t_lexer *lex, t_shell *shell)
 {
