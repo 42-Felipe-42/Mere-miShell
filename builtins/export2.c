@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 22:15:04 by louismdv          #+#    #+#             */
-/*   Updated: 2024/08/01 09:40:04 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:33:20 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-int	is_custom_space(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
-		|| c == '\f');
-}
 
 // Fonction pour supprimer les espaces autour des signes égaux
 void	trim_spaces(char *str)
@@ -60,6 +54,12 @@ void	handle_identifier(t_env **env, char *arg)
 		ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
 }
 
+void	free_joined(char *str)
+{
+	if (str)
+		free(str);
+}
+
 // Fonction pour traiter un argument
 bool	process_arg(t_env **env, char *arg, char *next_arg)
 {
@@ -67,10 +67,10 @@ bool	process_arg(t_env **env, char *arg, char *next_arg)
 	char	*joined_arg;
 	bool	skip_next;
 
-	joined_arg = NULL;
 	skip_next = false;
+	joined_arg = NULL;
 	trim_spaces(arg);
-	if (arg && arg[strlen(arg) - 1] == '=' && next_arg)
+	if (arg && arg[ft_strlen(arg) - 1] == '=' && next_arg)
 	{
 		joined_arg = ft_strjoin(arg, next_arg);
 		if (!joined_arg)
@@ -78,7 +78,7 @@ bool	process_arg(t_env **env, char *arg, char *next_arg)
 		arg = joined_arg;
 		skip_next = true;
 	}
-	equal_sign = strchr(arg, '=');
+	equal_sign = ft_strchr(arg, '=');
 	if (equal_sign)
 	{
 		*equal_sign = '\0';
@@ -87,28 +87,5 @@ bool	process_arg(t_env **env, char *arg, char *next_arg)
 	}
 	else
 		handle_identifier(env, arg);
-	if (joined_arg)
-		free(joined_arg);
-	return (skip_next);
-}
-
-// Fonction principale pour exporter les variables d'environnement
-void	ft_export(t_env **env, t_cmds *cmds)
-{
-	int		i;
-	bool	skip;
-
-	i = 1;
-	if (!cmds->tab[1])
-	{
-		print_sorted_env(*env);
-		return ;
-	}
-	while (cmds->tab[i])
-	{
-		skip = process_arg(env, cmds->tab[i], cmds->tab[i + 1]);
-		if (skip)
-			i++;
-		i++;
-	}
+	return (free_joined(joined_arg), skip_next);
 }

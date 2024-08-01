@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 14:44:15 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/15 14:10:40 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:12:51 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef EXEC_H
+# define EXEC_H
+
+# include "minishell.h"
 
 typedef struct s_fd
 {
@@ -19,3 +22,5 @@ typedef struct s_fd
 	int	input;
 	int	output;
 }		t_fd;
+
+#endif

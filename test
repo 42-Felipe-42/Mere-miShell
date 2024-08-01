@@ -1,0 +1,18 @@
+total 140
+drwxr-xr-x 2 lmerveil 2023_paris    260 Aug  1 10:34 builtins
+drwxr-xr-x 2 lmerveil 2023_paris     80 Aug  1 10:34 env
+drwxr-xr-x 2 lmerveil 2023_paris    276 Aug  1 10:34 exec
+drwxr-xr-x 2 lmerveil 2023_paris    142 Aug  1 10:34 expander
+drwxr-xr-x 2 lmerveil 2023_paris     72 Aug  1 10:34 free_shell
+-rw-r--r-- 1 lmerveil 2023_paris    126 Jul 24 16:40 ignore_readline.supp
+drwxr-xr-x 2 lmerveil 2023_paris     70 Aug  1 10:00 include
+drwxr-xr-x 2 lmerveil 2023_paris     90 Aug  1 10:34 lexer
+-rw-r--r-- 1 lmerveil 2023_paris   1708 Aug  1 10:15 main.c
+-rw-r--r-- 1 lmerveil 2023_paris   5952 Aug  1 10:34 main.o
+-rw-r--r-- 1 lmerveil 2023_paris   1879 Aug  1 10:19 Makefile
+-rwxr-xr-x 1 lmerveil 2023_paris 107568 Aug  1 10:35 minishell
+drwxr-xr-x 2 lmerveil 2023_paris     82 Aug  1 10:35 parser
+drwxr-xr-x 2 lmerveil 2023_paris     74 Aug  1 10:34 prompt
+-rw-r--r-- 1 lmerveil 2023_paris      0 Aug  1 10:36 test
+-rw-r--r-- 1 lmerveil 2023_paris   2857 Aug  1 09:48 utils.c
+-rw-r--r-- 1 lmerveil 2023_paris   5752 Aug  1 10:34 utils.o

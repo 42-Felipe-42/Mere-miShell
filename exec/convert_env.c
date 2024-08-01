@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   convert_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 09:43:12 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 09:43:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:10:35 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #include "../include/minishell.h"
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 17:22:54 by felipe           ###   ########.fr       */
+/*   Updated: 2024/08/01 10:23:16 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	exit_args(char **tab, int *flag)
 		*flag = 1;
 		return (1);
 	}
-	return (atoi(tab[1]) % 256);
+	return (ft_atoi(tab[1]) % 256);
 }
 
 void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)

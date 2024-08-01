@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 09:41:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:34:37 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ void		ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd);
 void		ft_env(t_shell *shell, t_cmds *cmd, int fd_output);
 void		ft_export(t_env **env, t_cmds *cmds);
 void		print_error(char *str);
+void		print_sorted_env(t_env *env);
+void		add_or_update_env(t_env **env, const char *key, const char *value);
+int			is_valid_identifier(const char *str);
+bool		process_arg(t_env **env, char *arg, char *next_arg);
 
 /*--------------------LEXER--------------------*/
 void		lex_str(char *input, t_lexer **lex, t_shell *shell);

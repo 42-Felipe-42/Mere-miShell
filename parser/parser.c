@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/31 18:45:18 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:35:23 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
 		tmp = tmp->next;
 	}
-	return (free_lexer(&tmp), cmds);
+	return (free_lexer(&lex), cmds);
 }
 
 void	parser(t_lexer *lex, t_shell *shell)

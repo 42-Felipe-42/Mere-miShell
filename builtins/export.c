@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/01 09:58:10 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:33:30 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,6 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 	*env = new_node;
 }
 
-int	compare_env(const t_env *a, const t_env *b)
-{
-	return (ft_strncmp(a->key, b->key, ft_strlen(a->key)));
-}
-
 void	insertion_sort(t_env **arr, int n)
 {
 	t_env	*key;
@@ -67,10 +62,10 @@ void	insertion_sort(t_env **arr, int n)
 	{
 		key = arr[i];
 		j = i - 1;
-		while (j >= 0 && arr[j]->value > key->value)
+		while (j >= 0 && ft_strcmp(arr[j]->key, key->key) > 0)
 		{
 			arr[j + 1] = arr[j];
-			j--;
+			j = j - 1;
 		}
 		arr[j + 1] = key;
 		i++;
@@ -98,10 +93,31 @@ void	print_sorted_env(t_env *env)
 		env_array[i] = tmp;
 		tmp = tmp->next;
 	}
-	insertion_sort(env_array, count, compare_env);
+	insertion_sort(env_array, count);
 	i = -1;
 	while (++i < count)
 		printf("declare -x %s=\"%s\"\n", env_array[i]->key,
 			env_array[i]->value);
 	free(env_array);
+}
+
+// Fonction principale pour exporter les variables d'environnement
+void	ft_export(t_env **env, t_cmds *cmds)
+{
+	int		i;
+	bool	skip;
+
+	i = 1;
+	if (!cmds->tab[1])
+	{
+		print_sorted_env(*env);
+		return ;
+	}
+	while (cmds->tab[i])
+	{
+		skip = process_arg(env, cmds->tab[i], cmds->tab[i + 1]);
+		if (skip)
+			i++;
+		i++;
+	}
 }

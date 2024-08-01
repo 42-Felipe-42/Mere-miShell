@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/31 17:53:06 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:15:38 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ int	main(int ac, char **av, char **envp)
 		if (!shell)
 			exit_and_free(shell, "Error : malloc shell");
 		set_struct(shell, av, envp);
-		// setup_shell_signals();
+		setup_shell_signals();
 		while (1)
 		{
 			lex = lexer(av, shell);
 			if (!lex)
 				free_lexer(&lex);
-			// check_captured_signals(shell);
+			check_captured_signals(shell);
 			parser(lex, shell);
 			cmds = create_cmds(lex, shell);
 			shell->cmds = cmds;
