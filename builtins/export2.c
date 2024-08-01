@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 22:15:04 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/31 22:18:22 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/08/01 09:40:04 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	trim_spaces(char *str)
 	}
 }
 
-// Fonction pour gérer les arguments avec un signe égal
+// Fonction pour gerer les arguments avec un signe égal
 void	handle_assignment(t_env **env, char *arg, char *equal_sign)
 {
 	trim_spaces(arg);

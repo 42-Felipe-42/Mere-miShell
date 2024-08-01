@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 22:14:39 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/08/01 09:58:10 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,25 +53,24 @@ void	add_or_update_env(t_env **env, const char *key, const char *value)
 
 int	compare_env(const t_env *a, const t_env *b)
 {
-	return (ft_strcmp(a->key, b->key));
+	return (ft_strncmp(a->key, b->key, ft_strlen(a->key)));
 }
 
-void	insertion_sort(t_env **arr, int n, int (*cmp)(const t_env *,
-			const t_env *))
+void	insertion_sort(t_env **arr, int n)
 {
 	t_env	*key;
-	int		i;
 	int		j;
+	int		i;
 
 	i = 1;
 	while (i < n)
 	{
 		key = arr[i];
 		j = i - 1;
-		while (j >= 0 && cmp(arr[j], key) > 0)
+		while (j >= 0 && arr[j]->value > key->value)
 		{
 			arr[j + 1] = arr[j];
-			j = j - 1;
+			j--;
 		}
 		arr[j + 1] = key;
 		i++;
