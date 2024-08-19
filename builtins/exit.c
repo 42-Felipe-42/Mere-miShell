@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/01 17:08:33 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:00:13 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		return ;
 	}
-	if (cmd->next || cmd->prev)
-		return ;
+
 	ft_freeshell(shell);
 	close_all_fds(fd);
 	ft_putstr_fd("exit\n", 2);
