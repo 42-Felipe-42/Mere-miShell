@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 23:24:56 by louismdv          #+#    #+#             */
-/*   Updated: 2024/07/31 17:23:39 by felipe           ###   ########.fr       */
+/*   Updated: 2024/08/19 10:09:31 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-// expand first part of the input. ex: $HOME$$HOME s'arrete au 2eme $
-char	*initialize_expansion(char *word, int *i)
-{
-	char	*exp_w;
-
-	if (*i == 0 && ft_isalnum(word[*i]))
-	{
-		exp_w = ft_strndup_dol(word);
-		while (word[*i] != '$' && word[*i])
-			(*i)++;
-		return (exp_w);
-	}
-	else
-		exp_w = ft_strdup("");
-	return (exp_w);
-}
 
 char	*join_and_free(char *exp_w, const char *suffix, t_shell *shell)
 {
@@ -95,12 +78,11 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 {
 	char	*tmp;
 	char	*expansion_result;
+	char	*tmp2;
 
 	handle_dols(word, i, shell, &exp_w);
 	if (!ft_strncmp(word + *i, "$0", 2) || !ft_strncmp(word + *i, "$0$", 3))
-	{
 		exp_w = join_and_free(exp_w, find_pwd(word + *i, shell), shell);
-	}
 	else if (!ft_strncmp(word + *i, "$?", 2) || !ft_strncmp(word + *i, "$?$",
 			3))
 	{
@@ -110,8 +92,22 @@ char	*expand_variable(char *word, int *i, t_shell *shell, char *exp_w)
 		exp_w = expansion_result;
 	}
 	else if (word[*i] && word[*i] == '$' && word[*i + 1] != '$')
-	{
 		exp_w = expand_join(word, i, exp_w, shell);
+	if (word[*i] && init_exp_checks(word, *i))
+	{
+		tmp2 = ft_strndup(&word[*i], 1);
+		exp_w = join_and_free(exp_w, tmp2, shell);
+		free(tmp2);
 	}
 	return (exp_w);
+}
+
+int	init_exp_checks(char *word, int i)
+{
+	if (word && (word[i] == ' ' || word[i] == '-' || word[i] == '='
+			|| word[i] == '+' || word[i] == ']' || word[i] == '['
+			|| word[i] == '\'' || word[i] == '/' || word[i] == '}'
+			|| word[i] == '{' || word[i] == '%' || word[i] == '&'))
+		return (1);
+	return (0);
 }

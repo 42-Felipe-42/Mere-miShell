@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/01 10:23:16 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:08:33 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	is_valid_number(const char *str)
 		return (0);
 	while (str[i])
 	{
-		if (!isdigit(str[i]))
+		if (!ft_isdigit(str[i]))
 			return (0);
 		i++;
 	}
@@ -71,5 +71,6 @@ void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 		return ;
 	ft_freeshell(shell);
 	close_all_fds(fd);
+	ft_putstr_fd("exit\n", 2);
 	exit(ext);
 }

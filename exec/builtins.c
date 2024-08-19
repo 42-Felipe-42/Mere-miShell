@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 17:23:15 by felipe           ###   ########.fr       */
+/*   Updated: 2024/08/19 14:13:25 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
 	child_builtins(shell, fds);
 	if (cmds->builtin == ECHO)
-		ft_echo(shell, cmds);
+		ft_echo(shell, cmds, fds->output, fds);
 	if (cmds->builtin == ENV)
-		ft_env(shell, cmds, fds->output);
+		ft_env(shell, cmds, fds->output, fds);
 	if (cmds->builtin == PWD)
-		ft_pwd(cmds, shell, fds->output);
+		ft_pwd(cmds, shell, fds->output, fds);
+	if (cmds->builtin == EXIT)
+		ft_exit(shell, cmds, fds);
 }
 
 void	child_builtins(t_shell *shell, t_fd *fds)
@@ -55,6 +57,9 @@ void	is_builtin(t_cmds *cmds)
 		else if (ft_strncmp(cmds->tab[0], "pwd", 3) == 0
 			&& ft_strlen(cmds->tab[0]) == 3)
 			cmds->builtin = PWD;
+		else if (ft_strncmp(cmds->tab[0], "exit", 4) == 0
+			&& ft_strlen(cmds->tab[0]) == 4)
+			cmds->builtin = EXIT;
 		else if (ft_strncmp(cmds->tab[0], "export", 6) == 0
 			&& ft_strlen(cmds->tab[0]) == 6)
 			cmds->builtin = EXPORT;
@@ -64,8 +69,5 @@ void	is_builtin(t_cmds *cmds)
 		else if (ft_strncmp(cmds->tab[0], "env", 3) == 0
 			&& ft_strlen(cmds->tab[0]) == 3)
 			cmds->builtin = ENV;
-		else if (ft_strncmp(cmds->tab[0], "exit", 4) == 0
-			&& ft_strlen(cmds->tab[0]) == 4)
-			cmds->builtin = EXIT;
 	}
 }

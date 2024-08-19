@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/07/31 17:22:44 by felipe           ###   ########.fr       */
+/*   Updated: 2024/08/02 18:46:42 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_newline(char **tab, int *flag)
+int	check_line(char **tab, int *flag)
 {
 	int	n;
 	int	i;
@@ -34,24 +34,28 @@ int	check_newline(char **tab, int *flag)
 	return (n);
 }
 
-void	ft_echo(t_shell *shell, t_cmds *cmd)
+void	ft_echo(t_shell *shell, t_cmds *cmd, int fd_output, t_fd *fds)
 {
 	int	i;
 	int	flag;
+	int	ext;
 
 	flag = 0;
-	(void)shell;
-	i = check_newline(cmd->tab, &flag);
+	i = check_line(cmd->tab, &flag);
 	if (cmd->tab[1])
 	{
 		while (cmd->tab[i])
 		{
 			if (cmd->tab[i] && !cmd->tab[i + 1])
-				printf("%s", cmd->tab[i++]);
+				ft_putstr_fd(cmd->tab[i], fd_output);
 			else if (cmd->tab[i])
-				printf("%s ", cmd->tab[i++]);
+				(ft_putstr_fd(cmd->tab[i], fd_output), ft_putstr_fd(" ",
+						fd_output));
+			i++;
 		}
 	}
 	if (!flag)
-		printf("\n");
+		ft_putstr_fd("\n", fd_output);
+	ext = shell->exit_code;
+	(ft_freeshell(shell), close_all_fds(fds), exit(ext));
 }

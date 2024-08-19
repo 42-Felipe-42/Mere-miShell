@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 09:43:36 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 14:51:30 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/01 16:15:12 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*get_path(t_env *env, t_cmds *cmds)
 
 void	ft_cmd_no_found(char *str)
 {
-	ft_putstr_fd("command not found : ", 2);
+	ft_putstr_fd("command not found : ", STDOUT_FILENO);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);
 }
@@ -58,14 +58,15 @@ int	is_directory(const char *path)
 
 void	find_path(t_env *env, t_cmds *cmds, t_shell *shell, t_fd *fds)
 {
+	(void)fds;
 	if (!cmds || !cmds->tab || cmds->tab[0][0] == '\0')
 		exit_and_free(shell, "");
 	if (ft_strchr(cmds->tab[0], '/') != NULL)
 	{
 		if (is_directory(cmds->tab[0]))
 		{
-			ft_putstr_fd(cmds->tab[0], STDERR_FILENO);
-			ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+			ft_putstr_fd(cmds->tab[0], STDOUT_FILENO);
+			ft_putstr_fd(": Is a directory\n", STDOUT_FILENO);
 			shell->exit_code = 126;
 			close_all_fds(fds);
 			exit_and_free(shell, "");

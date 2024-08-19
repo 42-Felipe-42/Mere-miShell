@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/01 14:44:05 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/19 15:01:07 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,40 +46,27 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 	i = 0;
 	count = count_arg(lex);
 	tmp = lex;
-	(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
 	if (!(*cmds)->tab)
-		exit_and_free(shell, "Error malloc redir");
-	while (tmp && tmp->word)
+		(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
+	if (!(*cmds)->tab)
+		exit_and_free(shell, "Error: malloc tab");
+	while (tmp && tmp->word && tmp->token == 0)
 	{
 		if (tmp->word)
 		{
+			while ((*cmds)->tab && (*cmds)->tab[i])
+				i++;
 			(*cmds)->tab[i] = ft_strdup(tmp->word);
-			if (!(*cmds)->tab[i])
-			{
-				for (int j = 0; j < i; j++)
-					free((*cmds)->tab[j]);
-				free((*cmds)->tab);
-				exit_and_free(shell, "Error malloc redir");
-			}
-			i++;
+			if (!(*cmds)->tab[i++])
+				(free_lexer(&tmp), exit_and_free(shell,
+						"Error : malloc redir"));
 		}
-		if (tmp->next && tmp->next->word)
-			tmp = tmp->next;
-		else
-			break ;
+		tmp = tmp->next;
 	}
-	(*cmds)->tab[i] = NULL;
-	return (tmp);
+	return ((*cmds)->tab[i] = NULL, tmp);
 }
 
-void	tmp_is_token(t_cmds *current_cmd, t_shell *shell)
-{
-	current_cmd->next = init_cmds(shell);
-	current_cmd->next->prev = current_cmd;
-	current_cmd = current_cmd->next;
-}
-
-void handle_pipe(t_cmds **current_cmd, t_shell *shell)
+void	tmp_is_token(t_cmds **current_cmd, t_shell *shell)
 {
 	(*current_cmd)->next = init_cmds(shell);
 	(*current_cmd)->next->prev = *current_cmd;
@@ -101,19 +88,19 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 			|| tmp->token == APPEND || tmp->token == HERE_DOC)
 		{
 			redir_to_cmds(tmp, &current_cmd, shell);
-			tmp = tmp->next;
-			cmds->skip_redir = 1;
+			tmp = tmp->next->next;
 		}
 		else if (tmp->token == PIPE)
-			handle_pipe(&current_cmd, shell);
-		else if ((tmp->next && tmp->next->token != PIPE)
-			|| (!tmp->next && !cmds->skip_redir))
+		{
+			tmp_is_token(&current_cmd, shell);
+			tmp = tmp->next;
+		}
+		else if (((tmp->next && tmp->next->token == PIPE && tmp->next->next)
+				|| (tmp->next && tmp->next->token != PIPE) || !tmp->next))
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
-		tmp = tmp->next;
 	}
 	return (free_lexer(&lex), cmds);
 }
-
 
 void	parser(t_lexer *lex, t_shell *shell)
 {
@@ -122,16 +109,12 @@ void	parser(t_lexer *lex, t_shell *shell)
 	char	*tmp;
 
 	lexer = lex;
-	i = 0;
 	syntaxe(lexer, shell);
-	expander(lexer, shell);
 	while (lexer)
 	{
 		i = 0;
 		while (lexer->word && lexer->word[i])
 		{
-			if (check_quote_closed(lexer->word) == FALSE)
-				exit_and_free(shell, "Error : quote not closed");
 			if (which_quote(lexer->word[i++]))
 			{
 				tmp = remove_quote(lexer->word, &i, shell);

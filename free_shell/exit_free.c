@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:16 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 17:17:06 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/08/19 13:05:08 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	free_before_loop(t_shell *shell)
 	free_cmds(&cmds);
 	shell->tmpexit_code = shell->exit_code;
 	shell->exit_code = 0;
+	shell->skip_here = 0;
 }
 
 void	exit_and_free(t_shell *shell, char *str)
@@ -41,5 +42,6 @@ void	exit_and_free(t_shell *shell, char *str)
 		perror(str);
 	ext_code = shell->exit_code;
 	ft_freeshell(shell);
+	rl_clear_history();
 	exit(ext_code);
 }

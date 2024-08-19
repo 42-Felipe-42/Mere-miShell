@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 09:44:04 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 09:44:07 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:13:17 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ void	execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds)
 
 void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 {
-	if (cmds->builtin == EXIT)
-		ft_exit(shell, cmds, fds);
+
 	if (cmds->builtin == CD)
 		ft_cd(shell, cmds);
 	else if (cmds->builtin == EXPORT)
@@ -45,8 +44,7 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		if (cmds->pid == 0)
 		{
 			if (cmds->builtin)
-				(run_builtins(shell, cmds, fds), close_all_fds(fds),
-					exit_and_free(shell, ""));
+				(run_builtins(shell, cmds, fds));
 			else
 				execute_child(shell, cmds, fds);
 		}

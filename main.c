@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/01 10:15:38 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:30:30 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	set_struct(t_shell *shell, char **av, char **envp)
 	shell->env = NULL;
 	shell->flag = 0;
 	shell->exit_code = 0;
+	shell->tmpexit_code = 0;
+	shell->skip_here = 0;
 	get_env(shell, envp);
 	shell->lex = NULL;
 }
@@ -40,7 +42,7 @@ int	main(int ac, char **av, char **envp)
 		setup_shell_signals();
 		while (1)
 		{
-			lex = lexer(av, shell);
+			lex = lexer(shell);
 			if (!lex)
 				free_lexer(&lex);
 			check_captured_signals(shell);

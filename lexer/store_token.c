@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 15:35:20 by felipe           ###   ########.fr       */
+/*   Updated: 2024/08/19 14:46:20 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,18 +97,18 @@ void	lex_str(char *input, t_lexer **lex, t_shell *shell)
 	}
 }
 
-t_lexer	*lexer(char **av, t_shell *shell)
+t_lexer	*lexer(t_shell *shell)
 {
 	char	*input;
 	t_lexer	*lex;
 
 	lex = NULL;
-	input = av[1];
 	input = ft_readline();
-	if (!input)
+	if (!input && shell->skip_here == 0)
 	{
 		exit_and_free(shell, "exit");
 	}
+	input = expander(input, shell);
 	lex_str(input, &lex, shell);
 	shell->lex = lex;
 	return (lex);

@@ -3,27 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 09:43:46 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 10:53:37 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/02 13:36:53 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ctrlc(t_shell *shell, t_fd *fd)
-{
-	if (g_signal == SIGINT)
-	{
-		shell->exit_code = 130;
-		g_signal = 0;
-		close(fd->input);
-		dup2(fd->input, STDIN_FILENO);
-	}
-}
-
-void	loop_here_doc(t_lexer *redirs, int fd)
+void	loop_here_doc(t_lexer *redirs, int fd, t_shell *shell)
 {
 	char	*line;
 	char	*limiter;
@@ -32,6 +21,13 @@ void	loop_here_doc(t_lexer *redirs, int fd)
 	while (1)
 	{
 		line = readline(">");
+		if (g_signal == SIGINT)
+		{
+			shell->exit_code = 130;
+			g_signal = 0;
+			shell->skip_here = 1;
+			break ;
+		}
 		if (line == NULL || (!ft_strncmp(line, limiter, ft_strlen(line))
 				&& ft_strlen(line) == ft_strlen(limiter) - 1))
 		{
@@ -61,9 +57,8 @@ int	here_doc(t_shell *shell, t_lexer *redirs)
 	if (fd.input == -1)
 		exit_and_free(shell, "Error : Fail to open file");
 	unlink(file_name);
-	loop_here_doc(redirs, tmp);
+	loop_here_doc(redirs, tmp, shell);
 	free(file_name);
 	close(tmp);
-	ctrlc(shell, &fd);
 	return (fd.input);
 }

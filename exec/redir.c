@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 14:33:30 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 11:09:05 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/13 12:34:38 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 		if (fd == -1)
 		{
 			perror(redirs->word);
+			shell->exit_code = 1;
 			return (fd);
 		}
 	}
@@ -43,7 +44,7 @@ int	handle_input_redir(t_lexer *redirs, int fd, t_shell *shell)
 	return (fd);
 }
 
-int	handle_output_redir(t_lexer *redirs, int fd)
+int	handle_output_redir(t_lexer *redirs, t_shell *shell, int fd)
 {
 	if (fd != -2)
 		close(fd);
@@ -53,6 +54,7 @@ int	handle_output_redir(t_lexer *redirs, int fd)
 		if (fd == -1)
 		{
 			perror(redirs->word);
+			shell->exit_code = 1;
 			return (fd);
 		}
 	}
@@ -62,6 +64,7 @@ int	handle_output_redir(t_lexer *redirs, int fd)
 		if (fd == -1)
 		{
 			perror(redirs->word);
+			shell->exit_code = 1;
 			return (fd);
 		}
 	}
@@ -82,7 +85,7 @@ void	process_redirections(t_cmds *cmds, int *fd_in, int *fd_out,
 		}
 		else if (redirs->token == OUT_REDIR || redirs->token == APPEND)
 		{
-			*fd_out = handle_output_redir(redirs, *fd_out);
+			*fd_out = handle_output_redir(redirs, shell, *fd_out);
 		}
 		if ((*fd_in == -1) || (*fd_out == -1))
 			break ;
@@ -93,7 +96,9 @@ void	process_redirections(t_cmds *cmds, int *fd_in, int *fd_out,
 void	set_fds(t_fd *fd)
 {
 	if (fd->pipes[1] != -2)
+	{
 		fd->output = fd->pipes[1];
+	}
 	if (fd->redir[0] != -2)
 	{
 		if (fd->input != -2)

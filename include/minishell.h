@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 14:51:35 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/19 15:42:53 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <sys/stat.h>
+# define PROMPT_LINE "\001\x1b[38;2;0;255;0m\x1b[1m\002➜ \001\x1b[0m\002"
 
 extern int	g_signal;
 
@@ -29,6 +30,7 @@ typedef struct s_shell
 	char	*av;
 	int		exit_code;
 	int		tmpexit_code;
+	int		skip_here;
 	t_cmds	*cmds;
 	t_env	*env;
 	t_lexer	*lex;
@@ -37,13 +39,13 @@ typedef struct s_shell
 }			t_shell;
 
 /*-------------------BUILTINS-------------------*/
-void		ft_echo(t_shell *shell, t_cmds *cmd);
+void		ft_echo(t_shell *shell, t_cmds *cmd, int fd_output, t_fd *fds);
 void		run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds);
-void		ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output);
+void		ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output, t_fd *fds);
 void		ft_cd(t_shell *shell, t_cmds *cmds);
 void		ft_unset_builtin(t_shell *shell, t_cmds *cmds);
 void		ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd);
-void		ft_env(t_shell *shell, t_cmds *cmd, int fd_output);
+void		ft_env(t_shell *shell, t_cmds *cmd, int fd_output, t_fd *fds);
 void		ft_export(t_env **env, t_cmds *cmds);
 void		print_error(char *str);
 void		print_sorted_env(t_env *env);
@@ -56,7 +58,7 @@ void		lex_str(char *input, t_lexer **lex, t_shell *shell);
 void		store_token(t_lexer **lex, int token, t_shell *shell);
 void		store_token_words(char *input, t_lexer **lex, int len,
 				t_shell *shell);
-t_lexer		*lexer(char **av, t_shell *shell);
+t_lexer		*lexer(t_shell *shell);
 char		*remove_quote(char *word, int *i, t_shell *shell);
 t_cmds		*create_cmds(t_lexer *lex, t_shell *shell);
 t_lexer		*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell);
@@ -69,8 +71,8 @@ void		syntaxe(t_lexer *lex, t_shell *shell);
 
 /*------------------EXPANDER------------------*/
 char		*initialize_expansion(char *word, int *i);
-char		*no_guillemets(char *word, t_shell *shell);
-void		expander(t_lexer *lex, t_shell *shell);
+char		*no_guillemets(char *word,int *i, t_shell *shell);
+char		*expander(char *input, t_shell *shell);
 char		*ft_strndup_dol(char *s);
 char		*join_and_free(char *exp_w, const char *suffix, t_shell *shell);
 char		*expand_join(char *word, int *i, char *exp_w, t_shell *shell);
@@ -78,6 +80,8 @@ char		*expand_variable(char *word, int *i, t_shell *shell, char *exp_w);
 int			count_dols(char *word, int i);
 char		*find_pwd(char *str, t_shell *shell);
 char		*find_excode(char *str, t_shell *shell);
+int			init_exp_checks(char *word, int i);
+char		*symbols(char *word);
 
 /*--------------------ENV--------------------*/
 void		set_env_key_value(t_shell *shell, t_env *new, char **envp, int i);
@@ -99,7 +103,7 @@ void		execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		execute_child(t_shell *shell, t_cmds *cmds, t_fd *fds);
 void		init_fd(t_fd *fd);
 int			handle_input_redir(t_lexer *redirs, int fd, t_shell *shell);
-int			handle_output_redir(t_lexer *redirs, int fd);
+int			handle_output_redir(t_lexer *redirs, t_shell *shell, int fd);
 void		process_redirections(t_cmds *cmds, int *fd_in, int *fd_out,
 				t_shell *shell);
 void		set_fds(t_fd *fd);

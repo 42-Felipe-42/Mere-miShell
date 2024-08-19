@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 10:24:54 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/19 16:38:47 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,62 +52,79 @@ char	*find_pwd(char *str, t_shell *shell)
 	return (str);
 }
 
-char	*find_excode(char *str, t_shell *shell)
+// expand first part of the input. ex: $HOME$$HOME s'arrete au 2eme $
+char	*initialize_expansion(char *word, int *i)
 {
-	if (!ft_strncmp(str, "$?", 2) || !ft_strncmp(str, "$?$", 3))
-		str = ft_itoa(shell->tmpexit_code);
-	else
-		return (NULL);
-	return (str);
-}
+	char	*exp_w;
 
-void	expander(t_lexer *lex, t_shell *shell)
-{
-	t_lexer	*tmp;
-	char	*expanded_word;
-
-	tmp = lex;
-	expanded_word = NULL;
-	while (tmp)
+	if (*i == 0 && word[*i] != '\0' && (ft_isalnum(word[*i])
+			|| init_exp_checks(word, *i)))
 	{
-		if (tmp->word != NULL && tmp->skip == 0 && ft_strchr(tmp->word, '$')
-			&& which_quote(tmp->word[0]) == FALSE)
-		{
-			if (!(tmp->word[0] == '$' && tmp->word[1] == '\0'))
-			{
-				expanded_word = no_guillemets(tmp->word, shell);
-				free(tmp->word);
-				tmp->word = expanded_word;
-				tmp->skip = 1;
-			}
-		}
-		tmp = tmp->next;
+		exp_w = ft_strndup_dol(word);
+		while (word[*i] != '$' && word[*i])
+			(*i)++;
+		return (exp_w);
 	}
+	else
+		exp_w = ft_strdup("");
+	return (exp_w);
 }
 
 // returns expanded word
-char	*no_guillemets(char *word, t_shell *shell)
+char	*no_guillemets(char *word, int *i, t_shell *shell)
 {
 	char	*exp_w;
-	int		i;
 	char	*partial_exp;
 	char	*tmp;
 
 	exp_w = ft_strdup("");
-	i = 0;
-	while (word[i])
+	partial_exp = initialize_expansion(word, i);
+	exp_w = join_and_free(exp_w, partial_exp, shell);
+	free(partial_exp);
+	if (word[*i])
 	{
-		partial_exp = initialize_expansion(word, &i);
-		exp_w = join_and_free(exp_w, partial_exp, shell);
-		free(partial_exp);
-		if (word[i])
-		{
-			tmp = expand_variable(word, &i, shell, exp_w);
-			exp_w = tmp;
-		}
-		if (ft_strchr(word + i, '$') == NULL)
-			break ;
-		i++;
+		tmp = expand_variable(word, i, shell, exp_w);
+		exp_w = tmp;
 	}
 	return (exp_w);
+}
+
+char	*expander(char *input, t_shell *shell)
+{
+	char	*expanded_word;
+	char	*tmp2;
+	int		i;
+	int		opened;
+	// char	*result;
+
+	opened = 0;
+	i = 0;
+	expanded_word = NULL;
+	if (check_quote_closed(input) == FALSE)
+		exit_and_free(shell, "Error : quote not closed");
+	if (input != NULL && ft_strchr(input, '$'))
+	{
+		while (input[i])
+		{
+			
+			if (input[i] == '$' && input[i + 1] != '\0' )
+			{
+				expanded_word = no_guillemets(input, &i, shell);
+				// result = ft_st
+				printf("expanded_word: %s\n", expanded_word);
+				
+				// i =+ ft_
+			}				
+			else
+				is_quoted(input, &i, &opened);
+			printf("i: %d\n", i);
+			i++;
+		}
+	}
+	else if (init_exp_checks(input, 0))
+	{
+		tmp2 = symbols(input);
+		(free(input), input = tmp2);
+	}
+	return (input);
 }

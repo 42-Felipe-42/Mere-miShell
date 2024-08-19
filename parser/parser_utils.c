@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: felipe <felipe@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/07/31 17:24:29 by felipe           ###   ########.fr       */
+/*   Updated: 2024/08/02 18:12:31 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	count_arg(t_lexer *lex)
 	int	count;
 
 	count = 1;
-	while (lex && lex->next && lex->next->token == 0)
+	while (lex && lex->next && lex->next->token != PIPE)
 	{
 		count++;
 		lex = lex->next;
@@ -63,12 +63,24 @@ void	syntaxe(t_lexer *lex, t_shell *shell)
 	t_lexer	*tmp;
 
 	tmp = lex;
+	if (tmp && tmp->token == PIPE)
+	{
+		free_lexer(&lex);
+		exit_and_free(shell, "Error : syntax error near unexpected token");
+	}
 	while (tmp)
 	{
 		if (tmp->token == PIPE && (!tmp->next || tmp->next->token == PIPE))
+		{
+			free_lexer(&lex);
 			exit_and_free(shell, "Error : syntax error near unexpected token");
-		if (tmp->token != 0 && (!tmp->next || tmp->next->token != 0))
+		}
+		if ((tmp->token != 0 && tmp->token != PIPE) && ((tmp->next == NULL)
+				|| (tmp->next->token != 0)))
+		{
+			free_lexer(&lex);
 			exit_and_free(shell, "Error : syntax error near unexpected token");
+		}
 		tmp = tmp->next;
 	}
 }

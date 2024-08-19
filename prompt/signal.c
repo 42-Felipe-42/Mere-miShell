@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:14:24 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/01 11:06:33 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/19 11:16:59 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void	handle_signal(int signal)
 void	handle_heredoc_signal(int signal)
 {
 	g_signal = signal;
-	close(STDIN_FILENO);
-	write(STDERR_FILENO, "^C", 3);
+	write(STDOUT_FILENO, "^C", 3);
 }
 
 // Configuration des signaux pour heredoc
@@ -65,7 +64,7 @@ void	setup_shell_signals(void)
 	sigaction(SIGQUIT, &sig, NULL);
 }
 
-// Vérification et gestion des signaux capturés
+// Vérification et gestion des signaux captures
 bool	check_captured_signals(t_shell *shell)
 {
 	if (g_signal == SIGINT)
