@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/19 14:46:20 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 09:49:50 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,6 @@ t_lexer	*lexer(t_shell *shell)
 	input = expander(input, shell);
 	lex_str(input, &lex, shell);
 	shell->lex = lex;
+	free(input);
 	return (lex);
 }

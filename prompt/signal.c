@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:14:24 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/19 11:16:59 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 11:44:14 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ bool	check_captured_signals(t_shell *shell)
 	}
 	else if (g_signal == SIGQUIT)
 	{
-		shell->tmpexit_code = 130;
+		shell->tmpexit_code = 131;
 		g_signal = 0;
 		return (true);
 	}
