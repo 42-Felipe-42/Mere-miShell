@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   store_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 09:49:50 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:05:05 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ t_lexer	*lexer(t_shell *shell)
 		exit_and_free(shell, "exit");
 	}
 	input = expander(input, shell);
+	input = remove_quotes(input, shell);
+	printf("input: %s\n", input);
 	lex_str(input, &lex, shell);
 	shell->lex = lex;
 	free(input);

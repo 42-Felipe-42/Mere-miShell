@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/19 15:42:53 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:33:24 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void		store_token(t_lexer **lex, int token, t_shell *shell);
 void		store_token_words(char *input, t_lexer **lex, int len,
 				t_shell *shell);
 t_lexer		*lexer(t_shell *shell);
-char		*remove_quote(char *word, int *i, t_shell *shell);
+char		*remove_quotes(char *str, t_shell *shell);
 t_cmds		*create_cmds(t_lexer *lex, t_shell *shell);
 t_lexer		*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell);
 
@@ -70,8 +70,7 @@ t_cmds		*init_cmds(t_shell *shell);
 void		syntaxe(t_lexer *lex, t_shell *shell);
 
 /*------------------EXPANDER------------------*/
-char		*initialize_expansion(char *word, int *i);
-char		*no_guillemets(char *word,int *i, t_shell *shell);
+char		*no_guillemets(char *word, int *i, t_shell *shell);
 char		*expander(char *input, t_shell *shell);
 char		*ft_strndup_dol(char *s);
 char		*join_and_free(char *exp_w, const char *suffix, t_shell *shell);

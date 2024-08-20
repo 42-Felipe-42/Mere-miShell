@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 16:22:55 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/20 18:00:02 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*no_guillemets(char *word, int *i, t_shell *shell)
 	return (exp_w);
 }
 
-void	skip_and_copy(char *input, int *i, char **dest)
+void	skip_and_copy(char *input, int *i, char **dest, t_shell *shell)
 {
 	int		opened;
 	int		dest_index;
@@ -78,8 +78,13 @@ void	skip_and_copy(char *input, int *i, char **dest)
 		while (input[*i] != '$' && input[*i] != '\'' && input[*i] != '\"'
 			&& input[*i] != '\0')
 			(*i)++;
-		tmp = strndup(input + start, *i - start);
+		tmp = ft_strndup(input + start, *i - start);
 		*dest = ft_join_free(*dest, tmp);
+		if (!dest)
+		{
+			free(tmp);
+			exit_and_free(shell, "ERROR : skip_and_copy");
+		}
 		free(tmp);
 		return ;
 	}
@@ -90,9 +95,15 @@ void	skip_and_copy(char *input, int *i, char **dest)
 			opened = 0;
 		(*i)++;
 	}
-	tmp = strndup(input + start, *i - start);
+	tmp = ft_strndup(input + start, *i - start);
 	*dest = ft_join_free(*dest, tmp);
+	if (!dest)
+	{
+		free(tmp);
+		exit_and_free(shell, "ERROR : skip_and_copy");
+	}
 	free(tmp);
+	(*dest)[dest_index] = '\0';
 }
 
 char	*expander(char *input, t_shell *shell)
@@ -121,13 +132,13 @@ char	*expander(char *input, t_shell *shell)
 					i++;
 			}
 			else
-				skip_and_copy(input, &i, &result);
+				skip_and_copy(input, &i, &result, shell);
 		}
 	}
 	else if (init_exp_checks(input, 0))
 	{
 		exp_w = symbols(input);
-		(free(input), result = exp_w, free(exp_w));
+		(free(input), free(result), result = exp_w);
 	}
 	else
 	{

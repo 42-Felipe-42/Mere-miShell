@@ -57,12 +57,15 @@ C_FILE		 = 	$(addsuffix .c,						\
 				)									\
 
 OBJS        =   $(C_FILE:.c=.o)
+DEPS		=	$(OBJS:.o=.d)
+
+all: $(NAME)
+
+-include $(DEPS)
 
 .c.o:
 	@printf "\r\033[K[Mere-MiShell] \033[0;32mBuilding : $<\033[0m"
-	@$(CC) $(FLAG) -c $< -o $@
-
-all: $(NAME)
+	@$(CC) $(FLAG) -c $< -o $@ -MMD -MP
 
 $(LIBFT_LIB):
 	@make -C $(LIBFT_PATH)
@@ -74,7 +77,7 @@ $(NAME): $(LIBFT_LIB) $(OBJS)
 
 clean:
 	@make clean -sC $(LIBFT_PATH)
-	@rm -f $(OBJS)
+	@rm -f $(OBJS) $(DEPS)
 	@printf "[Mere-MiShell] \033[1;31mCleaned .o!\033[0m\n"
 
 fclean: clean

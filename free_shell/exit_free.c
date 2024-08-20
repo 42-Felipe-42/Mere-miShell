@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:16 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 09:49:13 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 16:59:08 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ void	exit_and_free(t_shell *shell, char *str)
 		;
 	else
 		perror(str);
-	ext_code = shell->exit_code;
+	if (shell->tmpexit_code != 0)
+		ext_code = shell->tmpexit_code;
+	else
+		ext_code = shell->exit_code;
 	ft_freeshell(shell);
 	rl_clear_history();
 	exit(ext_code);

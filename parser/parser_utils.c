@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/02 18:12:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:58:54 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,27 +85,29 @@ void	syntaxe(t_lexer *lex, t_shell *shell)
 	}
 }
 
-char	*remove_quote(char *word, int *i, t_shell *shell)
+char	*remove_quotes(char *str, t_shell *shell)
 {
+	int		i;
 	int		j;
-	char	*dest;
+	int		length;
+	char	*result;
 
+	i = 0;
 	j = 0;
-	dest = ft_calloc(ft_strlen(word + 1), sizeof(char *));
-	if (!dest)
-		exit_and_free(shell, "Error :  malloc parser");
-	while (word[*i])
+	length = strlen(str);
+	result = (char *)malloc(length + 1);
+	if (!result)
 	{
-		if ((which_quote(word[*i]) && *i == 0) || (which_quote(word[*i])
-				&& word[*i + 1] == '\0'))
-			(*i)++;
-		else
-		{
-			dest[j] = word[*i];
-			j++;
-			(*i)++;
-		}
+		perror("Erreur d'allocation mémoire");
+		exit_and_free(shell, "ERROR : malloc");
 	}
-	dest[j] = '\0';
-	return (dest);
+	while (str[i])
+	{
+		if (str[i] != '\'' && str[i] != '\"')
+			result[j++] = str[i];
+		i++;
+	}
+	result[j] = '\0';
+	free(str);
+	return (result);
 }

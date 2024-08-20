@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/02 14:30:30 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 17:16:28 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	main(int ac, char **av, char **envp)
 			if (!lex)
 				free_lexer(&lex);
 			check_captured_signals(shell);
-			parser(lex, shell);
+			syntaxe(lex, shell);
+			// parser(lex, shell);
 			cmds = create_cmds(lex, shell);
 			shell->cmds = cmds;
 			run_exec(shell);
