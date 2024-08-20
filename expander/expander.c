@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 18:00:02 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/20 18:13:50 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	skip_and_copy(char *input, int *i, char **dest, t_shell *shell)
 	int		start;
 	char	*tmp;
 
-	dest_index = strlen(*dest);
+	dest_index = ft_strlen(*dest);
 	opened = which_quote(input[*i]);
 	start = *i;
 	if (!opened)
@@ -103,7 +103,6 @@ void	skip_and_copy(char *input, int *i, char **dest, t_shell *shell)
 		exit_and_free(shell, "ERROR : skip_and_copy");
 	}
 	free(tmp);
-	(*dest)[dest_index] = '\0';
 }
 
 char	*expander(char *input, t_shell *shell)
@@ -133,6 +132,7 @@ char	*expander(char *input, t_shell *shell)
 			}
 			else
 				skip_and_copy(input, &i, &result, shell);
+				
 		}
 	}
 	else if (init_exp_checks(input, 0))
@@ -145,5 +145,6 @@ char	*expander(char *input, t_shell *shell)
 		free(result);
 		return (input);
 	}
+	printf("restult: %s\n", result);
 	return (result);
 }
