@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 23:24:56 by louismdv          #+#    #+#             */
-/*   Updated: 2024/08/19 10:09:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:13:38 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char	*expand_join(char *word, int *i, char *exp_w, t_shell *shell)
 	if (dols % 2 != 0)
 	{
 		tmp = expand(word, *i, shell);
+		// printf("tmp: %s\n", tmp);
 		if (tmp[0] == '\0')
 			shell->flag = 1;
 	}
