@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/20 17:16:28 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:57:06 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(int ac, char **av, char **envp)
 				free_lexer(&lex);
 			check_captured_signals(shell);
 			syntaxe(lex, shell);
-			// parser(lex, shell);
+			parser(lex, shell);
 			cmds = create_cmds(lex, shell);
 			shell->cmds = cmds;
 			run_exec(shell);

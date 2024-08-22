@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:41:24 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 10:13:38 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:38:12 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 typedef struct s_cmds
 {
 	char			**tab;
+	int				*spaces;
 	char			*path;
 	int				builtin;
 	pid_t			pid;

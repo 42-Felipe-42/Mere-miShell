@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 17:05:05 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:22:31 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ void	store_token_words(char *input, t_lexer **lex, int len, t_shell *shell)
 		current->next = new;
 		new->prev = current;
 	}
+	if (ft_strchr(&input[len], ' ') != 0)
+		new->space = 1;
+	else
+		new->space = 0;
+	// printf("new->space: %d\n", new->space);
 }
 
 // stockage de input[i] en fonction de sa valeur, token ou word
@@ -109,8 +114,6 @@ t_lexer	*lexer(t_shell *shell)
 		exit_and_free(shell, "exit");
 	}
 	input = expander(input, shell);
-	input = remove_quotes(input, shell);
-	printf("input: %s\n", input);
 	lex_str(input, &lex, shell);
 	shell->lex = lex;
 	free(input);

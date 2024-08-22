@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:12:09 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/20 17:16:16 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:58:14 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 		(*cmds)->tab = ft_calloc(count + 1, sizeof(char *));
 	if (!(*cmds)->tab)
 		exit_and_free(shell, "Error: malloc tab");
+	(*cmds)->spaces = ft_calloc(count + 1, sizeof(int));
 	while (tmp && tmp->word && tmp->token == 0)
 	{
 		if (tmp->word)
@@ -57,6 +58,7 @@ t_lexer	*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell)
 			while ((*cmds)->tab && (*cmds)->tab[i])
 				i++;
 			(*cmds)->tab[i] = ft_strdup(tmp->word);
+			(*cmds)->spaces[i] = tmp->space;
 			if (!(*cmds)->tab[i++])
 				(free_lexer(&tmp), exit_and_free(shell,
 						"Error : malloc redir"));
@@ -102,27 +104,27 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 	return (free_lexer(&lex), cmds);
 }
 
-// void	parser(t_lexer *lex, t_shell *shell)
-// {
-// 	int		i;
-// 	t_lexer	*lexer;
-// 	char	*tmp;
+void	parser(t_lexer *lex, t_shell *shell)
+{
+	int		i;
+	t_lexer	*lexer;
+	char	*tmp;
 
-// 	lexer = lex;
-// 	syntaxe(lexer, shell);
-// 	while (lexer)
-// 	{
-// 		i = 0;
-// 		while (lexer->word && lexer->word[i])
-// 		{
-// 			if (which_quote(lexer->word[i++]))
-// 			{
-// 				tmp = remove_quotes(lexer->word, shell);
-// 				(free(lexer->word), lexer->word = tmp);
-// 				break ;
-// 			}
-// 		}
-// 		lexer = lexer->next;
-// 	}
-// 	free_lexer(&lexer);
-// }
+	lexer = lex;
+	syntaxe(lexer, shell);
+	while (lexer)
+	{
+		i = 0;
+		while (lexer->word && lexer->word[i])
+		{
+			if (which_quote(lexer->word[i++]))
+			{
+				tmp = remove_quotes(lexer->word, shell);
+				(free(lexer->word), lexer->word = tmp);
+				break ;
+			}
+		}
+		lexer = lexer->next;
+	}
+	free_lexer(&lexer);
+}

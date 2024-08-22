@@ -8,6 +8,9 @@
     "files.exclude": {
         "**/*.o": true
     }
+	"files.exclude": {
+        "**/*.d": true
+    }
 }
 
 /* {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 10:51:21 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/19 16:31:49 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:31:10 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	is_quoted(char *input, int *i, int *opened)
 	}
 }
 // parcour le input du premier au dernier quote identique
-
 
 // parcour input en i tant que diff token, quotes et espace
 void	is_word(char *input, int *i)

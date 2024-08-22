@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 17:58:54 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:57:18 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,6 @@ char	*remove_quotes(char *str, t_shell *shell)
 		i++;
 	}
 	result[j] = '\0';
-	free(str);
+	// free(str);
 	return (result);
 }

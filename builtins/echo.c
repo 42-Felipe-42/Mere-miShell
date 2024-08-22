@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/19 17:47:11 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:22:45 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,16 @@ void	ft_echo(t_shell *shell, t_cmds *cmd, int fd_output, t_fd *fds)
 			if (cmd->tab[i] && !cmd->tab[i + 1])
 				ft_putstr_fd(cmd->tab[i], fd_output);
 			else if (cmd->tab[i])
-				(ft_putstr_fd(cmd->tab[i], fd_output), ft_putstr_fd(" ",
-						fd_output));
+			{
+				(ft_putstr_fd(cmd->tab[i], fd_output));
+				if (cmd->spaces[i] == 1)
+					ft_putstr_fd(" ", fd_output);
+			}
 			i++;
 		}
+		if (!flag)
+			ft_putstr_fd("\n", fd_output);
+		ext = shell->exit_code;
+		(ft_freeshell(shell), close_all_fds(fds), exit(ext));
 	}
-	if (!flag)
-		ft_putstr_fd("\n", fd_output);
-	ext = shell->exit_code;
-	(ft_freeshell(shell), close_all_fds(fds), exit(ext));
 }
