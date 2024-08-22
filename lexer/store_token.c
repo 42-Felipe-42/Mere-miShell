@@ -6,7 +6,7 @@
 /*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/22 17:22:31 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/22 23:48:17 by lmerveil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,12 @@ void	store_token_words(char *input, t_lexer **lex, int len, t_shell *shell)
 		current->next = new;
 		new->prev = current;
 	}
-	if (ft_strchr(&input[len], ' ') != 0)
+	printf("input[len]: [%c]\n", input[len]);
+	if (input[len] == ' ')
 		new->space = 1;
 	else
 		new->space = 0;
-	// printf("new->space: %d\n", new->space);
+	printf("new->space: %d\n", new->space);
 }
 
 // stockage de input[i] en fonction de sa valeur, token ou word
@@ -92,6 +93,7 @@ void	lex_str(char *input, t_lexer **lex, t_shell *shell)
 			is_quoted(input, &i, &(int){0});
 		else
 			is_word(input, &i);
+		printf("i: %d\n", i);
 		if (i > start)
 			store_token_words(input + start, lex, i - start, shell);
 		else
@@ -114,6 +116,7 @@ t_lexer	*lexer(t_shell *shell)
 		exit_and_free(shell, "exit");
 	}
 	input = expander(input, shell);
+	printf("result: [%s]\n", input);
 	lex_str(input, &lex, shell);
 	shell->lex = lex;
 	free(input);
