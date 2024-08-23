@@ -6,21 +6,17 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 10:09:31 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 12:08:07 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_cmds	*init_cmds(t_shell *shell)
+void	tmp_is_token(t_cmds **current_cmd, t_shell *shell)
 {
-	t_cmds	*cmds;
-
-	cmds = ft_calloc(1, sizeof(t_cmds));
-	if (!cmds)
-		exit_and_free(shell, "Error : malloc cmds");
-	ft_bzero(cmds, sizeof(t_cmds));
-	return (cmds);
+	(*current_cmd)->next = init_cmds(shell);
+	(*current_cmd)->next->prev = *current_cmd;
+	*current_cmd = (*current_cmd)->next;
 }
 
 int	check_quote_closed(char *word)

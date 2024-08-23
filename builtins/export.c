@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/01 10:33:30 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:07:22 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,21 @@ void	insertion_sort(t_env **arr, int n)
 	}
 }
 
-void	print_sorted_env(t_env *env)
+void	print_sorted_env(t_env *env, t_shell *shell, int count)
 {
-	int		count;
-	int		i;
 	t_env	*tmp;
 	t_env	**env_array;
+	int		i;
 
-	count = -1;
 	tmp = env;
-	while (tmp && ++count)
+	while (tmp)
+	{
+		count++;
 		tmp = tmp->next;
+	}
 	env_array = malloc(count * sizeof(t_env *));
 	if (!env_array)
-		(perror("malloc"), exit(EXIT_FAILURE));
+		exit_and_free(shell, "Error : Malloc");
 	tmp = env;
 	i = -1;
 	while (++i < count)
@@ -96,21 +97,22 @@ void	print_sorted_env(t_env *env)
 	insertion_sort(env_array, count);
 	i = -1;
 	while (++i < count)
-		printf("declare -x %s=\"%s\"\n", env_array[i]->key,
-			env_array[i]->value);
+		printf("export %s=\"%s\"\n", env_array[i]->key, env_array[i]->value);
 	free(env_array);
 }
 
 // Fonction principale pour exporter les variables d'environnement
-void	ft_export(t_env **env, t_cmds *cmds)
+void	ft_export(t_env **env, t_cmds *cmds, t_shell *shell)
 {
 	int		i;
 	bool	skip;
+	int		count;
 
+	count = 0;
 	i = 1;
 	if (!cmds->tab[1])
 	{
-		print_sorted_env(*env);
+		print_sorted_env(*env, shell, count);
 		return ;
 	}
 	while (cmds->tab[i])

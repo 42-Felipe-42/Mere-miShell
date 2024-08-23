@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: louismdv <louismdv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 18:38:17 by felipe            #+#    #+#             */
-/*   Updated: 2024/07/31 18:46:47 by louismdv         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:10:44 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	set_env_key_value(t_shell *shell, t_env *new, char **envp, int i)
 	int		key_length;
 	int		value_length;
 
-	(void)shell;
 	equal_sign = NULL;
 	if (envp && envp[i])
 		equal_sign = ft_strchr(envp[i], '=');

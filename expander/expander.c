@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/22 23:32:35 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:00:01 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,6 @@ char	*expand(char *input, int i, t_shell *shell)
 	return (free(dst), env);
 }
 
-char	*find_pwd(char *str, t_shell *shell)
-{
-	if (!ft_strncmp(str, "$0", 2) || !ft_strncmp(str, "$0$", 3))
-		str = shell->av;
-	else
-		return (NULL);
-	return (str);
-}
-
 // returns expanded word
 char	*no_guillemets(char *word, int *i, t_shell *shell)
 {
@@ -58,6 +49,8 @@ char	*no_guillemets(char *word, int *i, t_shell *shell)
 	if (word[*i])
 	{
 		tmp = expand_variable(word, i, shell, exp_w);
+		if (tmp[0] == '\0')
+			printf("\n");
 		exp_w = tmp;
 	}
 	return (exp_w);
@@ -70,40 +63,47 @@ void	skip_and_copy(char *input, int *i, char **dest, t_shell *shell)
 	int		start;
 	char	*tmp;
 
-	(void)dest_index;
+	tmp = NULL;
 	dest_index = ft_strlen(*dest);
 	opened = which_quote(input[*i]);
 	start = *i;
 	if (!opened)
 	{
-		while (input[*i] != '$' && input[*i] != '\'' && input[*i] != '\"'
-			&& input[*i] != '\0')
-			(*i)++;
-		tmp = ft_strndup(input + start, *i - start);
+		tmp = copy_if_not_quoted(input, i, start, tmp);
 		*dest = ft_join_free(*dest, tmp);
 		if (!dest)
-		{
-			free(tmp);
-			exit_and_free(shell, "ERROR : skip_and_copy");
-		}
-		free(tmp);
-		return ;
+			(free(tmp), exit_and_free(shell, "ERROR : skip_and_copy"));
+		return (free(tmp));
 	}
 	(*i)++;
-	while (opened && input[*i])
-	{
-		if (opened == which_quote(input[*i]))
-			opened = 0;
-		(*i)++;
-	}
-	tmp = ft_strndup(input + start, *i - start);
+	tmp = copy_if_quoted(input, i, opened, start);
 	*dest = ft_join_free(*dest, tmp);
 	if (!dest)
-	{
-		free(tmp);
-		exit_and_free(shell, "ERROR : skip_and_copy");
-	}
+		(free(tmp), exit_and_free(shell, "ERROR : skip_and_copy"));
 	free(tmp);
+}
+
+void	has_dols(char *input, int *i, t_shell *shell, char **result)
+{
+	char	*exp_w;
+
+	exp_w = NULL;
+	while (input[*i])
+	{
+		if (input[*i] == '$' && input[*i + 1] != '\0')
+		{
+			exp_w = no_guillemets(input, i, shell);
+			*result = join_and_free(*result, exp_w, shell);
+			free(exp_w);
+			(*i)++;
+			while (input[*i] != '\0' && input[*i] != ' ' && input[*i] != '\''
+				&& input[*i] != '\"' && input[*i] != '$'
+				&& !init_exp_checks(input, *i))
+				(*i)++;
+		}
+		else
+			skip_and_copy(input, i, result, shell);
+	}
 }
 
 char	*expander(char *input, t_shell *shell)
@@ -116,30 +116,12 @@ char	*expander(char *input, t_shell *shell)
 	i = 0;
 	exp_w = NULL;
 	if (check_quote_closed(input) == FALSE)
+	{
+		free(result);
 		exit_and_free(shell, "Error : quote not closed");
+	}
 	if (input != NULL && ft_strchr(input, '$'))
-	{
-		while (input[i])
-		{
-			if (input[i] == '$' && input[i + 1] != '\0')
-			{
-				exp_w = no_guillemets(input, &i, shell);
-				result = join_and_free(result, exp_w, shell);
-				free(exp_w);
-				i++;
-				while (input[i] != '\0' && input[i] != ' ' && input[i] != '\''
-					&& input[i] != '\"' && input[i] != '$')
-					i++;
-			}
-			else
-				skip_and_copy(input, &i, &result, shell);
-		}
-	}
-	else if (init_exp_checks(input, 0))
-	{
-		exp_w = symbols(input);
-		(free(input), free(result), result = exp_w);
-	}
+		has_dols(input, &i, shell, &result);
 	else
 		return (free(result), input);
 	return (result);

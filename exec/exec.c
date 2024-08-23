@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 09:44:04 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 11:44:27 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:51:49 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	execute_cmd(t_shell *shell, t_cmds *cmds, t_fd *fds)
 	else if (cmds->builtin == CD)
 		ft_cd(shell, cmds);
 	else if (cmds->builtin == EXPORT)
-		ft_export(&shell->env, cmds);
+		ft_export(&shell->env, cmds, shell);
 	else if (cmds->builtin == UNSET)
 		ft_unset_builtin(shell, cmds);
 	else

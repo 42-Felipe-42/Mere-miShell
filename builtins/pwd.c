@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:06:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 17:12:54 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:13:04 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,12 @@ void	ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output, t_fd *fds)
 {
 	char	*pwd;
 
-	(void)shell;
+	(void)cmds;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
 		perror("pwd: error retrieving current directory: getcwd: \
 			cannot access parent directories: No such file or directory");
-	}
-	else if (cmds->tab[1] && cmds->tab[1][0] == '-')
-	{
-		ft_putstr_fd("pwd: ", STDOUT_FILENO);
-		ft_putstr_fd(": invalid option\n", STDOUT_FILENO);
 	}
 	else
 	{
@@ -38,3 +33,14 @@ void	ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output, t_fd *fds)
 	close_all_fds(fds);
 	exit(0);
 }
+
+// else if (cmds->tab[1] && cmds->tab[1][0] == '-')
+// {
+// 	ft_putstr_fd("pwd: ", STDOUT_FILENO);
+// 	ft_putstr_fd("invalid option\n", STDOUT_FILENO);
+// }
+// else if (cmds->tab[1] && cmds->tab[1] != NULL)
+// {
+// 	ft_putstr_fd("pwd: ", STDOUT_FILENO);
+// 	ft_putstr_fd("too many arguments\n", STDOUT_FILENO);
+// }

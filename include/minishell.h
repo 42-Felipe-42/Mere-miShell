@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/20 17:33:24 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:13:47 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void		ft_cd(t_shell *shell, t_cmds *cmds);
 void		ft_unset_builtin(t_shell *shell, t_cmds *cmds);
 void		ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd);
 void		ft_env(t_shell *shell, t_cmds *cmd, int fd_output, t_fd *fds);
-void		ft_export(t_env **env, t_cmds *cmds);
+void		ft_export(t_env **env, t_cmds *cmds, t_shell *shell);
 void		print_error(char *str);
-void		print_sorted_env(t_env *env);
+void		print_sorted_env(t_env *env, t_shell *shell, int count);
 void		add_or_update_env(t_env **env, const char *key, const char *value);
 int			is_valid_identifier(const char *str);
 bool		process_arg(t_env **env, char *arg, char *next_arg);
@@ -68,6 +68,7 @@ void		parser(t_lexer *lex, t_shell *shell);
 char		*expand(char *input, int i, t_shell *shell);
 t_cmds		*init_cmds(t_shell *shell);
 void		syntaxe(t_lexer *lex, t_shell *shell);
+void		tmp_is_token(t_cmds **current_cmd, t_shell *shell);
 
 /*------------------EXPANDER------------------*/
 char		*no_guillemets(char *word, int *i, t_shell *shell);
@@ -80,8 +81,8 @@ int			count_dols(char *word, int i);
 char		*find_pwd(char *str, t_shell *shell);
 char		*find_excode(char *str, t_shell *shell);
 int			init_exp_checks(char *word, int i);
-char		*symbols(char *word);
-
+char		*copy_if_not_quoted(char *input, int *i, int start, char *tmp);
+char		*copy_if_quoted(char *input, int *i, int opened, int start);
 /*--------------------ENV--------------------*/
 void		set_env_key_value(t_shell *shell, t_env *new, char **envp, int i);
 void		maj_env_node(t_shell *shell, t_env *new_env_node, char **envp,

@@ -37,6 +37,7 @@ C_FILE		 = 	$(addsuffix .c,						\
 					expander 						\
 					expander_utils 					\
 					expander_utils_1 				\
+					expander_utils_2 				\
 				)									\
 				$(addprefix free_shell/, 			\
 					exit_free 						\
@@ -48,6 +49,7 @@ C_FILE		 = 	$(addsuffix .c,						\
 				)									\
 				$(addprefix parser/, 				\
 					parser_utils 					\
+					create_cmds						\
 					parser 							\
 				)									\
 				prompt/readline						\

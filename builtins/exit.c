@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/23 10:11:39 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:44:01 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,21 @@ void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 	int	ext;
 
 	flag = 0;
+	ext = 0;
 	if (cmd->tab[1])
-		ext = exit_args(cmd->tab, &flag);
+		shell->tmpexit_code = exit_args(cmd->tab, &flag);
 	if (cmd->tab[1] && cmd->tab[2] && !flag)
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		shell->exit_code = 1;
+		shell->tmpexit_code = 1;
 		return ;
 	}
 	if (!cmd->next || !cmd->prev)
 	{
+		ext = shell->tmpexit_code;
 		ft_freeshell(shell);
 		close_all_fds(fd);
 		ft_putstr_fd("exit\n", 2);
-		ext = shell->tmpexit_code;
 		exit(ext);
 	}
 	return ;

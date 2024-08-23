@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 09:43:36 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/01 16:15:12 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:11:19 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	is_directory(const char *path)
 
 void	find_path(t_env *env, t_cmds *cmds, t_shell *shell, t_fd *fds)
 {
-	(void)fds;
 	if (!cmds || !cmds->tab || cmds->tab[0][0] == '\0')
 		exit_and_free(shell, "");
 	if (ft_strchr(cmds->tab[0], '/') != NULL)
