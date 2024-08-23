@@ -6,11 +6,10 @@
 		"stat.h": "c"
 	},
     "files.exclude": {
-        "**/*.o": true
-    }
-	"files.exclude": {
-        "**/*.d": true
-    }
+	"**/*.d": true
+	"**/*.o": true 
+
+}
 }
 
 /* {

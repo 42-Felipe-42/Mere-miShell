@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/22 15:57:18 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:09:31 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*remove_quotes(char *str, t_shell *shell)
 
 	i = 0;
 	j = 0;
-	length = strlen(str);
+	length = ft_strlen(str);
 	result = (char *)malloc(length + 1);
 	if (!result)
 	{
@@ -108,6 +108,5 @@ char	*remove_quotes(char *str, t_shell *shell)
 		i++;
 	}
 	result[j] = '\0';
-	// free(str);
 	return (result);
 }
