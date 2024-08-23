@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:53:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 10:06:23 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:12:08 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	free_cmds(t_cmds **cmd)
 			free_split((*cmd)->tab);
 		if ((*cmd)->path)
 			free((*cmd)->path);
-		if((*cmd)->spaces)
+		if ((*cmd)->spaces)
 			free((*cmd)->spaces);
 		tmp = (*cmd)->next;
 		free(*cmd);

@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:14:19 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/19 17:59:37 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:11:46 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	run_builtins(t_shell *shell, t_cmds *cmds, t_fd *fds)
 		ft_env(shell, cmds, fds->output, fds);
 	if (cmds->builtin == PWD)
 		ft_pwd(cmds, shell, fds->output, fds);
-
 }
 
 void	child_builtins(t_shell *shell, t_fd *fds)

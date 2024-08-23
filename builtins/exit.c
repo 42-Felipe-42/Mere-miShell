@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/20 14:06:27 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:11:39 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ void	ft_exit(t_shell *shell, t_cmds *cmd, t_fd *fd)
 		close_all_fds(fd);
 		ft_putstr_fd("exit\n", 2);
 		ext = shell->tmpexit_code;
-
-		
 		exit(ext);
 	}
 	return ;
