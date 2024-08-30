@@ -12,16 +12,48 @@
 
 #include "../include/minishell.h"
 
+static int is_valid_llong(const char *str)
+ {
+    if (*str == '\0') 
+        return 0;
+    int sign = 1;
+    if (*str == '+' || *str == '-') 
+	{
+        if (*str == '-') {
+            sign = -1;
+        }
+        str++;
+    }
+    if (*str == '\0')
+        return 0; 
+    long long value = 0;
+    while (*str) 
+	{
+        if (!ft_isdigit((unsigned char)*str)) 
+            return 0; // Non numérique caractère trouvé  
+        int digit = *str - '0';
+        if (value > (LLONG_MAX - digit) / 10) {
+            return 0; // Dépassement de valeur
+        }
+        value = value * 10 + digit;
+        str++;
+    }
+    value *= sign;
+    if (value < LLONG_MIN || value > LLONG_MAX) 
+        return 0; // Valeur hors des limites
+    return 1; // Nombre valide
+}
+
 // Fonction pour verifier si la chaîne représente un nombre valide avec signe
 static int	is_valid_number(const char *str)
 {
 	int	i;
 
 	i = 0;
+	if(is_valid_llong(str) == 0)
+		return (0);
 	if (str[i] == '+' || str[i] == '-')
 		i++;
-	if (str[i] == '\0')
-		return (0);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
