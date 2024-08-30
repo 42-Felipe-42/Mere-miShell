@@ -47,7 +47,7 @@ void add_or_update_env(t_env **env, const char *key, const char *value)
     if (!new_node)
         exit_and_free(NULL, "Error: malloc failed");
     new_node->key = ft_strdup(key);
-    new_node->value = ft_strdup(value);k
+    new_node->value = ft_strdup(value);
     new_node->next = *env;
     if (*env)
         (*env)->prev = new_node;

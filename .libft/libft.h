@@ -28,6 +28,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <limits.h>
 
 # define RESET "\x1B[0m"
 # define BLACK "\x1B[30m"

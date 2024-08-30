@@ -43,7 +43,6 @@ static int is_valid_llong(const char *str)
         return 0; // Valeur hors des limites
     return 1; // Nombre valide
 }
-
 // Fonction pour verifier si la chaîne représente un nombre valide avec signe
 static int	is_valid_number(const char *str)
 {

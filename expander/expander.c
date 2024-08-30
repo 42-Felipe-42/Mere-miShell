@@ -59,12 +59,10 @@ char	*no_guillemets(char *word, int *i, t_shell *shell)
 void	skip_and_copy(char *input, int *i, char **dest, t_shell *shell)
 {
 	int		opened;
-	int		dest_index;
 	int		start;
 	char	*tmp;
 
 	tmp = NULL;
-	dest_index = ft_strlen(*dest);
 	opened = which_quote(input[*i]);
 	start = *i;
 	if (!opened)
@@ -108,13 +106,11 @@ void	has_dols(char *input, int *i, t_shell *shell, char **result)
 
 char	*expander(char *input, t_shell *shell)
 {
-	char	*exp_w;
 	int		i;
 	char	*result;
 
 	result = ft_strdup("");
 	i = 0;
-	exp_w = NULL;
 	if (check_quote_closed(input) == FALSE)
 	{
 		free(result);
