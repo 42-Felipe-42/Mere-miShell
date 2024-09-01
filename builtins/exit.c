@@ -3,73 +3,79 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 11:05:00 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/23 10:44:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/01 13:46:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int is_valid_llong(const char *str)
- {
-    if (*str == '\0') 
-        return 0;
-    int sign = 1;
-    if (*str == '+' || *str == '-') 
-	{
-        if (*str == '-') {
-            sign = -1;
-        }
-        str++;
-    }
-    if (*str == '\0')
-        return 0; 
-    long long value = 0;
-    while (*str) 
-	{
-        if (!ft_isdigit((unsigned char)*str)) 
-            return 0; // Non numérique caractère trouvé  
-        int digit = *str - '0';
-        if (value > (LLONG_MAX - digit) / 10) {
-            return 0; // Dépassement de valeur
-        }
-        value = value * 10 + digit;
-        str++;
-    }
-    value *= sign;
-    if (value < LLONG_MIN || value > LLONG_MAX) 
-        return 0; // Valeur hors des limites
-    return 1; // Nombre valide
-}
-// Fonction pour verifier si la chaîne représente un nombre valide avec signe
-static int	is_valid_number(const char *str)
+static int	ll_max_cmp(const char *str, long long value, int sign)
 {
-	int	i;
+	int		digit;
 
-	i = 0;
-	if(is_valid_llong(str) == 0)
-		return (0);
-	if (str[i] == '+' || str[i] == '-')
-		i++;
-	while (str[i])
+	while (*str)
 	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		i++;
+		if (!ft_isdigit((unsigned char)*str)) 
+			return 0;
+		digit = *str - '0';
+		if (value > (LLONG_MAX - digit) / 10)
+			return 0;
+		value = value * 10 + digit;
+		str++;
 	}
-	return (1);
+	value *= sign;
+	if (value < LLONG_MIN || value > LLONG_MAX) 
+		return 0;
+	return 1;
 }
+
+static int is_valid_llong(const char *str)
+{
+	long long 	value;
+	int			sign;
+
+	value = 0;
+	if (*str == '\0') 
+		return 0;
+	sign = 1;
+	if (*str == '+' || *str == '-') 
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	if (*str == '\0')
+		return 0; 
+	return(ll_max_cmp(str, value, sign));
+}
+
+// // Fonction pour verifier si la chaîne représente un nombre valide avec signe
+// static int	is_valid_number(const char *str)
+// {
+// 	int	i;
+// 	i = 0;
+// 	if(is_valid_llong(str) == 0)
+// 		return (0);
+// 	if (str[i] == '+' || str[i] == '-')
+// 		i++;
+// 	while (str[i])
+// 	{
+// 		if (!ft_isdigit(str[i]))
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
 // Fonction pour gerer les arguments de exit
 static int	exit_args(char **tab, int *flag)
 {
 	if (!tab[1])
-	{
 		return (0);
-	}
-	if (!is_valid_number(tab[1]))
+	if (!is_valid_llong(tab[1]))
 	{
 		ft_putstr_fd("exit: ", STDERR_FILENO);
 		ft_putstr_fd(tab[1], STDERR_FILENO);
