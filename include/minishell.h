@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 13:13:47 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:27:37 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ t_cmds		*create_cmds(t_lexer *lex, t_shell *shell);
 t_lexer		*lex_to_cmds(t_lexer *lex, t_cmds **cmds, t_shell *shell);
 
 /*--------------------PARSER--------------------*/
-void		parser(t_lexer *lex, t_shell *shell);
+int			parser(t_lexer *lex, t_shell *shell);
 char		*expand(char *input, int i, t_shell *shell);
 t_cmds		*init_cmds(t_shell *shell);
-void		syntaxe(t_lexer *lex, t_shell *shell);
+int			syntaxe(t_lexer *lex);
 void		tmp_is_token(t_cmds **current_cmd, t_shell *shell);
 
 /*------------------EXPANDER------------------*/

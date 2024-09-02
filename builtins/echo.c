@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmerveil <lmerveil@student.42.fr>          +#+  +:+       +#+        */
+/*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:03:19 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/22 17:22:45 by lmerveil         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:16:56 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void	ft_echo(t_shell *shell, t_cmds *cmd, int fd_output, t_fd *fds)
 			}
 			i++;
 		}
-		if (!flag)
-			ft_putstr_fd("\n", fd_output);
-		ext = shell->exit_code;
-		(ft_freeshell(shell), close_all_fds(fds), exit(ext));
 	}
+	if (!flag || !cmd->tab[1])
+		ft_putstr_fd("\n", fd_output);
+	ext = shell->exit_code;
+	(ft_freeshell(shell), close_all_fds(fds), exit(ext));
 }

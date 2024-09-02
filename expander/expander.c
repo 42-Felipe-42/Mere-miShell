@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 10:25:42 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 13:00:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:21:14 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ char	*no_guillemets(char *word, int *i, t_shell *shell)
 	if (word[*i])
 	{
 		tmp = expand_variable(word, i, shell, exp_w);
-		if (tmp[0] == '\0')
-			printf("\n");
 		exp_w = tmp;
 	}
 	return (exp_w);
@@ -111,11 +109,6 @@ char	*expander(char *input, t_shell *shell)
 
 	result = ft_strdup("");
 	i = 0;
-	if (check_quote_closed(input) == FALSE)
-	{
-		free(result);
-		exit_and_free(shell, "Error : quote not closed");
-	}
 	if (input != NULL && ft_strchr(input, '$'))
 		has_dols(input, &i, shell, &result);
 	else

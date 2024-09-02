@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 10:49:39 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 12:08:07 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:29:35 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,6 @@ void	tmp_is_token(t_cmds **current_cmd, t_shell *shell)
 	(*current_cmd)->next = init_cmds(shell);
 	(*current_cmd)->next->prev = *current_cmd;
 	*current_cmd = (*current_cmd)->next;
-}
-
-int	check_quote_closed(char *word)
-{
-	int	d_quote;
-	int	i;
-	int	s_quote;
-
-	s_quote = 0;
-	d_quote = 0;
-	i = 0;
-	while (word[i])
-	{
-		if (which_quote(word[i]) == D_QUOTE)
-			d_quote++;
-		if (which_quote(word[i]) == S_QUOTE)
-			s_quote++;
-		i++;
-	}
-	if (s_quote % 2 != 0 || d_quote % 2 != 0)
-		return (FALSE);
-	return (TRUE);
 }
 
 int	count_arg(t_lexer *lex)
@@ -54,55 +32,45 @@ int	count_arg(t_lexer *lex)
 	return (count);
 }
 
-void	syntaxe(t_lexer *lex, t_shell *shell)
+int	syntaxe(t_lexer *lex)
 {
 	t_lexer	*tmp;
 
 	tmp = lex;
 	if (tmp && tmp->token == PIPE)
-	{
-		free_lexer(&lex);
-		exit_and_free(shell, "Error : syntax error near unexpected token");
-	}
+		return (printf("Error : syntax error near unexpected token\n"), 1);
 	while (tmp)
 	{
 		if (tmp->token == PIPE && (!tmp->next || tmp->next->token == PIPE))
-		{
-			free_lexer(&lex);
-			exit_and_free(shell, "Error : syntax error near unexpected token");
-		}
+			return (printf("Error : syntax error near unexpected token\n"), 1);
 		if ((tmp->token != 0 && tmp->token != PIPE) && ((tmp->next == NULL)
 				|| (tmp->next->token != 0)))
-		{
-			free_lexer(&lex);
-			exit_and_free(shell, "Error : syntax error near unexpected token");
-		}
+			return (printf("Error : syntax error near unexpected token\n"), 1);
 		tmp = tmp->next;
 	}
+	return (0);
 }
 
 char	*remove_quotes(char *str, t_shell *shell)
 {
-	int		i;
-	int		j;
 	int		length;
+	int		start;
+	int		end;
 	char	*result;
 
-	i = 0;
-	j = 0;
 	length = ft_strlen(str);
-	result = (char *)malloc(length + 1);
+	start = 0;
+	end = length - 1;
+	if ((str[start] == '\'' && str[end] == '\'') || (str[start] == '\"'
+			&& str[end] == '\"'))
+	{
+		start++;
+		end--;
+	}
+	result = (char *)malloc((end - start + 2) * sizeof(char));
 	if (!result)
-	{
-		perror("Erreur d'allocation mémoire");
 		exit_and_free(shell, "ERROR : malloc");
-	}
-	while (str[i])
-	{
-		if (str[i] != '\'' && str[i] != '\"')
-			result[j++] = str[i];
-		i++;
-	}
-	result[j] = '\0';
+	ft_strncpy(result, str + start, end - start + 1);
+	result[end - start + 1] = '\0';
 	return (result);
 }

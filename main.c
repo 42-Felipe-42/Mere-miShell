@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/23 13:13:28 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:44:41 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	set_struct(t_shell *shell, char **av, char **envp)
 	shell->skip_here = 0;
 	get_env(shell, envp);
 	shell->lex = NULL;
+	setup_shell_signals();
 }
 
 int	main(int ac, char **av, char **envp)
@@ -39,16 +40,16 @@ int	main(int ac, char **av, char **envp)
 		if (!shell)
 			exit_and_free(shell, "Error : malloc shell");
 		set_struct(shell, av, envp);
-		setup_shell_signals();
 		while (1)
 		{
 			lex = lexer(shell);
-			if (!lex)
+			if (parser(lex, shell))
 				free_lexer(&lex);
-			parser(lex, shell);
-			cmds = create_cmds(lex, shell);
-			shell->cmds = cmds;
-			run_exec(shell);
+			if (lex)
+			{
+				cmds = create_cmds(lex, shell);
+				run_exec(shell);
+			}
 			(free_before_loop(shell), shell->cmds = NULL);
 		}
 	}

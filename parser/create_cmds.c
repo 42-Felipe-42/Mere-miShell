@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:05:35 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 12:35:48 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:03:22 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,5 +114,5 @@ t_cmds	*create_cmds(t_lexer *lex, t_shell *shell)
 				|| (tmp->next && tmp->next->token != PIPE) || !tmp->next))
 			tmp = lex_to_cmds(tmp, &current_cmd, shell);
 	}
-	return (free_lexer(&lex), cmds);
+	return (free_lexer(&lex), shell->cmds = cmds, cmds);
 }

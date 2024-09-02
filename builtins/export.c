@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 12:33:41 by felipe            #+#    #+#             */
-/*   Updated: 2024/08/23 11:07:22 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:36:07 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,31 @@ int	is_valid_identifier(const char *str)
 	return (1);
 }
 
-void add_or_update_env(t_env **env, const char *key, const char *value)
+void	add_or_update_env(t_env **env, const char *key, const char *value)
 {
-    t_env *temp = *env;
-    t_env *new_node;
+	t_env	*temp;
+	t_env	*new_node;
 
-    while (temp)
-    {
-        if (ft_strncmp(temp->key, key, ft_strlen(temp->key)) == 0)
-        {
-            free(temp->value);
-            temp->value = ft_strdup(value);
-            return;
-        }
-        temp = temp->next;
-    }
-    new_node = ft_calloc(1, sizeof(t_env));
-    if (!new_node)
-        exit_and_free(NULL, "Error: malloc failed");
-    new_node->key = ft_strdup(key);
-    new_node->value = ft_strdup(value);
-    new_node->next = *env;
-    if (*env)
-        (*env)->prev = new_node;
-    *env = new_node;
+	temp = *env;
+	while (temp)
+	{
+		if (ft_strncmp(temp->key, key, ft_strlen(temp->key)) == 0)
+		{
+			free(temp->value);
+			temp->value = ft_strdup(value);
+			return ;
+		}
+		temp = temp->next;
+	}
+	new_node = ft_calloc(1, sizeof(t_env));
+	if (!new_node)
+		exit_and_free(NULL, "Error: malloc failed");
+	new_node->key = ft_strdup(key);
+	new_node->value = ft_strdup(value);
+	new_node->next = *env;
+	if (*env)
+		(*env)->prev = new_node;
+	*env = new_node;
 }
 
 void	insertion_sort(t_env **arr, int n)
