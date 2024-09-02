@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:29:54 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 12:50:01 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:19:32 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ t_lexer	*lexer(t_shell *shell)
 	t_lexer	*lex;
 
 	lex = NULL;
+	rl_event_hook = rl_event_dummy;
 	input = ft_readline();
 	if (!input && shell->skip_here == 0)
 	{

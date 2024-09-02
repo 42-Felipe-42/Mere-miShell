@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 16:06:49 by plangloi          #+#    #+#             */
-/*   Updated: 2024/08/23 13:13:04 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:09:24 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_pwd(t_cmds *cmds, t_shell *shell, int fd_output, t_fd *fds)
 	if (!pwd)
 	{
 		perror("pwd: error retrieving current directory: getcwd: \
-			cannot access parent directories: No such file or directory");
+			\ncannot access parent directories: No such file or directory");
 	}
 	else
 	{

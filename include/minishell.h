@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 11:12:08 by plangloi          #+#    #+#             */
-/*   Updated: 2024/09/02 11:27:37 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:24:40 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ bool		check_captured_signals(t_shell *shell);
 void		setup_shell_signals(void);
 void		handle_heredoc_signal(int signal);
 void		setup_heredoc_signals(void);
+int			rl_event_dummy(void);
 
 /*--------------------UTILS--------------------*/
 void		print_env_list(t_env *env_list);

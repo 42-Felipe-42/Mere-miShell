@@ -6,13 +6,18 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:43:22 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/09/02 11:49:18 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:25:08 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/minishell.h"
 
 int		g_signal = 0;
+
+int	rl_event_dummy(void)
+{
+	return (1);
+}
 
 void	set_struct(t_shell *shell, char **av, char **envp)
 {

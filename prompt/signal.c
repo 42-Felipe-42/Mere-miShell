@@ -6,7 +6,7 @@
 /*   By: plangloi <plangloi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 10:14:24 by lmerveil          #+#    #+#             */
-/*   Updated: 2024/08/23 13:13:55 by plangloi         ###   ########.fr       */
+/*   Updated: 2024/09/02 15:23:45 by plangloi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ void	handle_signal(int signal)
 	}
 	else if (signal == SIGINT)
 	{
-		printf("^C\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		printf("^C");
+		rl_done = 1;
 	}
 }
 
